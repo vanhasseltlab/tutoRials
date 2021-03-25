@@ -1,0 +1,291 @@
+---
+title: "Good practices, common mistakes and getting help"
+output: 
+   learnr::tutorial:
+     progressive: true
+     allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+#load packages
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(knitr)
+library(png)
+library(grid)
+library(magick)
+library(ggplot2)
+
+#options
+knitr::opts_chunk$set(echo = FALSE)
+
+#code checking
+gradethis_setup()
+
+#load data used in exercises
+Assignment <- c(5.4, 6.0, 8.0, 4.2, 1.0)
+Exam <- c(7.0, 3.6, 8.0, 3.1, 2.0)
+
+```
+
+## Writing code 
+
+This tutorial describes good practices when writing R code, style recommendations, common mistakes that are often made when writing and running R code, and where and how to get help if you run into errors. 
+
+### Layout script
+Rule 1 is to always write in a script, so you can save and look back at previously written code. Don't know how to open and save a script? Go back to tutorial [R basics: Introduction to R](https://amvdkuijl.shinyapps.io/1_R_basics/#section-introduction-to-r). When writing your code in the script, always remember that your code will be run from top to bottom. In consequence, if you use a variable further down in the script, you have to define it before that line, otherwise it won't work. See the example below, where this problem is demonstrated. The *grades* variable is defined on the second line, and that is why the first line results in an error. However, when you try again to calculate the average grade after defining the *grades* variable, it will work because the grades variable is defined in your global environment. Unfortunately, you cannot see in this tutorial what objects are in your global environment. So, also try these three lines of code in your own RStudio environment. You are able to see there when *grades* is set in the global environment and is available to use for calculations. 
+
+```{r code1, exercise = FALSE, eval = TRUE, error = TRUE, echo = TRUE}
+#calculate average grade
+mean(grades)
+
+#define grades variable
+grades <- c(7.4, 2.9, 6.2, 10.0, 5.4)
+
+#calculate average grade
+mean(grades)
+```
+
+When you write code to, for example, adapt a big data set for modeling, you will probably define variables all over in the script. This is not a problem during your active session, because you have defined a new variable, put it in the global environment and run lines of code above and below the variable definition. However, when you close your script or when someone else takes a look, they will run the script from top to bottom. It is therefore important to sometimes test yourself if your variable definitions and code where you use those variables, are in the correct order. The best thing to do is to put this line of code at the top of your script: `remove(list = ls())`. This will remove all objects in your global environment. If you run your script from top to bottom after this line, you can check if everything goes well. 
+
+### Test your knowledge
+
+```{r code2, exercise = FALSE, eval = FALSE, echo = TRUE}
+X <- c("hello", "world", "goodbye", "world")
+table(X)
+Y <- c(X, "hello", "everybody")
+table(Y)
+table <- table(X)
+barplot(table)
+table <- table(Y)
+```
+
+```{r quiz1, echo = FALSE}
+quiz(caption = "Quiz - layout script",
+  question("Look at the code above. Will the barplot show the frequency of three unique words or of four unique words? If you are unsure, copy this code and try it out in R studio",
+    answer("Four unique words, because table is defined as the table(Y), which consists of 4 unique words.", message = "Remember that code runs from top to bottom. Which *table* object is used for the barplot?"),
+    answer("Three unique words, because the table that is used for the barplot is created with table(X)", correct = TRUE),
+    answer("Three unique words, because Y consists of the words *X*, *hello* and *everybody*.", message = "Pay close attention to quotes. If quotes are used, single or double, it indicates a string = character type data. If NO quotes are used, it refers to an object."),
+    allow_retry = TRUE
+  ),
+  question("Why would you use `remove(list = ls())` at the beginning of your script?",
+    answer("To empty the console"),
+    answer("To delete the script"),
+    answer("To empty the global environment", correct = TRUE, message = "You want to empty the global environment to ensure that you don't work with old objects in your code, while you have removed the line where you have defined them."),
+    answer("To delete all plots in the *Plots* window"),
+    allow_retry = TRUE
+  )
+)
+```
+
+### Object names
+
+When writing code, it is important to pay attention to the details. Using or NOT using quotes can already make a big difference. Names without quotes refer to objects, so for example the object *temp*: `temp <- c(20.5, 19.2, 17.0, 21.4)`. Words with quotes are considered strings, which is the same as objects of the character type. So if we look back at the first lines of the previous code example, also shown below, we see that *"hello"*, *"world"*, *"goodbye"* and *"everybody"* are strings. The *X* mentioned when creating the *Y* object, refers to the object *X* and not the string *"X"*. The object *X* is copied and extended with two extra words/strings.
+
+```{r code3, exercise = FALSE, eval = TRUE, echo = FALSE}
+X <- c("hello", "world", "goodbye", "world")
+print(X)
+Y <- c(X, "hello", "everybody")
+print(Y)
+```
+
+When naming an object, there are a few things to consider. The first one, also discussed in the R basics tutorial, is that the name should be meaningful. *X* and *Y* are not useful, but *temp* better describes an object which contains room temperatures. Secondly, it is better that the name doesn't contain spaces, as this makes it very difficult to work with. This is closely related to the style guidelines we will discuss in the next chapter, but putting spaces in your object/row/column names can easily lead to mistakes in your coding. If the data set which was given to you, contains spaces in the column names, it is easier to change these names, to be able to work with your data set. If you don't want to change these names, you can use backticks \`\` around the name. This will accept the space in the name, as you can see in the example below. 
+
+```{r code4, exercise = FALSE, eval = TRUE, echo = TRUE, error = TRUE}
+test <- 1
+print(test)
+test test <- 2
+print(test test)
+`test test` <- 3
+print(`test test`)
+```
+
+Another point of attention is the use of capital letters. An object called *temp* is not the same as the object *Temp*, or any other letter capitalized, such as *temP* or *TEMP*. Try this out yourself in the exercise below!
+
+#### Exercise 1
+
+The object *temp* will be defined when you run the first line. Try other variations of *temp* with one or multiple letters capitalized, as shown on the second line. 
+
+```{r object_name, exercise = TRUE}
+temp <- c(20.5, 19.2, 17.0, 21.4)
+print(Temp)
+```
+
+## Coding style
+
+### Indentation
+
+One of the most important reasons to improve your coding style is to make it more readable for others. If you write a script for data analysis which is eventually published, the code has to be checked beforehand. Or, if you write multiple scripts for analysis of a certain experiment, other colleagues may want to use your script for their data too.
+
+Indentation is a good way to increase readability of your code. The examples below show code with and without indentation. The first example is written on one long line, which adapts to the width of your window. However, it is hard to read what happens with certain grades. With the second example, each `ifelse` statement is placed on a different line, and indented. This makes it a lot easier to read the different conditions. This indentation with `ifelse` is automatically done by RStudio. 
+
+```{r code5, exercise = FALSE, eval = FALSE, echo = TRUE}
+#one long line
+ifelse(Assignment >= 5.5 & Exam>=5.5, "Passed",ifelse(Assignment < 5.5 & Exam >= 5.5, "Resit assignment", ifelse(Assignment >= 5.5 & Exam < 5.5, "Resit exam", ifelse(Assigment < 5.5 & Exam < 5.5, "Resit both"))))
+
+#indentation and multiple lines
+ifelse(Assignment >= 5.5 & Exam>=5.5, "Passed",
+       ifelse(Assignment < 5.5 & Exam >= 5.5, "Resit assignment", 
+              ifelse(Assignment >= 5.5 & Exam < 5.5, "Resit exam", 
+                    ifelse(Assigment < 5.5 & Exam < 5.5, "Resit both"))))
+
+```
+
+### Headers and comments
+
+In an Rscript, comments are written after `#`. The text after a hashtag is not read by R and just informative for the reader/user of your script. Comments can be used to describe results from functions, or to explain what functions will do to your data. However, the latter is not often done, because the code should immediately be clear to the reader/user. If your code is not clear, consider to rewrite it. However, headers can describe what happens in a part of the code. Headers are also indicated with hashtags, but elongated with `-` or `=` after the header name, as shown below. This is also repeated in the output. Comments are used after the calculations to show the correct answers, in this example. 
+
+```{r code6, exercise = FALSE, eval = FALSE, echo = TRUE}
+# Data definition ---------------------------------
+A <- c(1, 2, 3, 4)
+B <- c(5, 6, 7, 8)
+
+# Calculation -------------------------------------
+mean(A) #2.5
+mean(B) #6.5
+
+sum(A,B) #36
+
+```
+
+### Tidyverse coding style guide
+
+Go to [this website](https://style.tidyverse.org/index.html) and read through *chapter 1: Files* and *chapter 2: Syntax*. This is a good summary of the generally accepted style guidelines for R code. It makes your code easier to read and also easier to check. 
+
+Next, test your knowledge in this exercise. Correct the style errors in the code below. Next, check your answers with the toggles after continue.
+
+```{r style, exercise = TRUE}
+# Exercise 1
+Time ="2017-11-29 18:31:49" 
+substr(as.character(Time ),1,2) >  19
+
+# Exercise 2 
+y <- c(1,213,1235,1234,123,123,123,123,0,NA); data.frame(x= sample(1:10, 9),y = rnorm ( 3^2), k = seq(9)*34, hrut = 2)
+mean (y, na.rm=T)
+
+# Exercise 3
+x=3 
+if(x==3){     print ( "x is 3")
+  }
+
+# Exercise 4
+IsPrime <- function(n) {
+  if(n==2L) {
+    return(T)
+} else {
+    for (d in 2L:max(2L, n - 1L)) {
+      if((n %% d) == 0) {
+        return(F)
+}
+}
+}
+  T
+}
+```
+
+### Exercise discussion
+
+<details><summary>Click here for explanation and solution of exercise 1</summary>
+
+- Variable should use only lowercase letters, numbers, and underscores
+- Most infix operators (==, +, -, <-, etc.) should always be surrounded by spaces
+- But not double spaces
+- Always put a space after a comma, never before, just like in regular English
+
+```{r code style1, exercise = FALSE, eval = FALSE, echo = TRUE}
+# Exercise 1
+time <- "2017-11-29 18:31:49" 
+substr(as.character(time ), 1, 2) > 19
+```
+
+</details>
+
+<details><summary>Click here for explanation and solution of exercise 2</summary>
+
+- Strive to limit your code to 80 characters per line
+- Always put a space after a comma, never before, just like in regular English
+- Do not put spaces inside or outside parentheses for regular function calls
+- Place a space before and after () when used with if, for, or while
+- When a line break occurs inside a parentheses, align the wrapped line with the first character inside the parenthesis
+- Prefer TRUE and FALSE over T and F
+
+```{r code style2, exercise = FALSE, eval = FALSE, echo = TRUE}
+# Exercise 2
+y <- c(1, 213, 1235, 1234, 123, 123, 123, 123, 0, NA)
+data.frame(x = sample(1:10, 9),
+           y = rnorm(3^2), 
+           k = seq(9) * 34, 
+           hrut = 2)
+mean(y, na.rm = TRUE)
+```
+
+</details>
+
+<details><summary>Click here for explanation and solution of exercise 3</summary>
+
+- Use <-, not = for assignment
+- Most infix operators (==, +, -, <-, etc.) should always be surrounded by spaces
+- Do not put spaces inside or outside parentheses for regular function calls
+- Place a space before and after () when used with if, for, or while
+- An opening curly brace should never go on its own line and should always be followed by a new line
+- A closing curly brace should always go on its own line, unless it is followed by else
+- When indenting your code, use two spaces
+
+```{r code style3, exercise = FALSE, eval = FALSE, echo = TRUE}
+# Exercise 3
+x <- 3 
+if (x == 3) {
+  print("x is 3")
+}
+```
+
+</details>
+
+<details><summary>Click here for explanation and solution of exercise 4</summary>
+
+- Most infix operators (==, +, -, <-, etc.) should always be surrounded by spaces
+- Prefer TRUE and FALSE over T and F
+- An opening curly brace should never go on its own line and should always be followed by a new line
+- A closing curly brace should always go on its own line, unless it is followed by else
+
+```{r code style4, exercise = FALSE, eval = FALSE, echo = TRUE}
+# Exercise 4
+IsPrime <- function(n) {
+  if(n == 2L) {
+    return(TRUE)
+} else {
+    for(d in 2L:max(2L, n - 1L)) {
+      if((n %% d) == 0) {
+        return(FALSE)
+      }
+    }
+  }
+  TRUE
+}
+```
+
+</details>
+
+## Running code
+
+As said in the first chapter *Writing code*, it is important to clean the environment before running your script. This ensures that no old objects/variables are still in your global environment and can be used for old and maybe wrong lines of code. Therefore, always run `remove(list = ls())` at the beginning of your script. 
+
+### Common mistakes
+
+If you run your code, you always check the output of your code in the console. Hopefully it shows the desired output, and you can continue. However, sometimes you will see an error and the code will not run, or a warning after the code has (partially) run. You should **never** ignore errors and warnings! At first, the warnings and errors will range from mildly confusing to completely incomprehensible to you, but as you gain more experience with R, you will understand them quicker. They often tell you where the mistake is or why the code did not or only partially run. 
+
+```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 1, fig.cap = "**Figure 1: Errors and warnings in R**"}
+img <- readPNG("./Images/Running_code.png")
+grid.raster(img)
+```
+
+#### Errors and warnings
+
+As shown in figure 1, errors are R's way of saying no. The code you tried to run, was not possible to run. The error explains why it went wrong. These errors are not always easy to understand, so make sure to always check your code that resulted in an error, or google the error. Very simple, common mistakes can result in an error, but also in a warning, which can be even worse if missed. R will run the code, but not in the way you would want it to run. It will for example change some values in NA, but continue with the other values. 
+
+
+## Resources and getting help
+
+
