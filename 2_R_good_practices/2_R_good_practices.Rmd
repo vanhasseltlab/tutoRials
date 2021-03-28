@@ -9,20 +9,14 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 #load packages
-library(learnr)
-library(gradethis)
-library(tidyverse)
-library(knitr)
-library(png)
-library(grid)
-library(magick)
-library(ggplot2)
+require(learnr)
+require(knitr)
+require(png)
+require(grid)
+
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
-
-#code checking
-gradethis_setup()
 
 #load data used in exercises
 Assignment <- c(5.4, 6.0, 8.0, 4.2, 1.0)
@@ -48,7 +42,7 @@ grades <- c(7.4, 2.9, 6.2, 10.0, 5.4)
 mean(grades)
 ```
 
-When you write code to, for example, adapt a big data set for modeling, you will probably define variables all over in the script. This is not a problem during your active session, because you have defined a new variable, put it in the global environment and run lines of code above and below the variable definition. However, when you close your script or when someone else takes a look, they will run the script from top to bottom. It is therefore important to sometimes test yourself if your variable definitions and code where you use those variables, are in the correct order. The best thing to do is to put this line of code at the top of your script: `remove(list = ls())`. This will remove all objects in your global environment. If you run your script from top to bottom after this line, you can check if everything goes well. 
+When you write code to, for example, adapt a big data set for modeling, you will probably define variables all over in the script. This is not a problem during your active session, because you have defined a new variable, put it in the global environment and run lines of code above and below the variable definition. However, when you close your script or when someone else takes a look, they will run the script from top to bottom. It is therefore important to test if your variable definitions and code where you use those variables, are in the correct order. The best thing to do is to put this line of code at the top of your script: `remove(list = ls())`. This will remove all objects in your global environment. If you run your script from top to bottom after this line, you can check if everything goes well and is in the correct order. 
 
 ### Test your knowledge
 
@@ -93,11 +87,12 @@ print(Y)
 
 When naming an object, there are a few things to consider. The first one, also discussed in the R basics tutorial, is that the name should be meaningful. *X* and *Y* are not useful, but *temp* better describes an object which contains room temperatures. Secondly, it is better that the name doesn't contain spaces, as this makes it very difficult to work with. This is closely related to the style guidelines we will discuss in the next chapter, but putting spaces in your object/row/column names can easily lead to mistakes in your coding. If the data set which was given to you, contains spaces in the column names, it is easier to change these names, to be able to work with your data set. If you don't want to change these names, you can use backticks \`\` around the name. This will accept the space in the name, as you can see in the example below. 
 
-```{r code4, exercise = FALSE, eval = TRUE, echo = TRUE, error = TRUE}
+```{r code4a, exercise = FALSE, eval = TRUE, echo = TRUE}
 test <- 1
 print(test)
-test test <- 2
-print(test test)
+```
+
+```{r code4c, exercise = FALSE, eval = TRUE, echo = TRUE}
 `test test` <- 3
 print(`test test`)
 ```
@@ -106,9 +101,9 @@ Another point of attention is the use of capital letters. An object called *temp
 
 #### Exercise 1
 
-The object *temp* will be defined when you run the first line. Try other variations of *temp* with one or multiple letters capitalized, as shown on the second line. 
+The object *temp* will be defined when you run the first line. Try to print other variations of *temp* with one or multiple letters capitalized, as shown on the second line. 
 
-```{r object_name, exercise = TRUE}
+```{r object_name, exercise = TRUE, eval = FALSE, error = TRUE}
 temp <- c(20.5, 19.2, 17.0, 21.4)
 print(Temp)
 ```
@@ -156,7 +151,7 @@ Go to [this website](https://style.tidyverse.org/index.html) and read through *c
 
 Next, test your knowledge in this exercise. Correct the style errors in the code below. Next, check your answers with the toggles after continue.
 
-```{r style, exercise = TRUE}
+```{r style, exercise = TRUE, eval = FALSE, error = TRUE}
 # Exercise 1
 Time ="2017-11-29 18:31:49" 
 substr(as.character(Time ),1,2) >  19
@@ -272,20 +267,56 @@ IsPrime <- function(n) {
 
 As said in the first chapter *Writing code*, it is important to clean the environment before running your script. This ensures that no old objects/variables are still in your global environment and can be used for old and maybe wrong lines of code. Therefore, always run `remove(list = ls())` at the beginning of your script. 
 
-### Common mistakes
+### Errors and warnings
 
 If you run your code, you always check the output of your code in the console. Hopefully it shows the desired output, and you can continue. However, sometimes you will see an error and the code will not run, or a warning after the code has (partially) run. You should **never** ignore errors and warnings! At first, the warnings and errors will range from mildly confusing to completely incomprehensible to you, but as you gain more experience with R, you will understand them quicker. They often tell you where the mistake is or why the code did not or only partially run. 
 
 ```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 1, fig.cap = "**Figure 1: Errors and warnings in R**"}
-img <- readPNG("./Images/Running_code.png")
-grid.raster(img)
+img <- png::readPNG("./Images/Running_code.png")
+grid::grid.raster(img)
 ```
 
-#### Errors and warnings
+As shown in figure 1, errors are R's way of saying no. The code you tried to run, was not possible to run. The error explains why it went wrong. These errors are not always easy to understand, so make sure to always check your code that resulted in an error, or google the error. Very simple, common mistakes can result in an error, but also in a warning, which can be even worse if missed. When a warning is shown, R will run the code, but not in the way you would want it to run. It will ,for example, change some values in NA, but continue with the other values. 
 
-As shown in figure 1, errors are R's way of saying no. The code you tried to run, was not possible to run. The error explains why it went wrong. These errors are not always easy to understand, so make sure to always check your code that resulted in an error, or google the error. Very simple, common mistakes can result in an error, but also in a warning, which can be even worse if missed. R will run the code, but not in the way you would want it to run. It will for example change some values in NA, but continue with the other values. 
+### Common mistakes
 
+- Missing */*
+  
+  A common mistake with reading in or writing data is not using forward slashes. While Windows uses backward slashes (\\) in the file paths, R and MacOS use forward slashes (/). If backward slashes are used, R cannot find the folder or file you try to locate. 
+
+- Missing *""*
+  
+  This was also discussed in the previous chapter, but emphasized again. When quotes are missing, you indicate an object instead of a string. If the object is also present in your environment, this can lead to mistakes without showing a warning or an error. If the object is not present in your environment, an error will be shown. Therefore, always check if you are working with objects or with strings and if you need to use quotes. 
+
+- In console: *+* vs. *>*
+  
+  A good way to check if your code has run correctly is to check the next empty line in the console. If your code has run completely, the console will show a *greater than sign* (>), indicating it is ready for the next line of code. If the last line in the console starts with a *plus sign* (+), it indicates that it expected something more, for example a closing bracket ()) you may have forgotten. Of course, when red text is shown, indicating an error or a warning, it is clear that something is wrong with your code. 
 
 ## Resources and getting help
 
+There are different ways to get help when you are unsure about a function, or run into errors or warnings. If you are having trouble with a certain function, or want to know its arguments, you can easily look this up within RStudio, by using question marks or the help pages in the bottom left panel. Using a single question mark (?) before your function name will look up the help page of that function. Using double question marks (??) before a term will search the help pages for function related to that term, for example regression analysis. You can of course also search the function or term directly in the search bar in the help panel. If you run the code below, it will open a new tab with the help window. However, if you will copy it to your RStudio and run it there, you will see it opening in your help panel on the left bottom. 
+
+```{r code7, exercise = TRUE, eval = FALSE}
+?mean
+
+??regression
+```
+
+But if you don't know what to do or which function to use, you can also google your question. Be sure to include R, as this is the language you are writing in. You will often see the website https://stackoverflow.com/ come up. This public platform has many coding questions & answers which often answer your problem. If you run into errors or warnings, you can also google them and look on stackoverflow, to get an explanation of the error or warning. If you cannot find a solution on the internet, you can always choose to post your question on, for example, stackoverflow. Please keep in mind that you need to provide a representable example to get an answer.
+
+Another option to get help are cheat sheets. These are comprehensive summaries of the most important functions in a package. The one from ggplot2 is a very good example when you are working with graphs and want to, for example, adapt the x-axis label. If you look at the cheat sheet, you can easily locate the correct function, under *labels* on the second figure, left bottom corner.
+
+```{r fig 2, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 2: Cheat sheet ggplot2 page 1**"}
+img1 <- png::readPNG("./Images/Getting_help_cheat_sheet_1.png")
+grid::grid.raster(img1)
+``` 
+
+```{r fig 3, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 3: Cheat sheet ggplot2 page 2**"}
+img2 <- png::readPNG("./Images/Getting_help_cheat_sheet_2.png")
+grid::grid.raster(img2)
+``` 
+
+### End of good practices tutorial
+
+Well done! You finished this tutorial about R! Please feel free to revisit parts that were difficult, or continue with the next tutorial "R: data manipulation".
 
