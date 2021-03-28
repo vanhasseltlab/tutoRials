@@ -5,8 +5,8 @@ account: amvdkuijl
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3638353
-bundleId: 4393421
+bundleId: 4403925
 url: https://amvdkuijl.shinyapps.io/1_R_basics/
-when: 1616676210.81138
+when: 1616931273.02461
 asMultiple: FALSE
 asStatic: FALSE
