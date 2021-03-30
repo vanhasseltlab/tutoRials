@@ -1,0 +1,132 @@
+---
+title: "Data manipulation"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+#load packages
+library(learnr)
+library(gradethis)
+library(tidyverse)
+library(knitr)
+library(png)
+library(grid)
+library(magick)
+
+#options
+knitr::opts_chunk$set(echo = FALSE)
+
+#code checking
+gradethis_setup()
+
+#load data used in exercises
+
+```
+
+## Selection and subsetting
+
+This tutorial covers the basics of data manipulation with base R and the packages dplyr and tidyr. We will first start with the topic of selection and subsetting data. 
+
+### Dimensions
+
+To subset your data, you need to know in which dimension you are working. This is graphically shown in figure 1. If you are working with vectors, this is easy, as there is only one dimension, you will be subsetting the different elements of the vector. With data frames you are working with two dimensions, which means you can either subset rows or columns, or both. With lists, it is even more complex, as you can be subsetting within an element of the list, these elements can be vectors, data frames or even another list. 
+
+```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 0.5, fig.cap = "**Figure 1: Dimensions in data structures**"}
+img <- readPNG("./Images/Dimensions.png")
+grid.raster(img)
+```
+
+### Subset using [] and index
+
+The simplest way to subset is by using square brackets ([]). When you place these after an object name, you can subset in different ways. Most important to remember is that the number of dimensions are of influence how you use these brackets! 
+
+#### Vector
+
+Vector is the easiest, as it has only one dimension, so one number is required within the square brackets. A vector is created in the example below, which consist of 5 elements. The easiest way is to set a number between 1 and 5 in the square brackets, resembling the index of the element you want to extract. If you want multiple elements, you can indicate this with `c()`, or `:` if it is a sequence. If you want to remove an element, you can indicate this with a minus sign (-) in front of the element number. 
+
+```{r code1, exercise = FALSE, eval=TRUE, echo = TRUE}
+baby_names <- c("Anne", "Fleur", "Johan", "Klaas", "Renee")
+baby_names[1]
+baby_names[c(1,5,3)]
+baby_names[1:3]
+baby_names[-3]
+```
+
+
+#### Data frame
+
+The same principle can also be applied on data frames. However, because you have two dimensions: rows and columns, you need to indicate to R in which dimension you are working. To separate the two dimensions, you use a comma, with the first number indicating the row and the second number indicating the column. If you leave a number out, it indicates to R that you are not subsetting in that dimension and want to keep everything. A simple data frame is created below and printed to show you what it looks complete. 
+
+```{r code2, exercise = FALSE, eval=TRUE, echo = TRUE}
+baby_names <- c("Anne", "Fleur", "Johan", "Klaas", "Renee")
+freq <- c(100, 88, 78, 95, 45)
+baby_freq <- data.frame("names" = baby_names, "Frequency" = freq)
+print(baby_freq)
+```
+
+Next, we are going to subset it. First select the first row, then the first column and next the first value: extracted from first row, first column. We see that the output also differs. When the first row is extracted, the data frame structure is kept. However, when we extract the first column or the first value, we see that a vector is returned. It is important to keep this in mind when you are working  with your own data, as already the simple subsetting methods differ between different data structures. Similarly to vectors, you can select multiple rows or columns by using `c()`.  
+
+```{r code3, exercise = FALSE, eval=TRUE, echo = TRUE}
+#first row
+class(baby_freq[1, ])
+#first column
+baby_freq[ , 1]
+#value from first row and first column
+baby_freq[1, 1]
+
+#Row 1,3 and 5, all columns
+baby_freq[c(1,3,5),]
+```
+
+#### List
+
+
+
+
+### Subset using [] and/or names
+
+
+
+## Vectorization and arithmetic
+
+
+
+### Complex exercise
+
+
+
+## Introduction dplyr and tidyr
+
+
+
+### Piping
+
+
+## Columns
+
+### select()
+
+### mutate()
+
+## Rows
+
+### filter()
+
+### arrange()
+
+## Whole dataset
+
+### summarise()
+
+### group_by()
+
+### *join()
+
+### pivot_longer and pivot_wider
+
+### Complex exercise
+
