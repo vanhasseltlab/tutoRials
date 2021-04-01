@@ -56,7 +56,6 @@ baby_names[1:3]
 baby_names[-3]
 ```
 
-
 #### Data frame
 
 The same principle can also be applied on data frames. However, because you have two dimensions: rows and columns, you need to indicate to R in which dimension you are working. To separate the two dimensions, you use a comma, with the first number indicating the row and the second number indicating the column. If you leave a number out, it indicates to R that you are not subsetting in that dimension and want to keep everything. A simple data frame is created below and printed to show you what it looks complete. 
@@ -84,7 +83,26 @@ baby_freq[c(1,3,5),]
 
 #### List
 
+A list is also one dimensional, and therefore only requires one number in the square brackets to select an element. However, if you want to select something form an element, you need to consider its dimensions. Look at the example below, where a list is created from the vector and data frame we used in the two previous examples. 
 
+```{r code4, exercise = FALSE, eval=TRUE, echo = TRUE}
+baby_names <- c("Anne", "Fleur", "Johan", "Klaas", "Renee")
+freq <- c(100, 88, 78, 95, 45)
+baby_freq <- data.frame("names" = baby_names, "Frequency" = freq)
+baby_names_freq <- list("names" = baby_names, "baby_freq" = baby_freq)
+print(baby_names_freq)
+```
+
+The vector with the baby names is the first element and the data frame with the names and frequencies is the second element of the list. If we want the fourth name from the vector *Klaas*, we have to first subset the first element of the list and then the fourth element of the vector. However, keep attention to the output. When you use a single set of square brackets, you get a list as output, containing the element(s) you selected. When you use a double set of square brackets ([[]]), you will extract the element from the list. 
+
+```{r code5, exercise = FALSE, eval=TRUE, echo = TRUE}
+#first element of the list
+baby_names_freq[1]
+
+#fourth element of the vector
+baby_names_freq[[1]][4]
+
+```
 
 
 ### Subset using [] and/or names
