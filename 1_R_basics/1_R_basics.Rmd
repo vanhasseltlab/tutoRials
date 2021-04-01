@@ -665,7 +665,7 @@ getwd()
 
 *Rstudio webserver*
 
-*If you are working on the Rstudio webser, you will probably see that your working directory is similar to: "/cloud/" or "-/". This is perfectly fine, and you can change it by adding a folder there for your project. However, you can not link to a folder on your own computer.*
+*If you are working on the Rstudio webser, you will probably see that your working directory is similar to: "/cloud/" or "-/". This is perfectly fine, and you can change it by adding a folder there for your project. For example "-/Marinda/Project1". However, you can not link to a folder on your own computer.*
 
 ### Changing your directory
 As described in the chapter: **Introduction to R**, you need to have a designated folder per project where you are going to save your scripts and data sets. It is most likely that you will also you this folder as your working directory. You can create subfolders to save images and data sets separately.
@@ -707,7 +707,7 @@ You should always check two things when reading in data. First, the automatic as
 Writing data, the opposite of reading in data, is done at the end of your data manipulation and is used to save the changed data set in a folder in your working directory. You will most often use the csv file as your output for data sets, but sometimes also png or pdf for figures. 
 
 **CSV files**
-As discussed before, Dutch systems handle csv files differently. They can replace the comma as separation symbol with a semicolon when a csv file is created in Excel, or they can misunderstand the comma separation, because it is also the decimal symbol. Especially with writing a csv file from R, the comma is automatically placed as separator, and dots are used as decimal symbol. *--You have already changed this in Excel, so you should have no problem with opening data sets which are saved from R.--*
+As discussed before, Dutch systems handle csv files differently. They can replace the comma as separation symbol with a semicolon when a csv file is created in Excel, or they can misunderstand the comma separation, because it is also the decimal symbol. Especially with writing a csv file from R, the comma is automatically placed as separator, and dots are used as decimal symbol.
 
 #### Exercise 7
 
