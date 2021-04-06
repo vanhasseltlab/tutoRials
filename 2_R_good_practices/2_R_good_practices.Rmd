@@ -98,7 +98,7 @@ IsPrime <- function(n) {
 
 ### Exercise discussion
 
-<details><summary>Click here for explanation and solution of exercise 1</summary>
+<details><summary>Click <u>**here**</u> for explanation and solution of exercise 1</summary>
 
 - Variable should use only lowercase letters, numbers, and underscores
 - Most infix operators (==, +, -, <-, etc.) should always be surrounded by spaces
@@ -113,7 +113,7 @@ substr(as.character(date_time), 1, 2) > 19
 
 </details>
 
-<details><summary>Click here for explanation and solution of exercise 2</summary>
+<details><summary>Click <u>**here**</u> for explanation and solution of exercise 2</summary>
 
 - Strive to limit your code to 80 characters per line
 - Always put a space after a comma, never before, just like in regular English
@@ -134,7 +134,7 @@ mean(y, na.rm = TRUE)
 
 </details>
 
-<details><summary>Click here for explanation and solution of exercise 3</summary>
+<details><summary>Click <u>**here**</u> for explanation and solution of exercise 3</summary>
 
 - Use <-, not = for assignment
 - Most infix operators (==, +, -, <-, etc.) should always be surrounded by spaces
@@ -154,7 +154,7 @@ if (x == 3) {
 
 </details>
 
-<details><summary>Click here for explanation and solution of exercise 4</summary>
+<details><summary>Click <u>**here**</u> for explanation and solution of exercise 4</summary>
 
 - Most infix operators (==, +, -, <-, etc.) should always be surrounded by spaces
 - Prefer TRUE and FALSE over T and F
@@ -187,7 +187,7 @@ You might think that you are not going to remember all those styling tips. And l
 2. Secondly,  you can use *Ctrl+Shift+A* or *Cmd+Shift+A* on selected lines of code. This will recognize style errors and correct them. However, it will not apply all the style recommendations from the Style guide, so you still need to keep those in mind. 
 3. Finally, you can also install a new package: styler. This package is easily usable to further correct your code into good practices of coding style. If you want this, install the package in the *Packages* window or with `install.packages("styler")`. When the installation is finished, you can select *"Style active file"* from the Addins menu on top of your screen. 
 
-```{r fig 2, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 2: Screenshot of Addins**"}
+```{r fig 1, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 1: Screenshot of Addins**"}
 img1 <- png::readPNG("./Images/Styler.png")
 grid::grid.raster(img1)
 ``` 
@@ -198,17 +198,32 @@ With these three tools combined, most styling errors will be corrected. However,
 
 ### Folder organisation
 
-This topic was briefly introduced in tutorial 1: R basics, where we advised you to create a designated folder for your research project in R, and if necessary, create some subfolders such as *data*, *scripts* and *figures*. This is to ensure "**G**ood **A**cademic **R**esearch **P**ractice" (GARP) and being able to easily locate your files. It is also important for your working directory, as you can use relative paths to all the folders and files within the working directory folder. 
+This topic was mainly discussed in tutorial 1: R basics, where we advised you to create a designated folder for your research project in R, and if necessary, create some subfolders such as *data*, *scripts* and *figures*. This is to ensure "**G**ood **A**cademic **R**esearch **P**ractice" (GARP) and being able to easily locate your files. It is also important for your working directory, as you can use relative paths to all the folders and files within the working directory folder. 
 
 ### R Projects
 
 > **_NOTE:_**  This chapter is intented for master and/or PhD students who will have one or multiple research projects for a longer period of time. If you are following this tutorial before a 3 month research project, it is more important to focus on other aspects of learning R. 
 
-A R Project is easily to implement in your research project and ensures reproducibility. It is advised to create a R Project for each separate research project you do. During your master, you will probably do only one project, but during your PhD, you will have multiple. A R Project file is placed within the most top folder of your project folder structure. Look at the following example: 
+An R project is easily to implement in your research project and ensures reproducibility. It is advised to create an R project for each separate research project you do. During your master, you will probably do only one project, but during your PhD, you will have multiple. The benefit of using R projects, is that the working directory is automatically set to the folder where the R project is located. You don't need to set your working directory and you can use relative paths in all your scripts. An R project file is placed within the most top folder of your project folder structure. Look at the following example: 
 
-*Project01* - *data manipulation* - *scripts* - *script1_20210406.R*
+*~/Project01/scripts/data_manipulation/01_data_cleaning.R*
 
-In this case, we follow the folder structure from the top folder *Project01*, into one subfolder *data manipulation*, to its subfolder *scripts* and then we see one script saved there. Of course in the top folder *Project01*, there can be other folders, such as *modelling* or *writing*, to better separate the different components of your project. The R Project file is placed within the *Project01* folder in this example, because that is the top folder of this research project. The benefit of using R Projects, is that the working directory is automatically set to the folder where the R Project is located. You don't need to set your working directory. You can use relative paths in all your scripts.   
+In this case, we follow the folder structure from your home folder ~, which is usually *C:/user/yourname*, or just the home folder of the R server. Next we see the created top folder of this research project: *Project01*, in which a subfolder *scripts* is placed, and in there the folder *data manipulation* and then we see one script saved there. Of course in the top folder *Project01*, there can be other folders, such as *modelling* or *writing*, to better separate the different components of your project. The R project file is placed within the *Project01* folder in this example, because that is the top folder of this research project. 
+
+You can create a new R project within RStudio, by selecting *New project...* in the File menu (Figure 2A). In the project wizard, select *New Directory* (Figure 2B) and then *New Project* (Figure 2C). In the next window, you can give your R project a name, preferably the same as your top project folder (Figure 2D). You can also browse for the correct folder where your R project will be placed. As you can see, you can also opt to create a git repository, because R projects are compatible with version control systems, such as Git. Having an R project set up, makes it very easy to start working with Git later on. 
+
+```{r fig2, fig.show = "hold", out.width = "100%"}
+library(cowplot)
+library(ggplot2)
+
+p1 <- ggdraw() + draw_image("./Images/Rproject_1.png")
+p2 <- ggdraw() + draw_image("./Images/Rproject_2.png")
+p3 <- ggdraw() + draw_image("./Images/Rproject_3.png")
+p4 <- ggdraw() + draw_image("./Images/Rproject_4.png")
+
+
+plot_grid(p1, p2, p3, p4, nrow  = 2, ncol = 2, labels = "AUTO")
+```
 
 ## Writing code 
 
@@ -298,7 +313,7 @@ print(Temp)
 
 If you run your code, you always check the output of your code in the console. Hopefully it shows the desired output, and you can continue. However, sometimes you will see an error and the code will not run, or a warning after the code has (partially) run. You should **never** ignore errors and warnings! At first, the warnings and errors will range from mildly confusing to completely incomprehensible to you, but as you gain more experience with R, you will understand them quicker. They often tell you where the mistake is or why the code did not or only partially run. 
 
-```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 1, fig.cap = "**Figure 1: Errors and warnings in R. ** *Adapted from http://rex-analytics.com/decoding-error-messages-r/*"}
+```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 1, fig.cap = "**Figure 3: Errors and warnings in R. ** *Adapted from http://rex-analytics.com/decoding-error-messages-r/*"}
 img <- png::readPNG("./Images/Running_code.png")
 grid::grid.raster(img)
 ```
@@ -339,12 +354,12 @@ But if you don't know what to do or which function to use, you can also google y
 
 Another option to get help are cheat sheets. These are comprehensive summaries of the most important functions in a package. The one from [ggplot2](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf) is a very good example when you are working with graphs and want to, for example, adapt the x-axis label. If you look at the cheat sheet, you can easily locate the correct function, under *labels* on the second figure, left bottom corner.
 
-```{r fig 3, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 3: Cheat sheet ggplot2 page 1**"}
+```{r fig 4, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 4: Cheat sheet ggplot2 page 1**"}
 img1 <- png::readPNG("./Images/Getting_help_cheat_sheet_1.png")
 grid::grid.raster(img1)
 ``` 
 
-```{r fig 4, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 4: Cheat sheet ggplot2 page 2**"}
+```{r fig 5, echo=FALSE, out.width = "100%", fig.asp = 0.8, fig.cap = "**Figure 5: Cheat sheet ggplot2 page 2**"}
 img2 <- png::readPNG("./Images/Getting_help_cheat_sheet_2.png")
 grid::grid.raster(img2)
 ``` 

@@ -183,7 +183,7 @@ IsPrime &lt;- function(n) {
 <h3>Exercise discussion</h3>
 <details>
 <summary>
-Click here for explanation and solution of exercise 1
+Click <u><strong>here</strong></u> for explanation and solution of exercise 1
 </summary>
 <ul>
 <li>Variable should use only lowercase letters, numbers, and underscores</li>
@@ -197,7 +197,7 @@ substr(as.character(date_time), 1, 2) &gt; 19</code></pre>
 </details>
 <details>
 <summary>
-Click here for explanation and solution of exercise 2
+Click <u><strong>here</strong></u> for explanation and solution of exercise 2
 </summary>
 <ul>
 <li>Strive to limit your code to 80 characters per line</li>
@@ -217,7 +217,7 @@ mean(y, na.rm = TRUE)</code></pre>
 </details>
 <details>
 <summary>
-Click here for explanation and solution of exercise 3
+Click <u><strong>here</strong></u> for explanation and solution of exercise 3
 </summary>
 <ul>
 <li>Use &lt;-, not = for assignment</li>
@@ -236,7 +236,7 @@ if (x == 3) {
 </details>
 <details>
 <summary>
-Click here for explanation and solution of exercise 4
+Click <u><strong>here</strong></u> for explanation and solution of exercise 4
 </summary>
 <ul>
 <li>Most infix operators (==, +, -, &lt;-, etc.) should always be surrounded by spaces</li>
@@ -268,9 +268,9 @@ IsPrime &lt;- function(n) {
 <li>Finally, you can also install a new package: styler. This package is easily usable to further correct your code into good practices of coding style. If you want this, install the package in the <em>Packages</em> window or with <code>install.packages("styler")</code>. When the installation is finished, you can select <em>“Style active file”</em> from the Addins menu on top of your screen.</li>
 </ol>
 <div class="figure">
-<img src="2_R_good_practices_files/figure-html/fig%202-1.png" alt="**Figure 2: Screenshot of Addins**" width="100%" />
+<img src="2_R_good_practices_files/figure-html/fig%201-1.png" alt="**Figure 1: Screenshot of Addins**" width="100%" />
 <p class="caption">
-<strong>Figure 2: Screenshot of Addins</strong>
+<strong>Figure 1: Screenshot of Addins</strong>
 </p>
 </div>
 <p>With these three tools combined, most styling errors will be corrected. However, the use of <em>T</em> and <em>F</em> instead of <em>TRUE</em> and <em>FALSE</em> are not corrected by any of these methods. This is one example of the styling recommendations you should apply yourself and will not be corrected by any tools.</p>
@@ -280,16 +280,18 @@ IsPrime &lt;- function(n) {
 <h2>Saving code</h2>
 <div id="section-folder-organisation" class="section level3">
 <h3>Folder organisation</h3>
-<p>This topic was briefly introduced in tutorial 1: R basics, where we advised you to create a designated folder for your research project in R, and if necessary, create some subfolders such as <em>data</em>, <em>scripts</em> and <em>figures</em>. This is to ensure “<strong>G</strong>ood <strong>A</strong>cademic <strong>R</strong>esearch <strong>P</strong>ractice” (GARP) and being able to easily locate your files. It is also important for your working directory, as you can use relative paths to all the folders and files within the working directory folder.</p>
+<p>This topic was mainly discussed in tutorial 1: R basics, where we advised you to create a designated folder for your research project in R, and if necessary, create some subfolders such as <em>data</em>, <em>scripts</em> and <em>figures</em>. This is to ensure “<strong>G</strong>ood <strong>A</strong>cademic <strong>R</strong>esearch <strong>P</strong>ractice” (GARP) and being able to easily locate your files. It is also important for your working directory, as you can use relative paths to all the folders and files within the working directory folder.</p>
 </div>
 <div id="section-r-projects" class="section level3">
 <h3>R Projects</h3>
 <blockquote>
 <p><strong><em>NOTE:</em></strong> This chapter is intented for master and/or PhD students who will have one or multiple research projects for a longer period of time. If you are following this tutorial before a 3 month research project, it is more important to focus on other aspects of learning R.</p>
 </blockquote>
-<p>A R Project is easily to implement in your research project and ensures reproducibility. It is advised to create a R Project for each separate research project you do. During your master, you will probably do only one project, but during your PhD, you will have multiple. A R Project file is placed within the most top folder of your project folder structure. Look at the following example:</p>
-<p><em>Project01</em> - <em>data manipulation</em> - <em>scripts</em> - <em>script1_20210406.R</em></p>
-<p>In this case, we follow the folder structure from the top folder <em>Project01</em>, into one subfolder <em>data manipulation</em>, to its subfolder <em>scripts</em> and then we see one script saved there. Of course in the top folder <em>Project01</em>, there can be other folders, such as <em>modelling</em> or <em>writing</em>, to better separate the different components of your project. The R Project file is placed within the <em>Project01</em> folder in this example, because that is the top folder of this research project. The benefit of using R Projects, is that the working directory is automatically set to the folder where the R Project is located. You don’t need to set your working directory. You can use relative paths in all your scripts.</p>
+<p>An R project is easily to implement in your research project and ensures reproducibility. It is advised to create an R project for each separate research project you do. During your master, you will probably do only one project, but during your PhD, you will have multiple. The benefit of using R projects, is that the working directory is automatically set to the folder where the R project is located. You don’t need to set your working directory and you can use relative paths in all your scripts. An R project file is placed within the most top folder of your project folder structure. Look at the following example:</p>
+<p><em>~/Project01/scripts/data_manipulation/01_data_cleaning.R</em></p>
+<p>In this case, we follow the folder structure from your home folder ~, which is usually <em>C:/user/yourname</em>, or just the home folder of the R server. Next we see the created top folder of this research project: <em>Project01</em>, in which a subfolder <em>scripts</em> is placed, and in there the folder <em>data manipulation</em> and then we see one script saved there. Of course in the top folder <em>Project01</em>, there can be other folders, such as <em>modelling</em> or <em>writing</em>, to better separate the different components of your project. The R project file is placed within the <em>Project01</em> folder in this example, because that is the top folder of this research project.</p>
+<p>You can create a new R project within RStudio, by selecting <em>New project…</em> in the File menu (Figure 2A). In the project wizard, select <em>New Directory</em> (Figure 2B) and then <em>New Project</em> (Figure 2C). In the next window, you can give your R project a name, preferably the same as your top project folder (Figure 2D). You can also browse for the correct folder where your R project will be placed. As you can see, you can also opt to create a git repository, because R projects are compatible with version control systems, such as Git. Having an R project set up, makes it very easy to start working with Git later on.</p>
+<p><img src="2_R_good_practices_files/figure-html/fig2-1.png" width="100%" /></p>
 </div>
 </div>
 <div id="section-writing-code" class="section level2">
@@ -363,9 +365,9 @@ print(Temp)</code></pre>
 <h3>Errors and warnings</h3>
 <p>If you run your code, you always check the output of your code in the console. Hopefully it shows the desired output, and you can continue. However, sometimes you will see an error and the code will not run, or a warning after the code has (partially) run. You should <strong>never</strong> ignore errors and warnings! At first, the warnings and errors will range from mildly confusing to completely incomprehensible to you, but as you gain more experience with R, you will understand them quicker. They often tell you where the mistake is or why the code did not or only partially run.</p>
 <div class="figure">
-<img src="2_R_good_practices_files/figure-html/fig1-1.png" alt="**Figure 1: Errors and warnings in R. ** *Adapted from http://rex-analytics.com/decoding-error-messages-r/*" width="100%" />
+<img src="2_R_good_practices_files/figure-html/fig3-1.png" alt="**Figure 3: Errors and warnings in R. ** *Adapted from http://rex-analytics.com/decoding-error-messages-r/*" width="100%" />
 <p class="caption">
-<strong>Figure 1: Errors and warnings in R. </strong> <em>Adapted from <a href="http://rex-analytics.com/decoding-error-messages-r/" class="uri">http://rex-analytics.com/decoding-error-messages-r/</a></em>
+<strong>Figure 3: Errors and warnings in R. </strong> <em>Adapted from <a href="http://rex-analytics.com/decoding-error-messages-r/" class="uri">http://rex-analytics.com/decoding-error-messages-r/</a></em>
 </p>
 </div>
 <p>As shown in figure 1, errors are R’s way of saying no. The code you tried to run, was not possible to run. The error explains why it went wrong. These errors are not always easy to understand, so make sure to always check your code that resulted in an error, or google the error. Very simple, common mistakes can result in an error, but also in a warning, which can be even worse if missed. When a warning is shown, R will run the code, but not in the way you would want it to run. It will, for example, change some values in NA, but continue with the other values.</p>
@@ -399,15 +401,15 @@ print(Temp)</code></pre>
 <p>But if you don’t know what to do or which function to use, you can also google your question. Be sure to include “R” as search term, as this is the language you are writing in. You will often see the website <a href="https://stackoverflow.com/" class="uri">https://stackoverflow.com/</a> come up. This public platform has many coding questions &amp; answers which often answer your problem. If you run into errors or warnings, you can also google them and look on stackoverflow, to get an explanation of the error or warning. If you cannot find a solution on the internet, you can always choose to post your question on, for example, stackoverflow. Please keep in mind that you need to provide a representable example to get an answer.</p>
 <p>Another option to get help are cheat sheets. These are comprehensive summaries of the most important functions in a package. The one from <a href="https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf">ggplot2</a> is a very good example when you are working with graphs and want to, for example, adapt the x-axis label. If you look at the cheat sheet, you can easily locate the correct function, under <em>labels</em> on the second figure, left bottom corner.</p>
 <div class="figure">
-<img src="2_R_good_practices_files/figure-html/fig%203-1.png" alt="**Figure 3: Cheat sheet ggplot2 page 1**" width="100%" />
+<img src="2_R_good_practices_files/figure-html/fig%204-1.png" alt="**Figure 4: Cheat sheet ggplot2 page 1**" width="100%" />
 <p class="caption">
-<strong>Figure 3: Cheat sheet ggplot2 page 1</strong>
+<strong>Figure 4: Cheat sheet ggplot2 page 1</strong>
 </p>
 </div>
 <div class="figure">
-<img src="2_R_good_practices_files/figure-html/fig%204-1.png" alt="**Figure 4: Cheat sheet ggplot2 page 2**" width="100%" />
+<img src="2_R_good_practices_files/figure-html/fig%205-1.png" alt="**Figure 5: Cheat sheet ggplot2 page 2**" width="100%" />
 <p class="caption">
-<strong>Figure 4: Cheat sheet ggplot2 page 2</strong>
+<strong>Figure 5: Cheat sheet ggplot2 page 2</strong>
 </p>
 </div>
 <div id="section-end-of-good-practices-tutorial" class="section level3">
@@ -522,17 +524,17 @@ learnr:::store_exercise_cache("style", list(setup = NULL, chunks = list(list(lab
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz1-1", question = structure("Look at the code above. Will the barplot show the frequency of three unique words or of four unique words? If you are unsure, copy this code and try it out in R studio", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_5fb6431", 
+"character")), answers = list(structure(list(id = "lnr_ans_102312c", 
     option = "Four unique words, because table is defined as the table(Y), which consists of 4 unique words.", 
     value = "Four unique words, because table is defined as the table(Y), which consists of 4 unique words.", 
     label = structure("Four unique words, because table is defined as the table(Y), which consists of 4 unique words.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Remember that code runs from top to bottom. Which <em>table<\u002fem> object is used for the barplot?", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_bdc85d2", option = "Three unique words, because the table that is used for the barplot is created with table(X)", 
+)), structure(list(id = "lnr_ans_456a7ee", option = "Three unique words, because the table that is used for the barplot is created with table(X)", 
     value = "Three unique words, because the table that is used for the barplot is created with table(X)", 
     label = structure("Three unique words, because the table that is used for the barplot is created with table(X)", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_aeb878b", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_5ef6596", 
     option = "Three unique words, because Y consists of the words *X*, *hello* and *everybody*.", 
     value = "Three unique words, because Y consists of the words *X*, *hello* and *everybody*.", 
     label = structure("Three unique words, because Y consists of the words <em>X<\u002fem>, <em>hello<\u002fem> and <em>everybody<\u002fem>.", html = TRUE, class = c("html", 
@@ -546,26 +548,26 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz1-1-answer", question = "quiz1-1"), loading = structure("<strong>Loading:<\u002fstrong> \nLook at the code above. Will the barplot show the frequency of three unique words or of four unique words? If you are unsure, copy this code and try it out in R studio\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 728064001.660969, options = list()), class = c("learnr_radio", 
+    seed = 1486349701.80786, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz1-2", question = structure("Why would you use <code>remove(list = ls())<\u002fcode> at the beginning of your script?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_4e07991", 
+"character")), answers = list(structure(list(id = "lnr_ans_ce1fb74", 
     option = "To empty the console", value = "To empty the console", 
     label = structure("To empty the console", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b0b9a15", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6970779", 
     option = "To delete the script", value = "To delete the script", 
     label = structure("To delete the script", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_bc85d00", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_8fe4c2a", 
     option = "To empty the global environment", value = "To empty the global environment", 
     label = structure("To empty the global environment", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("You want to empty the global environment to ensure that you don&#39;t work with old objects in your code, while you have removed the line where you have defined them.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_9e470b1", option = "To delete all plots in the *Plots* window", 
+)), structure(list(id = "lnr_ans_2e6016d", option = "To delete all plots in the *Plots* window", 
     value = "To delete all plots in the *Plots* window", label = structure("To delete all plots in the <em>Plots<\u002fem> window", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
@@ -576,7 +578,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz1-2-answer", question = "quiz1-2"), loading = structure("<strong>Loading:<\u002fstrong> \nWhy would you use <code>remove(list = ls())<\u002fcode> at the beginning of your script?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1255576809.91533, options = list()), class = c("learnr_radio", 
+    seed = 1868725942.12981, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
@@ -656,7 +658,7 @@ learnr:::store_exercise_cache("code7", list(setup = NULL, chunks = list(list(lab
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46]}},"value":[{"type":"character","attributes":{},"value":["backports","base","bslib","checkmate","compiler","curl","datasets","digest","ellipsis","evaluate","fastmap","graphics","grDevices","grid","highr","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","later","learnr","lifecycle","magrittr","markdown","methods","mime","png","promises","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","shiny","stats","stringi","stringr","tools","utils","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["1.2.1","4.0.4","0.2.4","2.0.0","4.0.4","4.3","4.0.4","0.6.27","0.3.1","0.14","1.1.0","4.0.4","4.0.4","4.0.4","0.8","0.5.1.1","1.5.3","1.5.5","0.1.3","1.7.2","1.31","1.1.0.1","0.10.1.9008","1.0.0","2.0.1","1.1","4.0.4","0.10","0.1-7","1.2.0.1","2.5.0","1.0.6","0.4.10","2.7","2.0.2","0.3.1","1.6.0","4.0.4","1.5.3","1.4.0","4.0.4","4.0.4","2.4.1","0.21","1.8-4","2.2.1"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","bslib","checkmate","colorspace","compiler","cowplot","crayon","curl","datasets","DBI","debugme","digest","dplyr","ellipsis","evaluate","fansi","farver","fastmap","generics","ggplot2","glue","graphics","grDevices","grid","gtable","highr","htmltools","htmlwidgets","httpuv","jquerylib","jsonlite","knitr","labeling","later","learnr","lifecycle","magick","magrittr","markdown","methods","mime","munsell","pillar","pkgconfig","png","promises","purrr","R6","Rcpp","rlang","rmarkdown","rprojroot","sass","scales","shiny","stats","stringi","stringr","tibble","tidyselect","tools","utf8","utils","vctrs","withr","xfun","xtable","yaml"]},{"type":"character","attributes":{},"value":["0.2.1","1.2.1","4.0.4","0.2.4","2.0.0","2.0-0","4.0.4","1.1.1","1.4.1","4.3","4.0.4","1.1.1","1.1.0","0.6.27","1.0.4","0.3.1","0.14","0.4.2","2.0.3","1.1.0","0.1.0","3.3.3","1.4.2","4.0.4","4.0.4","4.0.4","0.3.0","0.8","0.5.1.1","1.5.3","1.5.5","0.1.3","1.7.2","1.31","0.4.2","1.1.0.1","0.10.1.9008","1.0.0","2.6.0","2.0.1","1.1","4.0.4","0.10","0.5.0","1.5.0","2.0.3","0.1-7","1.2.0.1","0.3.4","2.5.0","1.0.6","0.4.10","2.7","2.0.2","0.3.1","1.1.1","1.6.0","4.0.4","1.5.3","1.4.0","3.1.0","1.1.0","4.0.4","1.1.4","4.0.4","0.3.6","2.4.1","0.21","1.8-4","2.2.1"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>
