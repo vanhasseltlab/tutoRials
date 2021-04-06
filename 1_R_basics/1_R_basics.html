@@ -287,7 +287,7 @@ print(sum_numbers) </code></pre>
 <p>As seen in Figure 4, the function <code>rnorm</code> has three inputs, which are provided using arguments in the function call. You have to provide the number of samples you want to draw from the normal distribution, the mean and the standard deviation of the normal distribution. The output of the function is n random numbers from the normal distribution with mean and standard deviation you provided.</p>
 <div class="tutorial-exercise" data-label="example3" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>rnorm(n = 5, mean = 1, sd = 1)</code></pre>
-<pre><code>[1]  1.59749393  1.95423461  1.20994990 -0.05977438  0.67412060</code></pre>
+<pre><code>[1] 0.2655071 0.8995143 3.3500206 1.2334939 1.4023596</code></pre>
 <script type="application/json" data-ui-opts="1">{"engine":"r","has_checker":false,"caption":"<span data-i18n=\"text.enginecap\" data-i18n-opts=\"{&quot;engine&quot;:&quot;R&quot;}\">R Code<\/span>"}</script>
 </div>
 <p>Especially in the beginning of your coding adventures in R, it is clearer to provide the arguments with its names, so n = 10, mean = 1 and sd = 1. You can also leave the argument names out, but beware of the order in which they have to be provided. Besides the order, you can also see if there are any default values set for the arguments. With the <code>rnorm</code> function, the default for mean = 0, and the default for sd = 1. If you don’t provide these arguments, the function will automatically use these default values.</p>
@@ -507,7 +507,7 @@ PK &lt;- data.frame(&quot;id&quot; = id, &quot;sex&quot; = sex, &quot;conc&quot;
 PK</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["sex"],"name":[2],"type":["fct"],"align":["left"]},{"label":["conc"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"male","3":"8.738521"},{"1":"2","2":"female","3":"8.504635"},{"1":"3","2":"male","3":"8.188584"},{"1":"4","2":"female","3":"10.857754"},{"1":"5","2":"male","3":"11.258665"},{"1":"6","2":"female","3":"10.367907"},{"1":"7","2":"male","3":"11.644075"},{"1":"8","2":"female","3":"12.208951"},{"1":"9","2":"male","3":"7.742831"},{"1":"10","2":"female","3":"7.674314"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["sex"],"name":[2],"type":["fct"],"align":["left"]},{"label":["conc"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"male","3":"7.466762"},{"1":"2","2":"female","3":"7.790928"},{"1":"3","2":"male","3":"8.384571"},{"1":"4","2":"female","3":"9.823747"},{"1":"5","2":"male","3":"9.113753"},{"1":"6","2":"female","3":"11.460646"},{"1":"7","2":"male","3":"8.681409"},{"1":"8","2":"female","3":"10.125327"},{"1":"9","2":"male","3":"9.145486"},{"1":"10","2":"female","3":"10.025147"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>#all together
@@ -516,7 +516,7 @@ PK2 &lt;- data.frame(&quot;id&quot; = 1:10, &quot;sex&quot; = factor(rep(c(&quot
 PK2</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["sex"],"name":[2],"type":["fct"],"align":["left"]},{"label":["conc"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"male","3":"12.835314"},{"1":"2","2":"female","3":"8.727276"},{"1":"3","2":"male","3":"11.175809"},{"1":"4","2":"female","3":"13.992698"},{"1":"5","2":"male","3":"8.765321"},{"1":"6","2":"female","3":"11.429797"},{"1":"7","2":"male","3":"11.278274"},{"1":"8","2":"female","3":"10.156645"},{"1":"9","2":"male","3":"8.542175"},{"1":"10","2":"female","3":"10.696023"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["id"],"name":[1],"type":["int"],"align":["right"]},{"label":["sex"],"name":[2],"type":["fct"],"align":["left"]},{"label":["conc"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"male","3":"9.728725"},{"1":"2","2":"female","3":"9.901715"},{"1":"3","2":"male","3":"10.528781"},{"1":"4","2":"female","3":"9.101579"},{"1":"5","2":"male","3":"11.853980"},{"1":"6","2":"female","3":"9.496011"},{"1":"7","2":"male","3":"14.872785"},{"1":"8","2":"female","3":"6.621251"},{"1":"9","2":"male","3":"9.833860"},{"1":"10","2":"female","3":"13.376376"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -755,7 +755,7 @@ for(i in 1:10) {
 <p>When working in R, you often have to load data sets to work with and at the end, save the adapted data sets. To do this right, you need to understand what your working directory is. The working directory is the location on your computer where you are working: reading and saving images, data sets and scripts. It doesn’t matter where your working directory is, as long as you can find it and save all your scripts, data sets and images in the correct folders. Use the code standing below in your Rstudio environment to check your working directory.</p>
 <pre class="r"><code>getwd()</code></pre>
 <p><em>Rstudio webserver</em></p>
-<p><em>If you are working on the Rstudio webser, you will probably see that your working directory is similar to: “/cloud/” or “-/”. This is perfectly fine, and you can change it by adding a folder there for your project. However, you can not link to a folder on your own computer.</em></p>
+<p><em>If you are working on the Rstudio webser, you will probably see that your working directory is similar to: “/cloud/” or “-/”. This is perfectly fine, and you can change it by adding a folder there for your project. For example “-/Marinda/Project1”. However, you can not link to a folder on your own computer.</em></p>
 <div id="section-changing-your-directory" class="section level3">
 <h3>Changing your directory</h3>
 <p>As described in the chapter: <strong>Introduction to R</strong>, you need to have a designated folder per project where you are going to save your scripts and data sets. It is most likely that you will also you this folder as your working directory. You can create subfolders to save images and data sets separately.</p>
@@ -789,7 +789,7 @@ wd_folder_data &lt;- &quot;./data_sets/example_data.csv&quot;</code></pre>
 <div id="section-write-data" class="section level3">
 <h3>Write data</h3>
 <p>Writing data, the opposite of reading in data, is done at the end of your data manipulation and is used to save the changed data set in a folder in your working directory. You will most often use the csv file as your output for data sets, but sometimes also png or pdf for figures.</p>
-<p><strong>CSV files</strong> As discussed before, Dutch systems handle csv files differently. They can replace the comma as separation symbol with a semicolon when a csv file is created in Excel, or they can misunderstand the comma separation, because it is also the decimal symbol. Especially with writing a csv file from R, the comma is automatically placed as separator, and dots are used as decimal symbol. <em>–You have already changed this in Excel, so you should have no problem with opening data sets which are saved from R.–</em></p>
+<p><strong>CSV files</strong> As discussed before, Dutch systems handle csv files differently. They can replace the comma as separation symbol with a semicolon when a csv file is created in Excel, or they can misunderstand the comma separation, because it is also the decimal symbol. Especially with writing a csv file from R, the comma is automatically placed as separator, and dots are used as decimal symbol.</p>
 <div id="section-exercise-7" class="section level4">
 <h4>Exercise 7</h4>
 <p>Copy the code standing below to import the data set Theoph, which is an existing data set from R. Then write the data set to a location in your working directory, you can for example place it in a folder called data. Next, read your file back in again, but give it a different name than <em>Theoph</em>. Compare the two with the last line of code to see if you correctly wrote and read in the data set.</p>
@@ -903,19 +903,19 @@ learnr:::store_exercise_setup_chunk("__setup__", c("#load packages", "library(le
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_checkbox", label = "quiz1", question = structure("Check all that you have done:", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_5626bc2", 
+"character")), answers = list(structure(list(id = "lnr_ans_30f28e4", 
     option = "installed R on my computer", value = "installed R on my computer", 
     label = structure("installed R on my computer", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_3a0b417", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b00ae66", 
     option = "installed the RStudio IDE", value = "installed the RStudio IDE", 
     label = structure("installed the RStudio IDE", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b783698", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_2ba398c", 
     option = "installed the tidyverse R package", value = "installed the tidyverse R package", 
     label = structure("installed the tidyverse R package", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e63d3ad", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_af61dde", 
     option = "None of the above. I have not installed anything.", 
     value = "None of the above. I have not installed anything.", 
     label = structure("None of the above. I have not installed anything.", html = TRUE, class = c("html", 
@@ -929,24 +929,24 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_checkbox", lab
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz1-answer", question = "quiz1"), loading = structure("<strong>Loading:<\u002fstrong> \nCheck all that you have done:\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = FALSE, 
-    seed = 1565894319.27082, options = list()), class = c("learnr_checkbox", 
+    seed = 1893318454.61835, options = list()), class = c("learnr_checkbox", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz2-1", question = structure("What command do you use to install packages?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_67b665c", 
+"character")), answers = list(structure(list(id = "lnr_ans_df89950", 
     option = "`library()`", value = "`library()`", label = structure("<code>library()<\u002fcode>", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("We will see what <code>library()<\u002fcode> does later.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_dddb78e", option = "`install.packages()`", 
+)), structure(list(id = "lnr_ans_756d3cb", option = "`install.packages()`", 
     value = "`install.packages()`", label = structure("<code>install.packages()<\u002fcode>", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_dc481d7", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a03d8d7", 
     option = "`install_packages()`", value = "`install_packages()`", 
     label = structure("<code>install_packages()<\u002fcode>", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_daab413", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9f5ae86", 
     option = "There is no command. You must visit [cran.r-project.org](http://cran.r-project.org) and download packages manually.", 
     value = "There is no command. You must visit [cran.r-project.org](http://cran.r-project.org) and download packages manually.", 
     label = structure("There is no command. You must visit <a href=\"http://cran.r-project.org\">cran.r-project.org<\u002fa> and download packages manually.", html = TRUE, class = c("html", 
@@ -960,26 +960,26 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz2-1-answer", question = "quiz2-1"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat command do you use to install packages?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 120250455.444004, options = list()), class = c("learnr_radio", 
+    seed = 1237352897.42381, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz2-2", question = structure("How often do you need to install a package on your computer?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_2508081", 
+"character")), answers = list(structure(list(id = "lnr_ans_7ed1d36", 
     option = "Every time you restart R", value = "Every time you restart R", 
     label = structure("Every time you restart R", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a42c12b", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9dfdbc", 
     option = "Every time you restart your computer", value = "Every time you restart your computer", 
     label = structure("Every time you restart your computer", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d36ce3f", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_aaf2ed9", 
     option = "Only when an update is needed. R can find it on your hard drive as it is installed at least once.", 
     value = "Only when an update is needed. R can find it on your hard drive as it is installed at least once.", 
     label = structure("Only when an update is needed. R can find it on your hard drive as it is installed at least once.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_d424312", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_50cd3e1", 
     option = "Never, as long as you are connected to the internet.", 
     value = "Never, as long as you are connected to the internet.", 
     label = structure("Never, as long as you are connected to the internet.", html = TRUE, class = c("html", 
@@ -993,26 +993,26 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz2-2-answer", question = "quiz2-2"), loading = structure("<strong>Loading:<\u002fstrong> \nHow often do you need to install a package on your computer?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1213353389.43499, options = list()), class = c("learnr_radio", 
+    seed = 36066453.4832053, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz2-3", question = structure("What is the tidyverse?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_be0d2d7", 
+"character")), answers = list(structure(list(id = "lnr_ans_7163dc3", 
     option = "A collection of packages that work well together and provide tools for common data science tasks.", 
     value = "A collection of packages that work well together and provide tools for common data science tasks.", 
     label = structure("A collection of packages that work well together and provide tools for common data science tasks.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("You can install all of the tidyverse packages at once with <code>install.packages(&quot;tidyverse&quot;)<\u002fcode>.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_83e752f", option = "A word processing program for R", 
+)), structure(list(id = "lnr_ans_17db58c", option = "A word processing program for R", 
     value = "A word processing program for R", label = structure("A word processing program for R", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_71bcac1", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_9e93421", 
     option = "A code style that reads like poetry", value = "A code style that reads like poetry", 
     label = structure("A code style that reads like poetry", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_991e59f", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_287669d", 
     option = "An alternate universe where everyone is an R programmer.", 
     value = "An alternate universe where everyone is an R programmer.", 
     label = structure("An alternate universe where everyone is an R programmer.", html = TRUE, class = c("html", 
@@ -1025,7 +1025,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz2-3-answer", question = "quiz2-3"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat is the tidyverse?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1020226196.52492, options = list()), class = c("learnr_radio", 
+    seed = 1275878106.40587, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
@@ -1066,26 +1066,26 @@ learnr:::store_exercise_cache("first-running", list(setup = NULL, chunks = list(
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_checkbox", label = "quiz3", question = structure("Does your RStudio environment look the same as Figure 2?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_e33f77a", 
+"character")), answers = list(structure(list(id = "lnr_ans_11f629c", 
     option = "A. Yes", value = "A. Yes", label = structure("A. Yes", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("<ul>\n<li>A: Good! You can continue to the next chapter.<\u002fli>\n<\u002ful>\n", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_26223be", option = "B. No, there is no script window, I only see the code in my console", 
+)), structure(list(id = "lnr_ans_19daa67", option = "B. No, there is no script window, I only see the code in my console", 
     value = "B. No, there is no script window, I only see the code in my console", 
     label = structure("B. No, there is no script window, I only see the code in my console", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("<ul>\n<li>B: You did not open a script, but chose to write in the console. This is not reproducible or traceable, so do the exercise again from step 2.<\u002fli>\n<\u002ful>\n", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_9ec8f4b", option = "C. No, there is no code in my console, I only see *>* in my console", 
+)), structure(list(id = "lnr_ans_aa2be4b", option = "C. No, there is no code in my console, I only see *>* in my console", 
     value = "C. No, there is no code in my console, I only see *>* in my console", 
     label = structure("C. No, there is no code in my console, I only see <em>&gt;<\u002fem> in my console", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("<ul>\n<li>C: You did not run the code yet. Run the three lines of code and check you screen again with Figure 2.<\u002fli>\n<\u002ful>\n", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_dd5f3a9", option = "D. No, there is no vector a in the global environment, it is empty", 
+)), structure(list(id = "lnr_ans_2d7aebf", option = "D. No, there is no vector a in the global environment, it is empty", 
     value = "D. No, there is no vector a in the global environment, it is empty", 
     label = structure("D. No, there is no vector a in the global environment, it is empty", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("<ul>\n<li>D: You did not run the code yet. Run the three lines of code and check you screen again with Figure 2<\u002fli>\n<\u002ful>\n", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_ba0eea1", option = "E. No, the script has a meaningless name", 
+)), structure(list(id = "lnr_ans_d639b6f", option = "E. No, the script has a meaningless name", 
     value = "E. No, the script has a meaningless name", label = structure("E. No, the script has a meaningless name", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("<ul>\n<li>E: Even this is just a simple exercise, it is important to name your scripts well so you can find it back. We will use this script again.<\u002fli>\n<\u002ful>\n", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
@@ -1097,7 +1097,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_checkbox", lab
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz3-answer", question = "quiz3"), loading = structure("<strong>Loading:<\u002fstrong> \nDoes your RStudio environment look the same as Figure 2?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1705198013.20596, options = list()), class = c("learnr_checkbox", 
+    seed = 801645319.126705, options = list()), class = c("learnr_checkbox", 
 "tutorial_question")))
 </script>
  
@@ -1216,16 +1216,16 @@ learnr:::store_exercise_cache("example3", list(setup = NULL, chunks = list(list(
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz4-1", question = structure("<code>min()<\u002fcode> is a function we often use to obtain the minimum of the input values. What are the default arguments for <code>min()<\u002fcode>", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_88fdf8d", 
+"character")), answers = list(structure(list(id = "lnr_ans_2e90e22", 
     option = "`min()` has no default arguments", value = "`min()` has no default arguments", 
     label = structure("<code>min()<\u002fcode> has no default arguments", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Check the help page of this function", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_2841ff5", option = "na.rm = TRUE", 
+)), structure(list(id = "lnr_ans_bba510b", option = "na.rm = TRUE", 
     value = "na.rm = TRUE", label = structure("na.rm = TRUE", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Check the help page of this function", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_eef4df1", option = "na.rm = FALSE", 
+)), structure(list(id = "lnr_ans_26800d3", option = "na.rm = FALSE", 
     value = "na.rm = FALSE", label = structure("na.rm = FALSE", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
@@ -1236,27 +1236,27 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz4-1-answer", question = "quiz4-1"), loading = structure("<strong>Loading:<\u002fstrong> \n<code>min()<\u002fcode> is a function we often use to obtain the minimum of the input values. What are the default arguments for <code>min()<\u002fcode>\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1738999837.69022, options = list()), class = c("learnr_radio", 
+    seed = 921609031.070842, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz4-2", question = structure("<code>paste()<\u002fcode> is a function that pastes the input together with a defined separator. What does the default <code>sep<\u002fcode> argument of <code>paste()<\u002fcode> do when executing the function?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_fb6084f", 
+"character")), answers = list(structure(list(id = "lnr_ans_be18ba", 
     option = "Nothing, it is just there to let the function run smoothly", 
     value = "Nothing, it is just there to let the function run smoothly", 
     label = structure("Nothing, it is just there to let the function run smoothly", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_934dd22", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_db725b4", 
     option = "It provides a dash to paste beween the terms", 
     value = "It provides a dash to paste beween the terms", label = structure("It provides a dash to paste beween the terms", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_8135788", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_30e7e06", 
     option = "It provides a space to paste between the terms", 
     value = "It provides a space to paste between the terms", 
     label = structure("It provides a space to paste between the terms", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_953fb4e", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_a922c59", 
     option = "It indicates that no empty space should be pasted beween the terms", 
     value = "It indicates that no empty space should be pasted beween the terms", 
     label = structure("It indicates that no empty space should be pasted beween the terms", html = TRUE, class = c("html", 
@@ -1269,24 +1269,24 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz4-2-answer", question = "quiz4-2"), loading = structure("<strong>Loading:<\u002fstrong> \n<code>paste()<\u002fcode> is a function that pastes the input together with a defined separator. What does the default <code>sep<\u002fcode> argument of <code>paste()<\u002fcode> do when executing the function?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1214969352.43424, options = list()), class = c("learnr_radio", 
+    seed = 2003120848.56722, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz4-3", question = structure("The function <code>sub()<\u002fcode> can be used to replace certain strings in the input. Why isn&#39;t Hello replaced after running the following function: `sub(&#39;hello&#39;, &#39;goodbye&#39;, &#39;The agent said: Hello stranger&#39;)?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_601d736", 
+"character")), answers = list(structure(list(id = "lnr_ans_da5b12f", 
     option = "Because hello is written with a capital letter", 
     value = "Because hello is written with a capital letter", 
     label = structure("Because hello is written with a capital letter", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("This is correct, but this not the complete answer.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_7f23179", option = "Because the arguments are mixed, the pattern which is recognized is set to 'goodbye' and the replacement is set to 'hello' in the function.", 
+)), structure(list(id = "lnr_ans_4238cb2", option = "Because the arguments are mixed, the pattern which is recognized is set to 'goodbye' and the replacement is set to 'hello' in the function.", 
     value = "Because the arguments are mixed, the pattern which is recognized is set to 'goodbye' and the replacement is set to 'hello' in the function.", 
     label = structure("Because the arguments are mixed, the pattern which is recognized is set to &#39;goodbye&#39; and the replacement is set to &#39;hello&#39; in the function.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("No, the order of the arguments is correct", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_b6761e0", option = "Because hello is written with a capital letter and the capital letter is not ignored as stated in the default argument.", 
+)), structure(list(id = "lnr_ans_97356e7", option = "Because hello is written with a capital letter and the capital letter is not ignored as stated in the default argument.", 
     value = "Because hello is written with a capital letter and the capital letter is not ignored as stated in the default argument.", 
     label = structure("Because hello is written with a capital letter and the capital letter is not ignored as stated in the default argument.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("If the ignore.case argument is set to TRUE, the function will replace Hello in this sentence.", html = TRUE, class = c("html", 
@@ -1299,7 +1299,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz4-3-answer", question = "quiz4-3"), loading = structure("<strong>Loading:<\u002fstrong> \nThe function <code>sub()<\u002fcode> can be used to replace certain strings in the input. Why isn&#39;t Hello replaced after running the following function: `sub(&#39;hello&#39;, &#39;goodbye&#39;, &#39;The agent said: Hello stranger&#39;)?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 306584952.357235, options = list()), class = c("learnr_radio", 
+    seed = 1575625722.26629, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
@@ -1446,13 +1446,13 @@ learnr:::store_exercise_cache("exercise5", list(setup = NULL, chunks = list(list
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz5-1", question = structure("How many elements of the vector_exercise are larger than or equal to 364?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_d73e122", 
+"character")), answers = list(structure(list(id = "lnr_ans_583531d", 
     option = "19", value = "19", label = structure("19", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_abe89e6", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b6e8cd2", 
     option = "20", value = "20", label = structure("20", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_caea72e", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_60355a9", 
     option = "21", value = "21", label = structure("21", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
@@ -1463,19 +1463,19 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz5-1-answer", question = "quiz5-1"), loading = structure("<strong>Loading:<\u002fstrong> \nHow many elements of the vector_exercise are larger than or equal to 364?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 2051375505.04475, options = list()), class = c("learnr_radio", 
+    seed = 238592156.888897, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz5-2", question = structure("How many elements  of the vector_exercise are larger than 100 and smaller than or equal to 430?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_b8298a9", 
+"character")), answers = list(structure(list(id = "lnr_ans_826cebe", 
     option = "9", value = "9", label = structure("9", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_706dd31", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b3a203e", 
     option = "11", value = "11", label = structure("11", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_de2ffd5", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c25c6b0", 
     option = "10", value = "10", label = structure("10", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
@@ -1486,19 +1486,19 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz5-2-answer", question = "quiz5-2"), loading = structure("<strong>Loading:<\u002fstrong> \nHow many elements  of the vector_exercise are larger than 100 and smaller than or equal to 430?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 72848026.9660775, options = list()), class = c("learnr_radio", 
+    seed = 512428084.261382, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz5-3", question = structure("How many elements  of the vector_exercise are smaller than 100 or larger than 430?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_7edb785", 
+"character")), answers = list(structure(list(id = "lnr_ans_a780a05", 
     option = "20", value = "20", label = structure("20", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_c1509fd", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_f97aa7a", 
     option = "21", value = "21", label = structure("21", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_b284a1a", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_481a63c", 
     option = "22", value = "22", label = structure("22", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", 
 "tutorial_quiz_answer"))), button_labels = list(submit = structure("<span data-i18n=\"button.questionsubmit\">Submit Answer<\u002fspan>", html = TRUE, class = c("html", 
@@ -1509,24 +1509,24 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz5-3-answer", question = "quiz5-3"), loading = structure("<strong>Loading:<\u002fstrong> \nHow many elements  of the vector_exercise are smaller than 100 or larger than 430?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1912011561.60965, options = list()), class = c("learnr_radio", 
+    seed = 1834513269.64574, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz6", question = structure("Look at the last example above. Why is the mode (data type) of <em>one.missing<\u002fem> numeric?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_b99c0e4", 
+"character")), answers = list(structure(list(id = "lnr_ans_9482a1", 
     option = "Because it is a factor, and factors are coded numerically.", 
     value = "Because it is a factor, and factors are coded numerically.", 
     label = structure("Because it is a factor, and factors are coded numerically.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("Indeed, the factors are coded numerically and its labels are the inputs you have given, in this case the character.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_cf92ab3", option = "Because it is a factor, and factors are a subtype of numeric data.", 
+)), structure(list(id = "lnr_ans_b7a304a", option = "Because it is a factor, and factors are a subtype of numeric data.", 
     value = "Because it is a factor, and factors are a subtype of numeric data.", 
     label = structure("Because it is a factor, and factors are a subtype of numeric data.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("This is not true, factors are a different type of data. Try again.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_41ef390", option = "Because it is a factor, and its contents are of numeric type.", 
+)), structure(list(id = "lnr_ans_439f49d", option = "Because it is a factor, and its contents are of numeric type.", 
     value = "Because it is a factor, and its contents are of numeric type.", 
     label = structure("Because it is a factor, and its contents are of numeric type.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("This is not true, you supply character input and one missing, not numeric data. Try again.", html = TRUE, class = c("html", 
@@ -1539,24 +1539,24 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz6-answer", question = "quiz6"), loading = structure("<strong>Loading:<\u002fstrong> \nLook at the last example above. Why is the mode (data type) of <em>one.missing<\u002fem> numeric?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 1100867051.48737, options = list()), class = c("learnr_radio", 
+    seed = 1285671986.90131, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz7", question = structure("Look at the last example above. Which answer option describes the list correctly?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_d9b7799", 
+"character")), answers = list(structure(list(id = "lnr_ans_fb339e5", 
     option = "The list consists of 3 elements, the first a data frame with 30 rows, the second a vector with one word, the third a vector with one word.", 
     value = "The list consists of 3 elements, the first a data frame with 30 rows, the second a vector with one word, the third a vector with one word.", 
     label = structure("The list consists of 3 elements, the first a data frame with 30 rows, the second a vector with one word, the third a vector with one word.", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Pay attention to the sublevels of the list. [[x]] indicates the list element, additional numbers and brackets indicate the element of the list element. Try again.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_f868a1e", option = "The list consists of 32 elements, the first 30 are vectors with 3 elements, the second a vector with one word, the third a vector with one word. ", 
+)), structure(list(id = "lnr_ans_82c043e", option = "The list consists of 32 elements, the first 30 are vectors with 3 elements, the second a vector with one word, the third a vector with one word. ", 
     value = "The list consists of 32 elements, the first 30 are vectors with 3 elements, the second a vector with one word, the third a vector with one word. ", 
     label = structure("The list consists of 32 elements, the first 30 are vectors with 3 elements, the second a vector with one word, the third a vector with one word. ", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Pay attention to the data structures you know, all of them can be placed within a list. Try again.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_c7ba4b4", option = "The list consists of 2 elements, the first a data frame with 30 rows, the second a list of two elements with each one word.", 
+)), structure(list(id = "lnr_ans_a76e53f", option = "The list consists of 2 elements, the first a data frame with 30 rows, the second a list of two elements with each one word.", 
     value = "The list consists of 2 elements, the first a data frame with 30 rows, the second a list of two elements with each one word.", 
     label = structure("The list consists of 2 elements, the first a data frame with 30 rows, the second a list of two elements with each one word.", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
@@ -1568,21 +1568,21 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz7-answer", question = "quiz7"), loading = structure("<strong>Loading:<\u002fstrong> \nLook at the last example above. Which answer option describes the list correctly?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 89177632.4584734, options = list()), class = c("learnr_radio", 
+    seed = 1144561533.46702, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz8", question = structure("Look back at the first example of an if-statement, where the condition is x&gt;5.5. What happens if the tested value x is lower than 5.5?", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_e093545", 
+"character")), answers = list(structure(list(id = "lnr_ans_3fa089b", 
     option = "A message will be printed: 'Failed'", value = "A message will be printed: 'Failed'", 
     label = structure("A message will be printed: &#39;Failed&#39;", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("It is not specified what will happen if the condition is NOT met, so try again.", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_6dfb536", option = "Nothing will be printed", 
+)), structure(list(id = "lnr_ans_5037841", option = "Nothing will be printed", 
     value = "Nothing will be printed", label = structure("Nothing will be printed", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", 
-"tutorial_quiz_answer")), structure(list(id = "lnr_ans_6792cba", 
+"tutorial_quiz_answer")), structure(list(id = "lnr_ans_e64c867", 
     option = "A message will be printed: 'Passed'", value = "A message will be printed: 'Passed'", 
     label = structure("A message will be printed: &#39;Passed&#39;", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("If that would happen, your if-statement will not have had any consequence and would be unlogical to use. Try again.", html = TRUE, class = c("html", 
@@ -1595,7 +1595,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz8-answer", question = "quiz8"), loading = structure("<strong>Loading:<\u002fstrong> \nLook back at the first example of an if-statement, where the condition is x&gt;5.5. What happens if the tested value x is lower than 5.5?\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 155163901.927746, options = list()), class = c("learnr_radio", 
+    seed = 1547857604.77922, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  
@@ -1674,18 +1674,18 @@ learnr:::store_exercise_cache("exercise6b", list(setup = NULL, chunks = list(lis
  
 <script type="application/shiny-prerendered" data-context="server">
 learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "quiz9", question = structure("Open both data sets, Theoph and your read in data set, to compare them. Also look at the output of <code>all(NEWNAME == Theoph)<\u002fcode>.", html = TRUE, class = c("html", 
-"character")), answers = list(structure(list(id = "lnr_ans_b48565b", 
+"character")), answers = list(structure(list(id = "lnr_ans_51ed86", 
     option = "Both data sets consist of 132 observations of 5 variables and the comparison evaluated to TRUE", 
     value = "Both data sets consist of 132 observations of 5 variables and the comparison evaluated to TRUE", 
     label = structure("Both data sets consist of 132 observations of 5 variables and the comparison evaluated to TRUE", html = TRUE, class = c("html", 
     "character")), correct = TRUE, message = structure("Everything went well with writing and reading data, well done!", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_2254457", option = "The read in data set consist of 132 observations of 6 variables and the comparison evaluated to FALSE", 
+)), structure(list(id = "lnr_ans_39aae30", option = "The read in data set consist of 132 observations of 6 variables and the comparison evaluated to FALSE", 
     value = "The read in data set consist of 132 observations of 6 variables and the comparison evaluated to FALSE", 
     label = structure("The read in data set consist of 132 observations of 6 variables and the comparison evaluated to FALSE", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Check the arguments of the <code>read.csv<\u002fcode> function, which variable needs to be removed?", html = TRUE, class = c("html", 
     "character"))), class = c("tutorial_question_answer", "tutorial_quiz_answer"
-)), structure(list(id = "lnr_ans_dd58444", option = "I get an error message either with writing my data or when reading in my data, so I cannot compare the data sets", 
+)), structure(list(id = "lnr_ans_113cfa4", option = "I get an error message either with writing my data or when reading in my data, so I cannot compare the data sets", 
     value = "I get an error message either with writing my data or when reading in my data, so I cannot compare the data sets", 
     label = structure("I get an error message either with writing my data or when reading in my data, so I cannot compare the data sets", html = TRUE, class = c("html", 
     "character")), correct = FALSE, message = structure("Try to fix the error(s) by searching them on Google, or reading the help files of the function.", html = TRUE, class = c("html", 
@@ -1698,7 +1698,7 @@ learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label 
 "character")), message = NULL, post_message = NULL), ids = list(
     answer = "quiz9-answer", question = "quiz9"), loading = structure("<strong>Loading:<\u002fstrong> \nOpen both data sets, Theoph and your read in data set, to compare them. Also look at the output of <code>all(NEWNAME == Theoph)<\u002fcode>.\n<br/><br/><br/>", html = TRUE, class = c("html", 
 "character")), random_answer_order = FALSE, allow_retry = TRUE, 
-    seed = 953622086.055935, options = list()), class = c("learnr_radio", 
+    seed = 1461125709.81961, options = list()), class = c("learnr_radio", 
 "tutorial_question")))
 </script>
  <!--html_preserve-->

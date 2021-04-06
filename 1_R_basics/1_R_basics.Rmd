@@ -665,7 +665,7 @@ getwd()
 
 *Rstudio webserver*
 
-*If you are working on the Rstudio webser, you will probably see that your working directory is similar to: "/cloud/" or "-/". This is perfectly fine, and you can change it by adding a folder there for your project. For example "-/Marinda/Project1". However, you can not link to a folder on your own computer.*
+*If you are working on the Rstudio webser, you will probably see that your working directory is similar to: "/cloud/" or "-/". This is perfectly fine, and you can change it by adding a folder there for your project. For example "-/Marinda/Project1". However, you cannot link to a folder on your own computer.*
 
 ### Changing your directory
 As described in the chapter: **Introduction to R**, you need to have a designated folder per project where you are going to save your scripts and data sets. It is most likely that you will also you this folder as your working directory. You can create subfolders to save images and data sets separately.
