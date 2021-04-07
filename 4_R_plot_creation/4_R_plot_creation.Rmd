@@ -1,5 +1,5 @@
 ---
-title: "Introduction to R"
+title: "Plot creation"
 output: 
   learnr::tutorial:
     progressive: true
@@ -9,108 +9,76 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 #load packages
-library(learnr)
-library(tidyverse)
-library(knitr)
+require(learnr)
+require(knitr)
+require(png)
+require(grid)
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
-
-#code checking
-checker <- function(label, user_code, check_code, envir_result, evaluate_result, ...) {
-  list(message = check_code, correct = TRUE, location = "append")
-}
-tutorial_options(exercise.timelimit = 10, exercise.checker = checker)
 
 #load data used in exercises
 
 ```
 
-## Home
+## Introduction 
 
-This tutorial provides a short, but interactive introduction of R and Rstudio (Figure 1). We will start with a knowledge clip that shows the Rstudio environment you will eventually work in. It will discuss the environment, how to work in it, how to run code and how to check your output. Next you will learn something about the various functions and objects in R. Then we move on to actual coding in R, where you will learn data manipulation and creating plots by coding yourself. Then we move on to simulations with Rx0DE, which is a package in R that can be used for PK and PD simulations. Last, but not least, you will do some exercises in Rstudio. 
+- ggplot buid in layers, figure ggplot_layers.png in Images folder
+- Cheat sheets
 
-```{r fig1, echo = FALSE, out.width = "100%", fig.cap = "**Figure 1: Flow of the tutorial**", fig.asp = 0.27}
-library(png)
-library(grid)
-img <- readPNG("./Images/flow2.png", info = TRUE)
-grid.raster(img)
-```
+### Grammar of ggplot
 
-## Intro to R and Rstudio
+- Maybe include ggplot_grammar.png from Linda
 
-### Knowledge clip
+## Simple plot
 
-![Knowledge clip]()
+- data 
+- aes
 
-## Functions and objects
+### Geom layers
 
-All the things you save are objects. Objects are a collection of data, ranging from one number or character to a complete data set. Look at the "numbers" object in the coding block. This is an object that contains 5 numbers. You can also save the output of functions in objects, which is done with the sum and mean of "numbers". These are objects which contain one number each. 
+- geom layers
+- overlaying lines and points
 
-```{r example1, exercise = TRUE, exercise.eval = TRUE}
-numbers <- c(1,2,3,4,5)
-sum_numbers <- sum(numbers)
-mean_numbers <- mean(numbers)
+### Exercise
 
-print(sum_numbers) 
-```
+- Simple plotting exercise with geom_line and geom_point
 
-All the things you do in R are functions, think for example about extracting the mean or the sum of a couple of numbers. `sum()` and `mean()` are functions, which you use to gather information. You can also use a function to generate a certain output, such as `print()` the object or create a graph with `plot()` or `ggplot()`. 
+## Complex plot
 
-### Exercise 1
+- group variable
+- colour variable
+- facetting
 
-For this exercise, print the object: mean_numbers
+### Quiz
 
-```{r exercise1, exercise = T, exercise.lines=3}
+- Questions about what to set in the aes and what not
+
+### Exercise
+
+- Replace ? in the code to recreate the given plot (aes(group = ?, colour = ?) etc. See ggplot_group_exercise.png for example I based this exercise on.
+- Add facet_ to create individual plots
 
 
+## Beautiful plot
 
-```
+•	set labels 
+•	aes colour discrete vs continuous
+•	Colour palates
+•	scale the aesthetics
+•	Themes (set theme_bw), call predefined theme before theme options
 
-<div id="exercise1-hint">
-**Hint:** You may want to use the `print()` function.
-</div>
+### Exercise
 
-### Functions
+- Change colour of id to discrete Hint: check data type, change data type, set colour in aes. See ggplot_colour_exercise.png for the example I based this exercise on. 
+- Recreate example plot? 
 
-A function is a piece of code that performs a certain operation. Input can be provided using arguments. Let's look for example at drawing from a normal distribution, which is often done for generating random data using the function `rnorm`. 
+## Multiple plots
 
-```{r fig2, echo = FALSE, out.width = "100%", fig.asp = 0.28, fig.cap = "**Figure 2: Elements of function `rnorm`**"}
-library(png)
-library(grid)
-img <- readPNG("./Images/Functions.png", info = TRUE)
-grid.raster(img)
-```
+- Par
+- Patchwork very interesting and useful package https://patchwork.data-imaginist.com/
 
-As seen in Figure 2, the function `rnorm` has three inputs, which are provided using arguments in the function call. You have to provide the number of samples you want to draw from the normal distribution, the mean and the standard deviation of the normal distribution. The output of the function is n random numbers from the normal distribution with mean and standard deviation you provided. 
+## Everything combined
 
-```{r example3, exercise = TRUE, exercise.eval = TRUE}
-rnorm(n = 5, mean = 1, sd = 1)
-```
-
-Especially in the beginning of your coding adventures in R, it is clearer to provide the arguments with its names, so n = 10, mean = 1 and sd = 1. You can also leave the argument names out, but beware of the order in which they have to be provided. You can find this order in the help files, as shown in the knowledge clip. Besides the order, you can also see if there are any default values set for the arguments. With the `rnorm` function, the default mean = 0, and the default sd = 1. If you don't provide these arguments, the function will automatically use these default values. 
-
-### Exercise 2
-
-For this exercise, generate 10 random numbers from a standard normal distribution.
-
-```{r exercise2, exercise = T, exercise.lines=3}
-
-```
-
-<div id="exercise2-hint">
-**Hint:** Think about the default arguments.
-</div>
-
-### Objects
-As said before, output of functions can be stored in objects. You do this with the assign operator, the `<-`. Before the assign operator, you set the name of the object. This name can be anything, just what you want and what is useful. If you call every object *data1*, *data2* etc., it is too vague and  you don't know what is in the object. 
-
-Objects are a collection of data and therefore, we can describe multiple data structures in which the data can be stored. Furthermore, there are also various data types, such as character or numeric. Figure 3 explains the relation between objects, structures and types. 
-
-```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 0.5, fig.cap = "**Figure 3: Objects, data structures and data types**"}
-library(png)
-library(grid)
-img <- readPNG("./Images/Objects.png", info = TRUE)
-grid.raster(img)
-```
-
+- Large exercise of creating a complicated plot with multiple layers
+- R course 2017 : Hands on exercise 7 -> adapted
