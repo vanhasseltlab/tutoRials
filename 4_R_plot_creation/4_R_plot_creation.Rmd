@@ -9,55 +9,323 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 #load packages
-require(learnr)
-require(knitr)
-require(png)
-require(grid)
+library(learnr)
+library(knitr)
+library(gradethis)
+library(png)
+library(grid)
+library(tidyverse)
+library(vdiffr)
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
 
+#code checking
+gradethis_setup()
+
 #load data used in exercises
+example_data <- read.table(file = "./data/example_data.txt", header = TRUE, sep = ",")
+example_data_ID1 <- example_data %>% 
+  filter(ID == 1) 
+
+test_plots <- function(x, y) {
+  fx <- tempfile()
+  fy <- tempfile()
+  on.exit({
+    unlink(c(fx, fy))
+  })
+  vdiffr::write_svg(x, fx)
+  vdiffr::write_svg(y, fy)
+  identical(readLines(fx), readLines(fy))
+}
 
 ```
 
 ## Introduction 
 
-- ggplot buid in layers, figure ggplot_layers.png in Images folder
-- Cheat sheets
+Visualization is one of the strongest tools for data exploration and analysis. R contains a versatile library for plotting your data: `ggplot2`. This tutorial will guide you through the basics of using `ggplot2`, so at the end only your own imagination will stand between you and your data visualization.
+
 
 ### Grammar of ggplot
 
-- Maybe include ggplot_grammar.png from Linda
+ggplot has its own grammar, which falls within the tidyverse framework (along with `dplyr` and `tidyr`). It works with layers (Figure 1), where you keep adding functions to create the plot you want. Table 1 gives an overview of the different functions that are part of ggplot. In the next sections you will see how to use these building blocks in creating real plots.
+
+```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 0.6, fig.cap = "**Figure 1: ggplot layers**"}
+img <- readPNG("./Images/ggplot_layers.png")
+grid.raster(img)
+```
+
+layer            
+-------                       ----------------------- 
+`data`                        add a data frame with variables you want to plot
+`aes`                         aesthetic, map the variables to axes: x, y, but also color, point size etc.
+`geom_*()`                    the type of plot (geometric object): points, lines, boxplot, barplot, etc.
+`facet_*()`                   splitting up of data over different panels (or facets)
+`scale_*()` and `coord_*()`   adjust the scales of plot: limits, transformations, color scale etc.
+`theme_*()`                   adjust visual aspect: font size, background color, etc.
+
+Table: Table 1: different layers in ggplot. `*` can be replaced by the specific element you want to plot, e.g. `geom_point()` for a scatter plot
+
+You can find many more layer options in the [ggplot2 cheat sheets](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).
+
 
 ## Simple plot
 
-- data 
-- aes
+Lets start with building our first plot! We will need some data to begin with. A dataset called `example_data` was added to this tutorial. We can look at what it contains using `head()`.  
 
-### Geom layers
+```{r code1, echo = TRUE}
+head(example_data)
+```
 
-- geom layers
-- overlaying lines and points
+
+Lets make our first simple plot, containing the concentration (`y`) over time (`x`). The main function is `ggplot()`, here you can specify the data (`data = example_data`) and the aesthetic (`aes(x = time, y = concentration)`). Let us see what happens!
+
+```{r code2, echo = TRUE}
+ggplot(data = example_data, aes(x = time, y = concentration))
+```
+
+What a disappointment, you cannot see the data. For this, we first need to add a geometry layer.
+
+### Geom(etry) layers
+
+We can start adding layers using an addition sign `+`. Lets start with a point (or scatter) plot. 
+
+
+```{r code3, echo = TRUE}
+ggplot(data = example_data, aes(x = time, y = concentration)) +
+  geom_point()
+```
+
+*the `aes()` can be specified either inside `ggplot()` or in a specific layer (e.g. `geom_point(aes(y = concentration))`).
+
 
 ### Exercise
 
-- Simple plotting exercise with geom_line and geom_point
+Now we can start playing with the different layers! First we do some data manipulation using `dplyr`. The data contains multiple measurements per individual, so lets use the data for only individual `1`.
+
+
+```{r code4, echo = TRUE}
+example_data_ID1 <- example_data %>% 
+  filter(ID == 1)
+
+```
+
+For this smaller data set, to visualize a model fit, we want to not only plot the observed `concentration` as points, but also the model `prediction` as **line** over time. 
+- Add a line geometry to the plot below with on the `y` axis the `prediction`.
+
+```{r exercise1, exercise = TRUE}
+ggplot(data = example_data_ID1, aes(x = time)) +
+  geom_point(aes(y = concentration))
+```
+
+
+```{r exercise1-check}
+grade_result(
+  pass_if(~ test_plots(.result, ggplot(data = example_data_ID1, aes(x = time)) +
+                                  geom_point(aes(y = concentration)) +
+                                  geom_line(aes(y = prediction))), 
+          "You did it!"),
+  pass_if(~ test_plots(.result, ggplot(data = example_data_ID1, aes(x = time)) +
+                                  geom_line(aes(y = prediction)) +
+                                  geom_point(aes(y = concentration))), 
+          "You did it!"),
+  fail_if(~ TRUE, 
+          "Not yet there, hint: check out the geom_line() function help page.")
+)
+```
+
 
 ## Complex plot
 
-- group variable
-- colour variable
-- facetting
+The plots shown before can (more) easily be made using the base R plot function. But now we will truly explore the possibilities of ggplot.
+
+### Grouping on variables
+
+In concentration time plots for multiple individuals, you might like to add lines for the predictions. So lets try it!
+
+```{r code5a, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction))
+```
+
+That looks very weird, instead of adding a line for each individual, ggplot adds a line over all individuals. Luckily ggplot has some very smart option for this: you can group geometries based on variables.
+
+```{r code5b, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID))
+```
+
+
+### Add colors to your plot
+
+You can also use color on a layer to let it pop.
+
+```{r code6, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID), color = "red")
+```
+
+You can use colors to distinguish between individuals, by adding the variable ID as an aesthetic to `aes()`. **Be aware!** There is a difference here between placing this feature inside or outside of `aes()`!
+
+```{r code7a, echo = TRUE}
+ggplot(data = example_data, aes(x = time, color = ID)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID))
+```
+
+The above plot looks a bit weird. ggplot sees the ID variable as numeric. Try changing ID into a factor (`as.factor(ID)`).
+
+```{r code7b, echo = TRUE}
+ggplot(data = example_data, aes(x = time, color = as.factor(ID))) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID))
+```
+
+
+
+
+
+### Multiple plots: facetting
+
+Lastly, you can facet based on different variables. Facets are different panels, each containing their own part of the data.You use the `~` operator, which means 'by' here. So if we want to group by individual: we add `~ ID` to the facet layer. Note that you don't need an `aes()` function inside the facet, it works separately from the geometries.
+
+```{r code8, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID), color = "red") +
+  facet_wrap(~ ID)
+```
+
+Please do not hesitate to play around with these different features before taking the quiz:
+
+```{r exercise3a, exercise = TRUE}
+ggplot(data = example_data, aes(x = time)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID), color = "red") +
+  facet_wrap(~ ID)
+```
+
+
 
 ### Quiz
 
-- Questions about what to set in the aes and what not
+- See the figure below. They all have a `color` argument in the creation of the plot. For every panel: is the color given inside or outside of `aes()`?
 
-### Exercise
+```{r fig2, echo = FALSE, out.width = "100%", fig.asp = 0.6}
+img <- readPNG("./Images/quiz_complex_plots.png")
+grid.raster(img)
+```
 
-- Replace ? in the code to recreate the given plot (aes(group = ?, colour = ?) etc. See ggplot_group_exercise.png for example I based this exercise on.
-- Add facet_ to create individual plots
+
+```{r quiz1, echo = FALSE}
+quiz(caption = "", 
+  question("Plot A:",
+    answer("in `aes()`"),
+    answer("outside `aes()`", correct = TRUE),
+    incorrect = "Wrong!" 
+  ),
+  question("Plot B:",
+    answer("in `aes()`", correct = TRUE),
+    answer("outside `aes()`"),
+    incorrect = "Wrong!" 
+  ),
+  question("Plot C:",
+    answer("in `aes()`", correct = TRUE),
+    answer("outside `aes()`"),
+    incorrect = "Wrong!" 
+  ),
+  question("Plot D:",
+    answer("in `aes()`", correct = TRUE),
+    answer("outside `aes()`"),
+    incorrect = "Wrong!" 
+  ),
+  question("Plot E:",
+    answer("in `aes()`"),
+    answer("outside `aes()`", correct = TRUE),
+    incorrect = "Wrong!" 
+  ),
+  question("Plot F:",
+    answer("in `aes()`", correct = TRUE),
+    answer("outside `aes()`"),
+    incorrect = "Wrong!" 
+  )
+)
+```
+
+
+
+### Exercises
+
+- Replace question marks (`'?'`) in the code to recreate the plot picture of the plot below.
+
+```{r exercise2, exercise = TRUE, eval = FALSE, warning = FALSE}
+ggplot(data = example_data, aes(x = time, y = prediction)) +
+  geom_line(aes(group = '?', color = '?')) +
+  geom_smooth(aes(color = '?'))
+```
+
+```{r exercise2-check}
+ggplot(data = example_data, aes(x = time, y = prediction)) +
+  geom_line(aes(group = '?', color = '?')) +
+  geom_smooth(aes(color = '?'))
+
+grade_result(
+  pass_if(~ test_plots(.result, ggplot(data = example_data, aes(x = time, y = prediction)) +
+                                  geom_line(aes(group = ID, color = sex)) +
+                                  geom_smooth(aes(color = sex))), 
+          "You did it!"),
+  
+  fail_if(~ test_plots(.result, ggplot(data = example_data, aes(x = time, y = prediction)) +
+                                  geom_line(aes(group = 'ID', color = 'sex')) +
+                                  geom_smooth(aes(color = 'sex'))), 
+          "Not yet there, hint: remove the quotation marks (') around your variable names."),
+  fail_if(~ test_plots(.result, ggplot(data = example_data, aes(x = time, y = prediction)) +
+                                  geom_line(aes(group = '?', color = '?')) +
+                                  geom_smooth(aes(color = '?'))), 
+          "You did not get anywhere... Replace the '?'s in the above code"),
+  
+  fail_if(~ TRUE, 
+          "Wrong!")
+)
+```
+
+```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 0.6}
+img <- readPNG("./Images/result_exercise_complex_plots.png")
+grid.raster(img)
+```
+
+- Use `facet_wrap()` in the code below to create individual plots for separate `weight_group`s
+
+
+```{r exercise3, exercise = TRUE, eval = FALSE, warning = FALSE}
+ggplot(data = example_data, aes(x = time, y = prediction)) +
+  geom_line(aes(group = ID)) +
+  facet_wrap(~ weight_group)
+```
+
+```{r exercise3-check}
+grade_result(
+  pass_if(~ test_plots(.result, ggplot(data = example_data, aes(x = time, y = prediction)) +
+                                  geom_line(aes(group = ID)) +
+                                  facet_wrap(~ weight_group)), 
+          "You did it!"),
+  
+  fail_if(~ test_plots(.result, ggplot(data = example_data, aes(x = time, y = prediction)) +
+                                  facet_wrap(~ weight_group)), 
+          "Oh no, don't remove the geometry!"),
+  fail_if(~ test_plots(.result, ggplot(data = example_data, aes(x = time, y = prediction)) +
+                                  geom_line(aes(group = ID)) +
+                                  facet_wrap(~ ID)), 
+          "Also looks nice, but wrong, you are supposed to facet on weight_group"),
+  
+  fail_if(~ TRUE, 
+          "Wrong!")
+)
+```
+
 
 
 ## Beautiful plot
