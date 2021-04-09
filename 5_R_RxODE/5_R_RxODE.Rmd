@@ -1,5 +1,5 @@
 ---
-title: "Introduction to R"
+title: "RxODE"
 output: 
   learnr::tutorial:
     progressive: true
@@ -9,108 +9,83 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 #load packages
-library(learnr)
-library(tidyverse)
-library(knitr)
+require(learnr)
+require(knitr)
+require(png)
+require(grid)
+library(cowplot)
+library(ggplot2)
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
-
-#code checking
-checker <- function(label, user_code, check_code, envir_result, evaluate_result, ...) {
-  list(message = check_code, correct = TRUE, location = "append")
-}
-tutorial_options(exercise.timelimit = 10, exercise.checker = checker)
 
 #load data used in exercises
 
 ```
 
-## Home
+## Introduction
 
-This tutorial provides a short, but interactive introduction of R and Rstudio (Figure 1). We will start with a knowledge clip that shows the Rstudio environment you will eventually work in. It will discuss the environment, how to work in it, how to run code and how to check your output. Next you will learn something about the various functions and objects in R. Then we move on to actual coding in R, where you will learn data manipulation and creating plots by coding yourself. Then we move on to simulations with Rx0DE, which is a package in R that can be used for PK and PD simulations. Last, but not least, you will do some exercises in Rstudio. 
+Understanding of pharmacokinetics (PK) and pharmacodynamics (PD) is essential before using the package RxODE. If the concept of compartmental modelling is not clear to you, first go back to PKPD lectures. A system of ordinary differential equations (ODEs) describe PKPD models, with equations for the change of amount of drug over time in different compartments. This is done for the example below, where a depot and central compartment are shown and the corresponding ODEs. The drug is only leaving compartment 1, the depot, which results in only one negative term in the ODE. Compartment 2, the central compartment has drug which enters from the depot, and drug which leaves the compartment. Therefore, we see two terms in the ODE, one positive term describing the amount coming in and one negative term describing the amount going out over time. 
 
-```{r fig1, echo = FALSE, out.width = "100%", fig.cap = "**Figure 1: Flow of the tutorial**", fig.asp = 0.27}
-library(png)
-library(grid)
-img <- readPNG("./Images/flow2.png", info = TRUE)
+```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 0.7, fig.cap = "**Figure 1: Example of a model and its ODEs**"}
+img <- readPNG("./Images/Model_ODE.png")
 grid.raster(img)
 ```
 
-## Intro to R and Rstudio
+### Purpose and installation
 
-### Knowledge clip
+RxODE is a package designed for simulation with already established models with ODEs. This tutorial focuses on using this package for pharmacometric models, such as the PKPD models. The model that you are going to simulate with RxODE is probably already published, but at least the model already has estimations for its parameters, since you cannot estimate parameters with RxODE. Pharmacometric models which are usually developed in NONMEN can easily be translated. 
 
-![Knowledge clip]()
+Installation is very easy, as it is a package placed on CRAN. Before you install it, first check if it is already in your library, especially if you are working on the RStudio server. RxODE sometimes runs into errors or problems when it is used within a local RStudio, therefore, some research groups choose to use an RStudio server for your project with RxODE. 
 
-## Functions and objects
+### Test your knowledge
 
-All the things you save are objects. Objects are a collection of data, ranging from one number or character to a complete data set. Look at the "numbers" object in the coding block. This is an object that contains 5 numbers. You can also save the output of functions in objects, which is done with the sum and mean of "numbers". These are objects which contain one number each. 
+```{r fig2, fig.show = "hold", out.width = "100%", fig.cap = "**Figure 2: Four different PK model schematics**"}
+p1 <- ggdraw() + draw_image("./Images/comp1.png")
+p2 <- ggdraw() + draw_image("./Images/comp1_oral.png")
+p3 <- ggdraw() + draw_image("./Images/comp2_oral.png")
+p4 <- ggdraw() + draw_image("./Images/comp3.png")
 
-```{r example1, exercise = TRUE, exercise.eval = TRUE}
-numbers <- c(1,2,3,4,5)
-sum_numbers <- sum(numbers)
-mean_numbers <- mean(numbers)
 
-print(sum_numbers) 
+plot_grid(p1, p2, p3, p4, nrow  = 2, ncol = 2, labels = "AUTO")
 ```
 
-All the things you do in R are functions, think for example about extracting the mean or the sum of a couple of numbers. `sum()` and `mean()` are functions, which you use to gather information. You can also use a function to generate a certain output, such as `print()` the object or create a graph with `plot()` or `ggplot()`. 
-
-### Exercise 1
-
-For this exercise, print the object: mean_numbers
-
-```{r exercise1, exercise = T, exercise.lines=3}
-
-
-
+```{r quiz1, echo = FALSE}
+quiz(caption = "Quiz - PK models and ODEs",
+  question("Look at Figure 2 above. Which type of drug administration is used in each model? IV = intravascular, EV = extravascular, for example oral.",
+    answer("A: IV, B: EV, C: EV, D: EV", message = "If no depot or Ka (absorption constant) is shown, we assume the dose was directly administered to the central compartment."),
+    answer("A: IV, B: IV, C: IV, D: EV", message = "A depot indicates and Ka (absorption constant) indicate the dose was administered out the blood, and has to absorbe into the blood."),
+    answer("A: IV, B: EV, C: EV, D: IV", correct = TRUE),
+    answer("A: IV, B: IV, C: EV, D: IV", message = "A depot indicates and Ka (absorption constant) indicate the dose was administered out the blood, and has to absorbe into the blood."),
+    allow_retry = TRUE
+  ),
+  question("Again, with Figure 2 in mind, which ODE of the central compartment is correct for which model? *Ad = amount in depot, Ac is amount in central compartment, Ap1 is amount in peripheral 1, Ap2 is amount in peripheral 2.* <br/> ODE1: $\\frac{dAc}{dt} = Ka*Ad - \\frac{CL}{V}*Ac - K12*Ac + K21*Ap1$         <br/> ODE2: $\\frac{dAc}{dt} = - \\frac{CL}{V}*Ac$ <br/> ODE3: $\\frac{dAc}{dt} = - \\frac{CL}{V}*Ac - K12*Ac + K21*Ap1 - K13*Ac + K31*Ap2$ <br/> ODE4: $\\frac{dAc}{dt} = Ka*Ad - \\frac{CL}{V}*Ac$",
+    answer("A: ODE4, B: ODE2, C: ODE3, D: ODE1", message = "Count all the arrows going to and from the central compartment. This is how many terms you should have in your ODE."),
+    answer("A: ODE3, B: ODE1, C: ODE2, D: ODE4", message = "Count all the arrows going to and from the central compartment. This is how many terms you should have in your ODE."),
+    answer("A: ODE1, B: ODE3, C: ODE4, D: ODE2", message = "Count all the arrows going to and from the central compartment. This is how many terms you should have in your ODE."),
+    answer("A: ODE2, B: ODE4, C: ODE1, D: ODE3", correct = TRUE),
+    allow_retry = TRUE
+  ))
 ```
 
-<div id="exercise1-hint">
-**Hint:** You may want to use the `print()` function.
-</div>
+## Model building
 
-### Functions
 
-A function is a piece of code that performs a certain operation. Input can be provided using arguments. Let's look for example at drawing from a normal distribution, which is often done for generating random data using the function `rnorm`. 
 
-```{r fig2, echo = FALSE, out.width = "100%", fig.asp = 0.28, fig.cap = "**Figure 2: Elements of function `rnorm`**"}
-library(png)
-library(grid)
-img <- readPNG("./Images/Functions.png", info = TRUE)
-grid.raster(img)
-```
+•	Built from published studies on estimated models
+•	ODE model
+•	Model parameters (unit, random effect)
+•	Initial conditions
+•	Covariates
 
-As seen in Figure 2, the function `rnorm` has three inputs, which are provided using arguments in the function call. You have to provide the number of samples you want to draw from the normal distribution, the mean and the standard deviation of the normal distribution. The output of the function is n random numbers from the normal distribution with mean and standard deviation you provided. 
 
-```{r example3, exercise = TRUE, exercise.eval = TRUE}
-rnorm(n = 5, mean = 1, sd = 1)
-```
+## Simulation
 
-Especially in the beginning of your coding adventures in R, it is clearer to provide the arguments with its names, so n = 10, mean = 1 and sd = 1. You can also leave the argument names out, but beware of the order in which they have to be provided. You can find this order in the help files, as shown in the knowledge clip. Besides the order, you can also see if there are any default values set for the arguments. With the `rnorm` function, the default mean = 0, and the default sd = 1. If you don't provide these arguments, the function will automatically use these default values. 
+•	eventTable() : dosing and sampling
+•	solve the system
 
-### Exercise 2
 
-For this exercise, generate 10 random numbers from a standard normal distribution.
+## Goal and output
 
-```{r exercise2, exercise = T, exercise.lines=3}
-
-```
-
-<div id="exercise2-hint">
-**Hint:** Think about the default arguments.
-</div>
-
-### Objects
-As said before, output of functions can be stored in objects. You do this with the assign operator, the `<-`. Before the assign operator, you set the name of the object. This name can be anything, just what you want and what is useful. If you call every object *data1*, *data2* etc., it is too vague and  you don't know what is in the object. 
-
-Objects are a collection of data and therefore, we can describe multiple data structures in which the data can be stored. Furthermore, there are also various data types, such as character or numeric. Figure 3 explains the relation between objects, structures and types. 
-
-```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 0.5, fig.cap = "**Figure 3: Objects, data structures and data types**"}
-library(png)
-library(grid)
-img <- readPNG("./Images/Objects.png", info = TRUE)
-grid.raster(img)
-```
-
+•	Various dosing schemes
+•	Different parameters for special populations
