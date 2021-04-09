@@ -16,6 +16,9 @@ library(png)
 library(grid)
 library(tidyverse)
 library(vdiffr)
+library(emo) # devtools::install_github("hadley/emo")
+library(patchwork)
+library(gridExtra)
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
@@ -25,8 +28,8 @@ gradethis_setup()
 
 #load data used in exercises
 example_data <- read.table(file = "./data/example_data.txt", header = TRUE, sep = ",")
-example_data_ID1 <- example_data %>% 
-  filter(ID == 1) 
+example_data_ID3 <- example_data %>% 
+  filter(ID == 3) 
 
 test_plots <- function(x, y) {
   fx <- tempfile()
@@ -39,12 +42,30 @@ test_plots <- function(x, y) {
   identical(readLines(fx), readLines(fy))
 }
 
+p_data <- ggplot(data = example_data, aes(x = time, y = concentration))
+
+p_predictions <- ggplot(data = example_data, aes(x = prediction, y = concentration)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(x = "Predicted concentration", y = "Observed concentration") +
+  theme_bw()
+p_population <- ggplot(data = example_data, aes(x = sex, y = age, fill = sex)) +
+  geom_violin() +
+  scale_fill_manual(values = c("#D81B60", "#FFC107")) +
+  labs(x = "Sex", y = "Age") +
+  theme_bw()
+p_PK <- ggplot(data = example_data, aes(x = time, group = ID, color = as.factor(ID))) +
+  geom_line(aes( y = prediction)) +
+  geom_point(aes(y = concentration), alpha = 0.3) +
+  scale_y_log10() +
+  labs(x = "Time", y = "Concentration", color = "ID") +
+  theme_bw()
+
 ```
 
 ## Introduction 
 
 Visualization is one of the strongest tools for data exploration and analysis. R contains a versatile library for plotting your data: `ggplot2`. This tutorial will guide you through the basics of using `ggplot2`, so at the end only your own imagination will stand between you and your data visualization.
-
 
 ### Grammar of ggplot
 
@@ -68,10 +89,27 @@ Table: Table 1: different layers in ggplot. `*` can be replaced by the specific 
 
 You can find many more layer options in the [ggplot2 cheat sheets](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).
 
+### Data used in this tutorial
+
+All exercises can be done within the tutorial. If you, however, want to try it in your own Rstudio (or on the server), follow these steps:
+
+Step 1: download the data file used for this tutorial. 
+
+  + click on [this link](https://raw.githubusercontent.com/vanhasseltlab/tutoRials/main/4_R_plot_creation/data/example_data.txt),
+  + click right mouse button and click 'Save as ...' OR press ctrl + s (on mac: cmd + s)
+  + save the file to a place on your computer where you want to access it from (`path_to_file`)
+
+
+If you work on the server you can upload the file to the server after downloading it to your own machine.
+
+Step 2: use the following code to load the data into your environment. Replace `path_to_file` with your path to the file where you downloaded it.
+
+`example_data <- read.table(file = "path_to_file/example_data.txt", header = TRUE, sep = ",")`
+
 
 ## Simple plot
 
-Lets start with building our first plot! We will need some data to begin with. A dataset called `example_data` was added to this tutorial. We can look at what it contains using `head()`.  
+Lets start with building our first plot! We will need some data to begin with. The data set called `example_data` was added to this tutorial. We can look at what it contains using `head()`.
 
 ```{r code1, echo = TRUE}
 head(example_data)
@@ -98,15 +136,28 @@ ggplot(data = example_data, aes(x = time, y = concentration)) +
 
 *the `aes()` can be specified either inside `ggplot()` or in a specific layer (e.g. `geom_point(aes(y = concentration))`).
 
+### Plot objects
+
+Plots from ggplot can be stored as an object. The object is not printed, but you can print it later on.
+
+```{r code3a, echo = TRUE}
+p_data <- ggplot(data = example_data, aes(x = time, y = concentration))
+```
+
+Once you have the ggplot object, you can add layers to it later.
+
+```{r code3b, echo = TRUE, eval = TRUE}
+p_data + geom_point()
+```
 
 ### Exercise
 
-Now we can start playing with the different layers! First we do some data manipulation using `dplyr`. The data contains multiple measurements per individual, so lets use the data for only individual `1`.
+Now we can start playing with the different layers! First we do some data manipulation using `dplyr`. The data contains multiple measurements per individual, so lets use the data for only individual `3`.
 
 
 ```{r code4, echo = TRUE}
-example_data_ID1 <- example_data %>% 
-  filter(ID == 1)
+example_data_ID3 <- example_data %>% 
+  filter(ID == 3)
 
 ```
 
@@ -114,18 +165,18 @@ For this smaller data set, to visualize a model fit, we want to not only plot th
 - Add a line geometry to the plot below with on the `y` axis the `prediction`.
 
 ```{r exercise1, exercise = TRUE}
-ggplot(data = example_data_ID1, aes(x = time)) +
+ggplot(data = example_data_ID3, aes(x = time)) +
   geom_point(aes(y = concentration))
 ```
 
 
 ```{r exercise1-check}
 grade_result(
-  pass_if(~ test_plots(.result, ggplot(data = example_data_ID1, aes(x = time)) +
+  pass_if(~ test_plots(.result, ggplot(data = example_data_ID3, aes(x = time)) +
                                   geom_point(aes(y = concentration)) +
                                   geom_line(aes(y = prediction))), 
           "You did it!"),
-  pass_if(~ test_plots(.result, ggplot(data = example_data_ID1, aes(x = time)) +
+  pass_if(~ test_plots(.result, ggplot(data = example_data_ID3, aes(x = time)) +
                                   geom_line(aes(y = prediction)) +
                                   geom_point(aes(y = concentration))), 
           "You did it!"),
@@ -183,8 +234,6 @@ ggplot(data = example_data, aes(x = time, color = as.factor(ID))) +
   geom_point(aes(y = concentration)) +
   geom_line(aes(y = prediction, group = ID))
 ```
-
-
 
 
 
@@ -259,6 +308,7 @@ quiz(caption = "",
 
 ### Exercises
 
+#### Exercise 1
 - Replace question marks (`'?'`) in the code to recreate the plot picture of the plot below.
 
 ```{r exercise2, exercise = TRUE, eval = FALSE, warning = FALSE}
@@ -297,13 +347,14 @@ img <- readPNG("./Images/result_exercise_complex_plots.png")
 grid.raster(img)
 ```
 
+#### Exercise 2
+
 - Use `facet_wrap()` in the code below to create individual plots for separate `weight_group`s
 
 
 ```{r exercise3, exercise = TRUE, eval = FALSE, warning = FALSE}
 ggplot(data = example_data, aes(x = time, y = prediction)) +
-  geom_line(aes(group = ID)) +
-  facet_wrap(~ weight_group)
+  geom_line(aes(group = ID))
 ```
 
 ```{r exercise3-check}
@@ -320,6 +371,9 @@ grade_result(
                                   geom_line(aes(group = ID)) +
                                   facet_wrap(~ ID)), 
           "Also looks nice, but wrong, you are supposed to facet on weight_group"),
+  fail_if(~ test_plots(.result, ggplot(data = example_data, aes(x = time, y = prediction)) +
+                                  geom_line(aes(group = ID))), 
+          "You did not get anywhere... Try facetting on weight_group"),
   
   fail_if(~ TRUE, 
           "Wrong!")
@@ -330,23 +384,258 @@ grade_result(
 
 ## Beautiful plot
 
-•	set labels 
-•	aes colour discrete vs continuous
-•	Colour palates
-•	scale the aesthetics
-•	Themes (set theme_bw), call predefined theme before theme options
+You have probably been wondering up till this point: why is there such an ugly gray background in all of our plots? Luckily ggplot has a lot of options for adjusting the visuals of your plots, not only the color of the lines, but in labels, aspect ratio, background, sizes of different elements, etc.
+
+### Aesthetics labels 
+
+You can adjust the labels for the x-axis, y-axis, give a title, even change the title  all through one simple layer: `labs()`.
+
+```{r code9, echo = TRUE}
+ggplot(data = example_data, aes(x = time, color = sex)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID)) +
+  labs(title = "PK example data plot", y = "Concentration (mg/l)",
+       x = "Time (days)", color = "Sex")
+```
+
+
+### Scaling
+
+You can scale your aesthetics, both the limits of your x and y axis and the colors you want your plot to have, through `scale_*()` functions. Let us try to zoom in on only the first 50 days of the data, by scaling x. The warnings show that ggplot actually removes all data points beyond time point 50. 
+
+```{r code10, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = ID)) +
+  scale_x_continuous(limits = c(0, 50))
+```
+
+We have already seen you can choose a color outside of `aes()` (e.g. using 'red', 'blue', '#D81B60'), but it is also possible to choose colors for `aes()`, using scaling.
+
+```{r code11, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) +
+  geom_line(aes(y = prediction, group = ID), color = "grey65") +
+  geom_point(aes(y = concentration, color = sex)) +
+  scale_color_manual(values = c("#D81B60", "#FFC107"))
+```
+
+The `scale_*()` functions contain two elements: the aesthetic you want to affect (e.g. `color` or `x`), and some last part, what type of scaling you are aiming for (e.g. `manual` or `continuous`). The last part depends on what the layer is like (is x continuous or discrete? Do you want to manually choose colors, or use some gradient?). You can also use transformations such as `scale_y_log10()` to log scale your plot.
+
+There are many different scaling types, so for now I can advice you to check out the [ggplot2 cheat sheets](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) or help pages/internet sources.
+
+### Themes
+
+Now, lets finally get rid of the background. Themes can be used for many other functions, like font sizes, positioning of the legend, etc. Almost always when you want to achieve something visual, you will see forum posts with recommendations to adjust something in `theme()`. Here you see an example:
+
+```{r code12, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) +
+  geom_line(aes(y = prediction, group = ID), color = "grey65") +
+  geom_point(aes(y = concentration, color = sex)) +
+  scale_color_manual(values = c("#D81B60", "#FFC107")) +
+  theme(legend.position = "top", 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "black"))
+```
+
+The options used above are: 
+
+- `legend.position = "top"`, moving the legend to the top of the plot
+- `panel.grid.minor = element_blank()`, removing the minor grid lines (or set to an empty/blank element)
+- `panel.background = element_rect(fill = "black")`, changing the background color to black
+
+You can play around with these if you want
+
+```{r code13, exercise = TRUE}
+ggplot(data = example_data, aes(x = time)) +
+  geom_line(aes(y = prediction, group = ID), color = "grey65") +
+  geom_point(aes(y = concentration, color = sex)) +
+  scale_color_manual(values = c("#D81B60", "#FFC107")) +
+  theme(legend.position = "top", 
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "black"))
+```
+
+There is way more to explore here, but there are luckily some preset themes that you can use to easily change multiple plot aspects. A favorite of mine is `theme_bw()`, which gives you a clean white background and also changes the legends (white background) and grid (white to light gray).
+
+```{r code14, echo = TRUE}
+ggplot(data = example_data, aes(x = time)) +
+  geom_line(aes(y = prediction, group = ID), color = "grey65") +
+  geom_point(aes(y = concentration, color = sex)) +
+  scale_color_manual(values = c("#D81B60", "#FFC107")) +
+  theme_bw()
+```
+
+
+There are many more [predefined themes such as theme_void(), theme_minimal(), theme_classic(), etc](https://ggplot2.tidyverse.org/reference/ggtheme.html). 
+
+And please, when giving presentations or writing papers: at least add `theme_bw()` to your plot to avoid those ugly gray backgrounds!
 
 ### Exercise
 
-- Change colour of id to discrete Hint: check data type, change data type, set colour in aes. See ggplot_colour_exercise.png for the example I based this exercise on. 
-- Recreate example plot? 
+#### Exercise 1
 
-## Multiple plots
+- Let us shush up a plot. Try to recreate the plot below! The geometries and aesthetics are already present. Try building on this using labs, scale, and (predefined) themes.
 
-- Par
-- Patchwork very interesting and useful package https://patchwork.data-imaginist.com/
+```{r exercise4, exercise = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
+ggplot(data = example_data, aes(x = prediction, y = concentration)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, color = "red")
+```
+
+```{r fig4, echo = FALSE, out.width = "100%", fig.asp = 0.6}
+img <- readPNG("./Images/exercise_beautiful_plots.png")
+grid.raster(img)
+```
+
+```{r exercise4-check}
+grade_result(
+  pass_if(~ test_plots(.result, ggplot(data = example_data, aes(x = prediction, y = concentration)) +
+                                  geom_point() +
+                                  geom_abline(intercept = 0, slope = 1, color = "red") +
+                                  labs(x = "Predicted concentration", y = "Observed concentration") +
+                                  scale_x_continuous(limits = c(0, 50)) +
+                                  theme_bw() +
+                                  theme(panel.grid.minor = element_blank())), 
+          "You did it!"),
+  fail_if(~ test_plots(.result, ggplot(data = example_data, aes(x = prediction, y = concentration)) +
+                                  geom_point() +
+                                  geom_abline(intercept = 0, slope = 1, color = "red")), 
+          "Come on, try adding some extra layers!"),
+  fail_if(~ TRUE, 
+          "Not there yet...")
+)
+```
+
+
+#### Exercise 2
+
+- Build your most beautiful creation!
+
+```{r exercise5, exercise = TRUE, eval = FALSE, warning = FALSE}
+ggplot(data = example_data)
+```
+
+```{r exercise5-check}
+grade_result(
+  pass_if(~ any(class(.result) %in% c("gg", "ggplot")) & !test_plots(.result, ggplot(data = example_data)), 
+          "Very... creative!"),
+  fail_if(~ test_plots(.result, ggplot(data = example_data)), 
+          "Come on, try adding some aesthetics and geometries!"),
+  fail_if(~ TRUE, 
+          "This is not a ggplot!")
+)
+```
+
+
+
+## Combining plots
+
+Sometimes you want to show multiple plots together in one figure (for example when the journal you want to submit to has a figure limit `r emo::ji("winking_face")`).
+
+For example, we want to show some diagnostics about the study population, the model fit and the PK curve together. What we first want to do, is save every plot as an object.
+
+```{r code15, echo = TRUE}
+p_predictions <- ggplot(data = example_data, aes(x = prediction, y = concentration)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, color = "red") +
+  labs(x = "Predicted concentration", y = "Observed concentration") +
+  theme_bw()
+
+p_population <- ggplot(data = example_data, aes(x = sex, y = age, fill = sex)) +
+  geom_violin() +
+  scale_fill_manual(values = c("#D81B60", "#FFC107")) +
+  labs(x = "Sex", y = "Age") +
+  theme_bw()
+
+p_PK <- ggplot(data = example_data, aes(x = time, group = ID, color = as.factor(ID))) +
+  geom_line(aes( y = prediction)) +
+  geom_point(aes(y = concentration), alpha = 0.3) +
+  scale_y_log10() +
+  labs(x = "Time", y = "Concentration", color = "ID") +
+  theme_bw()
+
+```
+
+You can now use print to get these figures printed.
+
+```{r code16, exercise = TRUE}
+print(p_predictions)
+```
+
+Now we want to stack these three together, maybe the PK on the left and the population and prediction plot stacked on the right. But how?
+
+### Patchwork
+
+There are two ways that I will show you here today. First using the package `patchwork`. You can install it directly from github:
+
+```{r code17, eval = FALSE, echo = TRUE}
+devtools::install_github("thomasp85/patchwork")
+```
+
+Patchworks uses very simple code to create different arrangements of your plots, using `+` to put plots next to each other, and `/` to put plots on top of each other.
+
+```{r code18, echo = TRUE, eval = TRUE}
+p_PK + (p_predictions / p_population)
+```
+
+Brackets can be used to give the order of operations.
+
+```{r code19, echo = TRUE, eval = TRUE}
+(p_PK + p_predictions) / p_population
+
+```
+
+Patchwork is very intuitive to use, so certainly check it out if you want to combine plots!
+
+### gridExtra and `grid.arrange()`
+
+The package `gridExtra` contains a function called `grid.arrange()`. There is a lot of smart code behind the ggplot package and grid.arrange works both with full ggplots and parts of ggplots, called grobs. This is way beyond the scope of this tutoRial, but when you get in to grobs, you know you are an expert.
+
+Grid arrange uses a bit more complicated code and will line up the plots differently from patchwork. This is how you can use it:
+
+```{r code20, echo = TRUE, eval = TRUE}
+grid.arrange(p_PK, p_predictions, p_population, layout_matrix = rbind(c(1, 2), c(1, 3)))
+```
+
+You give the function the three plots as arguments and you add a matrix layout, Where the numbers correspond with the argument order, so $1$ = `p_PK`, $2$ = `p_predictions` and $3$ = `p_population`. In this case:
+
+$$\begin{bmatrix}
+1 & 2\\
+1 & 3
+\end{bmatrix}$$
+
+
+Grid arrange is a nice way of making more complicate operations, such as adding labs on the fly, or changing the lay-out matrix:
+
+$$\begin{bmatrix}
+1 & 1 & 2\\
+1 & 1 & 2\\
+1 & 1 & 3
+\end{bmatrix}$$
+
+
+
+```{r code21, echo = TRUE, eval = TRUE}
+grid.arrange(p_PK + labs(tag = "A"), 
+             p_predictions + labs(tag = "B"), 
+             p_population + labs(tag = "C"), 
+             layout_matrix = rbind(c(1, 1, 2), c(1, 1, 2), c(1, 1, 3)))
+```
+
+
+Feel free to play around with these functions yourself!
+
+```{r code22, exercise = TRUE}
+grid.arrange(p_PK + labs(tag = "A"), 
+             p_predictions + labs(tag = "B"), 
+             p_population + labs(tag = "C"), 
+             layout_matrix = rbind(c(1, 1, 2), c(1, 1, 2), c(1, 1, 3)))
+```
+
 
 ## Everything combined
 
 - Large exercise of creating a complicated plot with multiple layers
 - R course 2017 : Hands on exercise 7 -> adapted
+
+
