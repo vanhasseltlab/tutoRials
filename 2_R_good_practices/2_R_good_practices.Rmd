@@ -14,7 +14,6 @@ require(knitr)
 require(png)
 require(grid)
 library(cowplot)
-library(ggplot2)
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
@@ -215,10 +214,10 @@ In this case, we follow the folder structure from your home folder ~, which is u
 You can create a new R project within RStudio, by selecting *New project...* in the File menu (Figure 2A). In the project wizard, select *New Directory* (Figure 2B) and then *New Project* (Figure 2C). In the next window, you can give your R project a name, preferably the same as your top project folder (Figure 2D). You can also browse for the correct folder where your R project will be placed. As you can see, you can also opt to create a git repository, because R projects are compatible with version control systems, such as Git. Having an R project set up, makes it very easy to start working with Git later on. 
 
 ```{r fig2, fig.show = "hold", out.width = "100%"}
-p1 <- ggdraw() + draw_image("./Images/Rproject_1.png")
-p2 <- ggdraw() + draw_image("./Images/Rproject_2.png")
-p3 <- ggdraw() + draw_image("./Images/Rproject_3.png")
-p4 <- ggdraw() + draw_image("./Images/Rproject_4.png")
+p1 <- ggdraw() + draw_image("./Images/R_project_1.png")
+p2 <- ggdraw() + draw_image("./Images/R_project_2.png")
+p3 <- ggdraw() + draw_image("./Images/R_project_3.png")
+p4 <- ggdraw() + draw_image("./Images/R_project_4.png")
 
 
 plot_grid(p1, p2, p3, p4, nrow  = 2, ncol = 2, labels = "AUTO")
