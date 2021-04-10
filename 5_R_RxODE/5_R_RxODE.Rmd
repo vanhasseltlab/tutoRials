@@ -70,10 +70,19 @@ quiz(caption = "Quiz - PK models and ODEs",
 
 ## Model building
 
+The PKPD models are already designed and estimated with other software, such as NONMEM or nlmixr package in R. When you want to simulate with the RxODE package, you need to describe the model with its ODEs, provide the parameter values and the initial values of the compartments. You see these three components for a simple one compartment model with oral dosing in Figure 3. 
 
+```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 0.6, fig.cap = "**Figure 3: Three components of model specification**"}
+img <- readPNG("./Images/Model_specify.png")
+grid.raster(img)
+```
 
-•	Built from published studies on estimated models
-•	ODE model
+### Model specification
+
+In the previous chapter you have seen different examples of ODEs. It is important that you describe **all** compartments with ODEs in the model specification. ODEs describe the change of amount over time, but often you also want to know the concentration of the central compartment, since this is the concentration that is often measured in the patient. Therefore, you also define the concentration in the model specification, with `C2 = A2/V2`.
+
+Another important aspect of the model definition is the inclusion of the inter individual variability (IIV) on various parameters. IIV describes differences between patients and is often placed on clearance (CL) and/or volume of distribution (V). The typical value (TV) is the same for all patients, and a random value from an eta distribution is added for each patient. For example: `CL = TVCL*exp(eta_CL)`
+
 •	Model parameters (unit, random effect)
 •	Initial conditions
 •	Covariates
