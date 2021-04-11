@@ -15,12 +15,27 @@ require(png)
 require(grid)
 library(cowplot)
 library(ggplot2)
+library(RxODE)
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
 
 #load data used in exercises
+mod1 <- RxODE({C2 = A2/Vd
+               d/dt(A1) = -Ka*A1 
+               d/dt(A2) = Ka*A1 - CL/Vd *A2})
 
+theta <- c(Ka = 0.5, Vd = 40, CL = 19)
+
+inits <- c(A1 = 0, A2 = 0)
+
+mod2 <- RxODE({
+  V1 = TVV1 * exp(eta_V1)
+  CL = TVCL * (WT/WT_avg) * expo
+  C1 = A1/V1
+  d/dt(A1) = -CL/V1 * A1 - K12*A1 + K12*A2
+  d/dt(A2) = K12*A1 - K12*A2
+})
 ```
 
 ## Introduction
@@ -70,9 +85,9 @@ quiz(caption = "Quiz - PK models and ODEs",
 
 ## Model building
 
-The PKPD models are already designed and estimated with other software, such as NONMEM or nlmixr package in R. When you want to simulate with the RxODE package, you need to describe the model with its ODEs, provide the parameter values and the initial values of the compartments. You see these three components for a simple one compartment model with oral dosing in Figure 3. 
+The PKPD models are already designed and estimated with other software, such as NONMEM or nlmixr package in R. When you want to simulate with the RxODE package, you need to specify the model with its ODEs, provide the parameter values and the initial values of the compartments. You see these three components for a simple one compartment model with oral dosing in Figure 3. 
 
-```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 0.6, fig.cap = "**Figure 3: Three components of model specification**"}
+```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 0.3, fig.cap = "**Figure 3: Three components of model specification**"}
 img <- readPNG("./Images/Model_specify.png")
 grid.raster(img)
 ```
@@ -81,18 +96,108 @@ grid.raster(img)
 
 In the previous chapter you have seen different examples of ODEs. It is important that you describe **all** compartments with ODEs in the model specification. ODEs describe the change of amount over time, but often you also want to know the concentration of the central compartment, since this is the concentration that is often measured in the patient. Therefore, you also define the concentration in the model specification, with `C2 = A2/V2`.
 
-Another important aspect of the model definition is the inclusion of the inter individual variability (IIV) on various parameters. IIV describes differences between patients and is often placed on clearance (CL) and/or volume of distribution (V). The typical value (TV) is the same for all patients, and a random value from an eta distribution is added for each patient. For example: `CL = TVCL*exp(eta_CL)`
+Another important aspect of the model definition is the inclusion of the inter individual variability (IIV) on various parameters. IIV describes differences between patients and is often placed on clearance (`CL`) and/or volume of distribution (`V`). The typical value (TV) is the same for all patients, and a random value from an eta distribution is added for each patient. For example: `CL = TVCL*exp(eta_CL)`. 
 
-•	Model parameters (unit, random effect)
-•	Initial conditions
-•	Covariates
+In the same way, covariate relationships can be added to parameters. The covariate weight, usually defined as `WT`, is regularly placed on CL, as many studies have shown that weight influence the clearance of drugs. You describe this relationship in the model specification, such as: `CL = TVCL* (WT / WT_avg) ^ expo`.  The `WT` input comes from your data, as that is specific for each patient. The `WT_avg` and `expo` are already estimated and you describe them in the model parameters section. You will often see in models that `WT_avg` is 70 kg and `expo` is 0.75. In this case, the `TVCL` describes the clearance value of a 70 kg adult, which is then scaled for the pediatric population based on their weight. However, sometimes the `WT_avg` and `expo` are also estimated by the model. 
 
+### Do it yourself
+
+Now you have seen an example of the model specification and the different components you can add, such as IIV and covariates. 
+Now you are going to write the model specification for the model description standing below. 
+
+- IIV on V1 with the following relationship: $TVV1 * exp(eta_V1)$
+- Covariate weight on CL with the following relationship: $TVCL * (WT/WT_{avg}) * expo$
+- Calculate the concentration in the central compartment
+- Two compartment model with IV dosing
+
+```{r exercise1, exercise = TRUE}
+mod2 <- RxODE({
+  
+})
+```
+
+```{r exercise1-hint-1}
+#First, describe the IIV and covariate relationship on V1 and CL
+```
+
+```{r exercise1-hint-2}
+#Secondly, describe the calculation for the concentration in compartment 1. 
+```
+
+```{r exercise1-hint-3}
+#Lastly, describe the two ODEs for the two compartments
+```
+
+### Model parameters
+
+The next component of your model building is describing the estimated model parameters. If you have defined your model, you can run your model name, in this case `mod1` to see a summary of the parameters in your model. This helps you to check which parameters you need to define. 
+
+```{r code1, echo = TRUE, eval = TRUE}
+mod1
+```
+
+`mod1$params` describes the parameters which are in your model. This helps you to check which values you need to provide. Be aware when you are using covariates, such as weight. You need to provide the average weight for which you are normalising (`WT_avg`) and the exponent `expo`, but the variable `WT` will be in your data set which you use for simulations. 
+
+The model parameter values are provided by the published article with the description of the model. You can usually find them in a table in the paper or within the supplementary information. Take caution with the units! Make sure they all match in your parameters, together with the dosing, otherwise your concentrations will be very different from what you want them to be. 
+
+#### IIV
+
+
+
+### Do it yourself 2
+
+We continue with the model you build in the first *Do it yourself* exercise. Don't worry if you didn't manage, the model `mod2` is also created and saved for you in the environment of this tutorial. Check which parameters you need to specify and extract them from the table below. You do not need all parameters from this table! 
+
+Parameter         Estimate              Parameter         Estimate  
+----------        ----------            ----------        ----------    
+Ka                0.3                   K12               0.05
+V1                35                    K21               0.02
+V2                120                   Q                 0.04
+CL                25                    
+
+Table: Table 1: parameter estimates for the exercise. 
+
+```{r exercise2, exercise = TRUE}
+theta2 <- c()
+```
+
+Next, you also need to define the eta distributions for the IIV. 
+
+```{r exercise3, exercise = TRUE}
+
+```
+
+### Initial conditions
+
+You need to define the initial amount at time 0 for each compartment. For PK this is often easy, as there is nothing in the compartments before a dose is given. When you are also modelling PD and describe for example the effect on blood pressure, you need to set an initial value which isn't zero, as that doesn't make sense for blood pressure. 
+
+#### Do it yourself 3
+
+We will finish building our model by setting the initial amounts for our two compartments. 
+
+```{r exercise4, exercise = TRUE}
+inits2 <- c()
+```
+
+```{r exercise4-hint}
+#Describe the initial amounts of both compartment 1 and compartment 2. Consider if a dose was administered or not, and what the amount is at T0.
+```
 
 ## Simulation
 
-•	eventTable() : dosing and sampling
-•	solve the system
+Before we can start with a simulation of the model, we need to specify dosing events and sampling times. This is specified within an event table. An event table is a container that stores dosing and sampling times in chronological order. We can for example give a dose of 10000, only one time. We sample every hour for 100 hours. 
 
+```{r code1, echo = TRUE, eval = TRUE}
+ev<-eventTable()  %>%                   # Create an empty event table
+  add.dosing(dose=10000, nbr.doses = 1) %>%       # single dose
+  add.sampling(0:100)                             # sampling times
+```
+
+Many different variations are possible to add dosing events, for example including a loading dose and maintenance doses. If you want to know more, take a look at the help file of `add.dosing()`.
+
+### Solve the system
+
+Next you are going to do the simulation, which is also called solve the system. The `solve()` function will use your model, dosing events, sampling times and if necessary covariate information to simulate concentrations, which you can save in a data set. `solve()` has many arguments, you need to specify the model, the parameter estimates, the event table, the initial values, the omegas, the covariate values and the number of patients you try to simulate. Of course, if you don't have IIV or covariate relationships in your model, you do not need to specify it for the simulation. 
 
 ## Goal and output
 
