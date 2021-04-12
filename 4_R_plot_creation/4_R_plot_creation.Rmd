@@ -633,9 +633,4 @@ grid.arrange(p_PK + labs(tag = "A"),
 ```
 
 
-## Everything combined
-
-- Large exercise of creating a complicated plot with multiple layers
-- R course 2017 : Hands on exercise 7 -> adapted
-
 
