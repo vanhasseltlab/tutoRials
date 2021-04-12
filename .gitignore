@@ -4,3 +4,5 @@
 .Ruserdata
 *.docx
 *.dcf
+*/figure-html/
+*.html
