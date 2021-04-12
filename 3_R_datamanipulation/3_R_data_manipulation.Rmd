@@ -29,6 +29,8 @@ gradethis_setup()
 
 ## Selection and subsetting
 
+> **_NOTE:_**  This tutorial is still under construction. So far it only contains one way of subsetting data. The tutorial will be extended in the coming weeks. 
+
 This tutorial covers the basics of data manipulation with base R and the packages dplyr and tidyr. We will first start with the topic of selection and subsetting data. 
 
 ### Dimensions
@@ -105,46 +107,4 @@ baby_names_freq[[1]][4]
 ```
 
 
-### Subset using [] and/or names
-
-
-
-## Vectorization and arithmetic
-
-
-
-### Complex exercise
-
-
-
-## Introduction dplyr and tidyr
-
-
-
-### Piping
-
-
-## Columns
-
-### select()
-
-### mutate()
-
-## Rows
-
-### filter()
-
-### arrange()
-
-## Whole dataset
-
-### summarise()
-
-### group_by()
-
-### *join()
-
-### pivot_longer and pivot_wider
-
-### Complex exercise
 
