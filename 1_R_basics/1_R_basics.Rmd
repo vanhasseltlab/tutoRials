@@ -44,7 +44,7 @@ This tutorial provides a short, but interactive introduction of R and RStudio. B
 ```{r quiz0, echo = FALSE}
 question("Are you going to work on an RStudio webserver? Note: if you are doing an internship for your bachelor or master degree, you probably will be using the RStudio webserver.",
   answer("Yes", message = "In that case, you don't have to read this chapter and can continue to *Introduction to R*"),
-  answer("No", message = "In that case, follow this chapter to find out what to install and how to do it."),
+  answer("No", message = "In that case, follow this chapter to find out what to install and how to do it.")
 )
 ```
 
