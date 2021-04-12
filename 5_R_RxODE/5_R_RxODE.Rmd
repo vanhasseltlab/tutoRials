@@ -187,7 +187,7 @@ inits2 <- c()
 
 Before we can start with a simulation of the model, we need to specify dosing events and sampling times. This is specified within an event table. An event table is a container that stores dosing and sampling times in chronological order. We can for example give a dose of 10000, only one time. We sample every hour for 100 hours. 
 
-```{r code1, echo = TRUE, eval = TRUE}
+```{r code2, echo = TRUE, eval = TRUE}
 ev<-eventTable()  %>%                   # Create an empty event table
   add.dosing(dose=10000, nbr.doses = 1) %>%       # single dose
   add.sampling(0:100)                             # sampling times
@@ -199,8 +199,8 @@ Many different variations are possible to add dosing events, for example includi
 
 Next you are going to do the simulation, which is also called solve the system. The `solve()` function will use your model, dosing events, sampling times and if necessary covariate information to simulate concentrations, which you can save in a data set. `solve()` has many arguments, you need to specify the model, the parameter estimates, the event table, the initial values, the omegas, the covariate values and the number of patients you try to simulate. Of course, if you don't have IIV or covariate relationships in your model, you do not need to specify it for the simulation. 
 
-```{r code2, echo = TRUE, eval = TRUE}
-solve()
+```{r code3, echo = TRUE, eval = TRUE}
+
 ```
 
 
