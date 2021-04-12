@@ -231,7 +231,7 @@ Solve the model you have been creating in the past exercises. Use the following 
 - Use the mod2, theta2, inits2 and omega2 objects you have created
 - Use the COV object for the weight covariate
 
-```{r exercise5, exercise = TRUE, eval = FALSE}
+```{r exercise6, exercise = TRUE, eval = FALSE}
 sim2 <- 
 ```
 
