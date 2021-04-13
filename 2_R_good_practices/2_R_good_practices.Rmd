@@ -366,3 +366,4 @@ grid::grid.raster(img2)
 
 Well done! You finished this tutorial about R! Please feel free to revisit parts that were difficult, or continue with the next tutorial "R: data manipulation".
 
+I would appreciate if you could [provide me feedback](https://forms.gle/qdwbSVi5dpKurTPPA) on this tutorial. This anonymously given feedback will be used to improve this tutorial.  

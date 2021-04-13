@@ -744,3 +744,5 @@ question("Open both data sets, Theoph and your read in data set, to compare them
 ### End of R basics tutorial
 
 Well done! You finished your first tutorial in R! Please feel free to revisit parts that were difficult, or continue with the next tutorial "R: good practices, common mistakes and getting help".
+
+I would appreciate if you could [provide me feedback](https://forms.gle/KiKS3GuxSbcwPtau8) on this tutorial. This anonymously given feedback will be used to improve this tutorial.  

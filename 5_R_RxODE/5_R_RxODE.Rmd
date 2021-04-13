@@ -282,3 +282,9 @@ Create a concentration - time graph for your simulation with model 2. The simula
 ```{r exercise7, exercise = TRUE, eval = FALSE}
 
 ```
+
+### End of RxODE tutorial
+
+Well done! You finished this tutorial about R! Please feel free to revisit parts that were difficult.
+
+I would appreciate if you could [provide me feedback](https://forms.gle/TQ23aAGN4L3qDLbn9) on this tutorial. This anonymously given feedback will be used to improve this tutorial. 
