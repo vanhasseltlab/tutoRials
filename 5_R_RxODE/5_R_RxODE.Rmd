@@ -113,9 +113,9 @@ grid.raster(img)
 
 In the previous chapter you have seen different examples of ODEs. It is important that you describe **all** compartments with ODEs in the model specification. ODEs describe the change of amount over time, but often you also want to know the concentration of the central compartment, which in a PKPD model corresponds to the plasma where the concentration is typically measured for a patient. Therefore, you also define the concentration in the model specification, with `C2 = A2/V2`.
 
-Another important aspect of the model definition is the inclusion of the random-effect parameters to account for inter individual variability (IIV) pf PK parameters. IIV describes variation between patients and is often added on clearance (`CL`) and/or volume of distribution (`V`). The typical value (TV) is the same for all patients, and a random value from an assumed distribution is added for each patient. For example: `CL = TVCL*exp(eta_CL)`, in which the `eta_CL` is a random value from a normal distribution. 
+Another important aspect of the model definition concerns the inter individual variability (IIV). IIV describes variation between patients and may be added on any PK parameters. We use the so-called random -effect parameters (eta) to account for IIV. The typical value of CL (TVCL) represents the population parameter describing the median/average CL of the entire population, hence is shared by all patients. However, individual CL may vary between patients and thus `eta_CL` is added, often exponentially. Typically, `eta_CL`, or any eta, is assumed to follow a normal distribution with a mean of 0 and a standard deviation of omega, which is also to be estimated. Each individual has a unique `eta_CL` value. As a result, all patients have their own unique CL despite sharing the same TVCL. In PKPD modelling, we use such an approach to differentiate individuals. 
 
-Similarly, covariate relationships can be added to PK parameters. The covariate weight, usually abbreviated as `WT`, is often added to CL, as many studies have shown that weight influence the clearance of drugs. You may specify this relationship in the code, such as: `CL = TVCL* (WT / WT_avg) ^ expo`.  The `WT` input comes from your data, as that is specific for each patient. The `WT_avg` is calculated in advance and you describe it in the model parameters secton. `expo` may be estimated but you will often see in models when `WT_avg` is 70 kg, `expo` is 0.75 according to allometric scaling. In this case, the `TVCL` describes the clearance value of a 70 kg adult. 
+Additionally, covariate relationships can be added to PK parameters. The covariate weight, usually abbreviated as `WT`, is often added to CL, as many studies have shown that weight influence the clearance of drugs. You may specify this relationship in the code, such as: `CL = TVCL* (WT / WT_avg) ^ expo`.  The `WT` input comes from your data, as that is specific for each patient. The `WT_avg` is calculated in advance and you describe it in the model parameters secton. `expo` may be estimated but you will often see in models when `WT_avg` is 70 kg, `expo` is fixed at 0.75 according to allometric scaling. In this case, the `TVCL` describes the clearance value of a 70 kg adult. 
 
 ### Do it yourself
 
@@ -158,7 +158,8 @@ The model parameter values are provided by the published article with the descri
 
 #### IIV
 
-To provide the model simulation with an estimation for the width of the normal distribution, you need to provide values for `omega`. This is not as easy as simply providing a number for `eta_CL` and `eta_V1`, this has to be given in a matrix format, with the values diagonally. 
+As mentioned earlier, IIV is accounted for by using random-effect parameters which is assumed to follow a normal distribution. We therefore should provide the information of that normal distribution. Given that the mean is always assumed to be zero, we only need to specify the standard deviation i.e. omega. In mathematical modelling, omegas are derived from the covariance matrix of the random-effect parameters. Hence, we should also specify omegas in a matrix format. Omegas for IIV are the diagonal elements of the matrix and these diagonal values are the square of the omga, i.e. the variance of the distribution. See the example below. 
+
 $$\begin{bmatrix}
 0.25 & 0 \\
 0 & 0.01 \\
@@ -172,6 +173,7 @@ diag(omega) <- c(0.5^2,
 dimnames(omega) <- list(NULL, c("eta_CL", "eta_V1"))
 ```
 
+In this example, there are two diagonal elements, i.e. 0.25 and 0.01, which correspond to the variance of `eta_CL`and `eta_V1` respectively. Off-diagonal elements may be specified when correlation between parameters is present, but our exercise does not involve this. 
 
 ### Do it yourself 2
 
