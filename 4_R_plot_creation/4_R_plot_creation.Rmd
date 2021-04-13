@@ -208,6 +208,17 @@ ggplot(data = example_data, aes(x = time)) +
   geom_line(aes(y = prediction, group = ID))
 ```
 
+Another benefit of grouping is that you can also group by two variables, with the interaction option. This can for instance be useful to see differences between two hospitals, which have used the same ID for their patients. We see more lines, because now we have a seperate line for each ID at each hospital. This can be made a lot clearer by using colors.
+
+```{r code5c, echo = TRUE}
+example_data_interaction <- example_data 
+example_data_interaction$site <- NA
+example_data_interaction$site[] <- c("Hospital A", "Hospital B")
+
+ggplot(data = example_data_interaction, aes(x = time)) + 
+  geom_point(aes(y = concentration)) +
+  geom_line(aes(y = prediction, group = interaction(ID, site)))
+```
 
 ### Add colors to your plot
 

@@ -29,29 +29,46 @@ theta <- c(Ka = 0.5, Vd = 40, CL = 19)
 
 inits <- c(A1 = 0, A2 = 0)
 
+ev<-eventTable()  %>%                  
+  add.dosing(dose=10000, nbr.doses = 1) %>%      
+  add.sampling(0:100)   
+
+sim1 <-  rxSolve(mod1, theta, ev, inits)
+
 mod2 <- RxODE({
   V1 = TVV1 * exp(eta_V1)
-  CL = TVCL * (WT/WT_avg) * expo
+  CL = TVCL * exp(eta_CL)
   C1 = A1/V1
-  d/dt(A1) = -CL/V1 * A1 - K12*A1 + K12*A2
-  d/dt(A2) = K12*A1 - K12*A2
+  d/dt(A1) = -CL/V1 * A1
 })
+
+theta2 <- c(TVV1 = 75, TVCL = 5)
+
+omega2 <- diag(2)
+diag(omega2) <- c(0.5^2,
+                 0.1^2)
+#to give names to the columns
+dimnames(omega2) <- list(NULL, c("eta_CL", "eta_V1"))
+
+inits2 <- c(A1 = 0)
+
+ev2 <-eventTable()  %>%                  
+  add.dosing(dosing.to = 1,dose=200, nbr.doses = 4) %>%      
+  add.sampling(0:75)   
+
+sim2 <-  solve(mod2, theta2, ev2, inits2, omega = omega2, nSub = 10, seed = 10)
 ```
 
 ## Introduction
 
-Understanding of pharmacokinetics (PK) and pharmacodynamics (PD) is essential before using the package RxODE. If the concept of compartmental modelling is not clear to you, first go back to PKPD lectures. A system of ordinary differential equations (ODEs) describe PKPD models, with equations for the change of amount of drug over time in different compartments. This is done for the example below, where a depot and central compartment are shown and the corresponding ODEs. The drug is only leaving compartment 1, the depot, which results in only one negative term in the ODE. Compartment 2, the central compartment has drug which enters from the depot, and drug which leaves the compartment. Therefore, we see two terms in the ODE, one positive term describing the amount coming in and one negative term describing the amount going out over time. 
+Understanding of pharmacokinetics (PK) and pharmacodynamics (PD) is essential before using the package RxODE. If the concept of compartmental modelling is not clear to you, first go back to PKPD lectures. A system of ordinary differential equations (ODEs) describe PKPD models, with equations for the change of amount of drug over time in different compartments. This is done for the example below, where a depot, the administration compartment, and central compartment are shown and the corresponding ODEs. The drug is only leaving compartment 1, the depot, which results in only one negative term in the ODE. Compartment 2, the central compartment has drug which enters from the depot, and drug which leaves the compartment. Therefore, we see two terms in the second ODE, one positive term describing the amount coming in and one negative term describing the amount going out over time. 
 
 ```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 0.7, fig.cap = "**Figure 1: Example of a model and its ODEs**"}
 img <- readPNG("./Images/Model_ODE.png")
 grid.raster(img)
 ```
 
-### Purpose and installation
-
-RxODE is a package designed for simulation with already established models with ODEs. This tutorial focuses on using this package for pharmacometric models, such as the PKPD models. The model that you are going to simulate with RxODE is probably already published, but at least the model already has estimations for its parameters, since you cannot estimate parameters with RxODE. Pharmacometric models which are usually developed in NONMEN can easily be translated. 
-
-Installation is very easy, as it is a package placed on CRAN. Before you install it, first check if it is already in your library, especially if you are working on the RStudio server. RxODE sometimes runs into errors or problems when it is used within a local RStudio, therefore, some research groups choose to use an RStudio server for your project with RxODE. 
+RxODE is a package developed for simulation based on models written in ODEs. This tutorial focuses on using this package for pharmacometric models, such as the PKPD models. Usage of RxODE within a local RStudio environment is not easy, which is why an account on a RStudio server is provided for you if you are going to work with this package.
 
 ### Test your knowledge
 
@@ -94,21 +111,20 @@ grid.raster(img)
 
 ### Model specification
 
-In the previous chapter you have seen different examples of ODEs. It is important that you describe **all** compartments with ODEs in the model specification. ODEs describe the change of amount over time, but often you also want to know the concentration of the central compartment, since this is the concentration that is often measured in the patient. Therefore, you also define the concentration in the model specification, with `C2 = A2/V2`.
+In the previous chapter you have seen different examples of ODEs. It is important that you describe **all** compartments with ODEs in the model specification. ODEs describe the change of amount over time, but often you also want to know the concentration of the central compartment, which in a PKPD model corresponds to the plasma where the concentration is typically measured for a patient. Therefore, you also define the concentration in the model specification, with `C2 = A2/V2`.
 
-Another important aspect of the model definition is the inclusion of the inter individual variability (IIV) on various parameters. IIV describes differences between patients and is often placed on clearance (`CL`) and/or volume of distribution (`V`). The typical value (TV) is the same for all patients, and a random value from an eta distribution is added for each patient. For example: `CL = TVCL*exp(eta_CL)`. 
+Another important aspect of the model definition is the inclusion of the random-effect parameters to account for inter individual variability (IIV) pf PK parameters. IIV describes variation between patients and is often added on clearance (`CL`) and/or volume of distribution (`V`). The typical value (TV) is the same for all patients, and a random value from an assumed distribution is added for each patient. For example: `CL = TVCL*exp(eta_CL)`, in which the `eta_CL` is a random value from a normal distribution. 
 
-In the same way, covariate relationships can be added to parameters. The covariate weight, usually defined as `WT`, is regularly placed on CL, as many studies have shown that weight influence the clearance of drugs. You describe this relationship in the model specification, such as: `CL = TVCL* (WT / WT_avg) ^ expo`.  The `WT` input comes from your data, as that is specific for each patient. The `WT_avg` and `expo` are already estimated and you describe them in the model parameters section. You will often see in models that `WT_avg` is 70 kg and `expo` is 0.75. In this case, the `TVCL` describes the clearance value of a 70 kg adult, which is then scaled for the pediatric population based on their weight. However, sometimes the `WT_avg` and `expo` are also estimated by the model. 
+Similarly, covariate relationships can be added to PK parameters. The covariate weight, usually abbreviated as `WT`, is often added to CL, as many studies have shown that weight influence the clearance of drugs. You may specify this relationship in the code, such as: `CL = TVCL* (WT / WT_avg) ^ expo`.  The `WT` input comes from your data, as that is specific for each patient. The `WT_avg` is calculated in advance and you describe it in the model parameters secton. `expo` may be estimated but you will often see in models when `WT_avg` is 70 kg, `expo` is 0.75 according to allometric scaling. In this case, the `TVCL` describes the clearance value of a 70 kg adult. 
 
 ### Do it yourself
 
 Now you have seen an example of the model specification and the different components you can add, such as IIV and covariates. 
 Now you are going to write the model specification for the model description standing below. 
 
-- IIV on V1 with the following relationship: $TVV1 * exp(eta_V1)$
-- Covariate weight on CL with the following relationship: $TVCL * (WT/WT_{avg}) * expo$
-- Calculate the concentration in the central compartment
-- Two compartment model with IV dosing
+1. One compartment PK model
+2. IIV on V1 and CL 
+3. Calculate the concentration in the central compartment
 
 ```{r exercise1, exercise = TRUE}
 mod2 <- RxODE({
@@ -117,7 +133,7 @@ mod2 <- RxODE({
 ```
 
 ```{r exercise1-hint-1}
-#First, describe the IIV and covariate relationship on V1 and CL
+#First, describe the IIV on V1 and CL
 ```
 
 ```{r exercise1-hint-2}
@@ -125,7 +141,7 @@ mod2 <- RxODE({
 ```
 
 ```{r exercise1-hint-3}
-#Lastly, describe the two ODEs for the two compartments
+#Lastly, describe the ODE for the compartment
 ```
 
 ### Model parameters
@@ -142,6 +158,19 @@ The model parameter values are provided by the published article with the descri
 
 #### IIV
 
+To provide the model simulation with an estimation for the width of the normal distribution, you need to provide values for `omega`. This is not as easy as simply providing a number for `eta_CL` and `eta_V1`, this has to be given in a matrix format, with the values diagonally. 
+$$\begin{bmatrix}
+0.25 & 0 \\
+0 & 0.01 \\
+\end{bmatrix}$$
+
+```{r code1b, echo = TRUE, eval = TRUE}
+omega <- diag(2)
+diag(omega) <- c(0.5^2,
+                 0.1^2)
+#to give names to the columns
+dimnames(omega) <- list(NULL, c("eta_CL", "eta_V1"))
+```
 
 
 ### Do it yourself 2
@@ -149,11 +178,11 @@ The model parameter values are provided by the published article with the descri
 We continue with the model you build in the first *Do it yourself* exercise. Don't worry if you didn't manage, the model `mod2` is also created and saved for you in the environment of this tutorial. Check which parameters you need to specify and extract them from the table below. You do not need all parameters from this table! 
 
 Parameter         Estimate              Parameter         Estimate  
-----------        ----------            ----------        ----------    
-Ka                0.3                   K12               0.05
-V1                35                    K21               0.02
-V2                120                   Q                 0.04
-CL                25                    
+----------        ---------------       ----------        ----------------    
+Ka                0.3 $hour^{-1}$       K12               0.05 $hour^{-1}$
+V1                75  $L$               K21               0.02 $hour^{-1}$
+V2                100 $L$               CL                5 $L/hour$  
+eta_V1            0.1^2                 eta_CL            0.5^2 
 
 Table: Table 1: parameter estimates for the exercise. 
 
@@ -169,7 +198,7 @@ Next, you also need to define the eta distributions for the IIV.
 
 ### Initial conditions
 
-You need to define the initial amount at time 0 for each compartment. For PK this is often easy, as there is nothing in the compartments before a dose is given. When you are also modelling PD and describe for example the effect on blood pressure, you need to set an initial value which isn't zero, as that doesn't make sense for blood pressure. 
+You need to define the initial condition at time 0 for each compartment. For PK this is simply zero, as there is nothing in the compartments before a dose is given. When you are also modelling PD and describe for example blood pressure, you need to set a non-zero initial value, as blood pressure has a baseline value. Non-zero initial condition is usually needed for measurement of biomarkers. 
 
 #### Do it yourself 3
 
@@ -177,10 +206,6 @@ We will finish building our model by setting the initial amounts for our two com
 
 ```{r exercise4, exercise = TRUE}
 inits2 <- c()
-```
-
-```{r exercise4-hint}
-#Describe the initial amounts of both compartment 1 and compartment 2. Consider if a dose was administered or not, and what the amount is at T0.
 ```
 
 ## Simulation
@@ -199,8 +224,8 @@ Many different variations are possible to add dosing events, for example includi
 
 Create an event table for your simulation with the following requirements:
 
-- 1000 mg dose one time
-- Sample each hour for 75 hours
+- 200 mg four times
+- Sample each hour for three days
 
 ```{r exercise5, exercise = TRUE, eval = FALSE}
 ev2 <- 
@@ -228,8 +253,7 @@ The result of your simulation is a data set with all the sampling times and the 
 Solve the model you have been creating in the past exercises. Use the following settings
 
 - 10 patients
-- Use the mod2, theta2, inits2 and omega2 objects you have created
-- Use the COV object for the weight covariate
+- Use the mod2, theta2, inits2, omega2 and ev2 objects you have created
 
 ```{r exercise6, exercise = TRUE, eval = FALSE}
 sim2 <- 
@@ -237,5 +261,24 @@ sim2 <-
 
 ## Goal and output
 
-•	Various dosing schemes
-•	Different parameters for special populations
+Defining the model is only half of the job, the purpose of simulation is often to test other situations than described in the model. You can for example tweak the parameters to fit another population, such as the obese, neonates or pregnant ladies. This can lead to changes in the concentrations or in the effect of the drug. Therefore, you might want to change the dosing schedule for these special populations to see the same effect as in 'normal' people. These are a few examples of things you might want to explore with your defined model. 
+
+The results of these simulations can be summarized in various graphs. Depending on what you are looking at, you can show multiple PK or PD simulations, maybe in reference to a certain toxicity limit. The graph below is of the simple one compartment model with absorption compartment. There is no inter individual variability in this model, so it doesn't matter how many patients you simulate, you will only see the same line. 
+
+```{r code4, echo = TRUE, eval = FALSE}
+PK_plot <- ggplot(sim1, aes(x = time, y = C2))+
+  geom_line()+
+  labs(y = "Concentration (mg/L)",
+       x = "Time (h)")+
+  theme_bw()+
+  theme(text = element_text(size = 20))
+PK_plot
+```
+
+### Do it yourself 6
+
+Create a concentration - time graph for your simulation with model 2. The simulation data set is saved as `sim2` and you can basically use the same code for the graph as standing above. Be creative and try to add different colors for the different individuals. 
+
+```{r exercise7, exercise = TRUE, eval = FALSE}
+
+```
