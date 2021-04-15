@@ -595,15 +595,14 @@ cat('|  Assignment |    Exam    |      Result      |
 
 ```
 
-::: {#exercise6-hint}
-**Hint:** Start in the first `ifelse()` function by describing the first condition, then what should be printed if the condition is met. If the condition is not met, put another `ifelse()` function to describe another condition.
-:::
+```{r exercise1a-hint-1}
+#Start in the first `ifelse()` function by describing the first condition, then what should be printed if the condition is met. If the condition is not met, put another `ifelse()` function to describe another condition.
+```
 
 ```{r exercise6-solution}
 ifelse(Assignment >= 5.5 & Exam>=5.5, "Passed", 
        ifelse(Assignment < 5.5 & Exam >= 5.5, "Resit assignment", 
-              ifelse(Assignment >= 5.5 & Exam < 5.5, "Resit exam", 
-                     ifelse(Assigment < 5.5 & Exam < 5.5, "Resit both"))))
+              ifelse(Assignment >= 5.5 & Exam < 5.5, "Resit exam", "Resit both")))
 ```
 
 ```{r exercise6-check}
