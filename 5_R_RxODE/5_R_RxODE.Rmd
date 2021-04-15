@@ -176,8 +176,7 @@ gradethis::grade_code()
 ```
 
 ### IIV 
-
-Another important aspect of the model definition concerns the inter individual variability (IIV). IIV describes variation between patients and may be added on any PK parameters. We use the so-called random -effect parameters (eta) to account for IIV. For example, we may add an eta to CL: `CL = TVCL * exp(eta_CL)`. The typical value of CL (TVCL) represents the population parameter describing the median/average CL of the entire population, hence is shared by all patients. However, individual CL may vary between patients and thus `eta_CL` is added, often exponentially. Typically, `eta_CL`, or any eta, is assumed to follow a normal distribution with a mean of 0 and a standard deviation of omega, which is also to be estimated. Each individual has a unique `eta_CL` value. As a result, all patients have their own unique CL despite sharing the same TVCL. In PKPD modelling, we use such an approach to differentiate individuals. 
+Another important aspect of the model definition concerns the inter individual variability (IIV). IIV describes variation between patients and may be added on any PK parameters. We use the so-called random -effect parameters (eta) to account for IIV. For example, we may add `eta` to clearance: `CL = TVCL*exp(eta_CL)`. The typical value of CL (TVCL) represents the population parameter describing the median/average CL of the entire population, hence is shared by all patients. However, individual CL may vary between patients and thus `eta_CL` is added, often exponentially. Typically, `eta_CL`, or any eta, is assumed to follow a normal distribution with a mean of 0 and a standard deviation of `omega`, which is also to be estimated. Each individual has a unique `eta_CL` value. As a result, all patients have their own unique CL despite sharing the same TVCL. In PKPD modelling, we use such an approach to differentiate individuals. 
 
 #### Do it yourself 1c
 
