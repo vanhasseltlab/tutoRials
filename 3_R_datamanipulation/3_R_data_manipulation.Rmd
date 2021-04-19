@@ -238,7 +238,7 @@ PK_data$Wt
 #Solution
 print(PK_data)
 PK_data$BMI <- NA
-PK_data$BMI <- PK_data$WT / ((PK_data$HT/100)^2)
+PK_data$BMI <- PK_data$Wt / ((PK_data$Ht/100)^2)
 ```
 
 ```{r exercise1-check} 
