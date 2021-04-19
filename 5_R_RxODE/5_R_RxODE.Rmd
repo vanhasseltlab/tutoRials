@@ -381,7 +381,7 @@ Next you are going to do the simulation, which is also called solve the system. 
 
 ```{r code3, echo = TRUE, eval = FALSE}
 sim1 <- rxSolve(mod1,  #RxODEmodel
-                theta = theta, #System parameters
+                theta, #System parameters
                 events = ev,    #Dosing events and sampling times
                 inits = inits , #Initial amounts
                 omega = omega, #Values for IIV
@@ -434,6 +434,32 @@ Solve the model you have been creating in the past exercises. Use the following 
 
 ```{r exercise6, exercise = TRUE, eval = FALSE}
 sim2 <- 
+```
+
+```{r exercise6-hint-1}
+# The standard arguments for the rxSolve functions are copied below
+# Replace the arguments *mod1* and *theta* and the arguments after the equal-sign (=) with the objects you created for this model
+# Remove arguments you don't need for your model
+
+#First try this, then click on to the next hint!!
+sim2 <- rxSolve(mod1,  #RxODEmodel
+                theta, #System parameters
+                events = ev,    #Dosing events and sampling times
+                inits = inits , #Initial amounts
+                omega = omega, #Values for IIV
+                nSub = 100,  #Number of patients to simulate
+                iCov = cov_data)   #Covariate values of patients
+```
+
+```{r exercise6-hint-2}
+# SOLUTION
+# Try to understand what happened here and how each object contributes to the simulation of mod2
+sim2 <- rxSolve(mod2,  #RxODEmodel
+                theta2, #System parameters
+                events = ev2,    #Dosing events and sampling times
+                inits = inits2 , #Initial amounts
+                omega = omega2, #Values for IIV
+                nSub = 10)  #Number of patients to simulate
 ```
 
 ## Goal and output

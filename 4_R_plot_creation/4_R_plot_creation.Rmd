@@ -16,7 +16,7 @@ library(png)
 library(grid)
 library(tidyverse)
 library(vdiffr)
-library(emo) # devtools::install_github("hadley/emo")
+#library(emo) # devtools::install_github("hadley/emo")
 library(patchwork)
 library(gridExtra)
 
@@ -328,6 +328,19 @@ ggplot(data = example_data, aes(x = time, y = prediction)) +
   geom_smooth(aes(color = '?'))
 ```
 
+```{r exercise2-hint-1}
+# Look at how many lines are drawn and look back at the theory for grouping variables
+# Is one line drawn through all points or are lines grouped on a certain variable? 
+```
+
+```{r exercise2-hint-2}
+# The color argument within aes usually results in a legend, to show which colors describe which variable
+```
+
+```{r exercise2-hint-3}
+# The variables you need to fill in are ID and sex, try to find out yourself which question mark(s) they replace
+```
+
 ```{r exercise2-check}
 ggplot(data = example_data, aes(x = time, y = prediction)) +
   geom_line(aes(group = '?', color = '?')) +
@@ -493,6 +506,26 @@ ggplot(data = example_data, aes(x = prediction, y = concentration)) +
   geom_abline(intercept = 0, slope = 1, color = "red")
 ```
 
+```{r exercise4-hint-1} 
+# Four lines of code need to be added to recreate this figure
+# Look at all the differences you see when you run the given code vs the given plot below
+```
+
+```{r exercise4-hint-2} 
+# Look at the labels on the axes, the scale of the axes and the background
+```
+
+```{r exercise4-hint-3} 
+# Background stuff is usually set by with the `theme()` function
+# Apply the `theme_bw()` function you have read about in the theory
+```
+
+```{r exercise4-hint-4} 
+# The lines in the background is called the grid, these options can be set in another `theme()` function
+theme(panel.grid.minor = ...)
+# Google and fill in on the ellipsis (...) what you need so it removes these minor grid lines
+```
+
 ```{r fig4, echo = FALSE, out.width = "100%", fig.asp = 0.6}
 img <- readPNG("./Images/exercise_beautiful_plots.png")
 grid.raster(img)
@@ -541,7 +574,7 @@ grade_result(
 
 ## Combining plots
 
-Sometimes you want to show multiple plots together in one figure (for example when the journal you want to submit to has a figure limit `r emo::ji("winking_face")`).
+Sometimes you want to show multiple plots together in one figure (for example when the journal you want to submit to has a figure limit).
 
 For example, we want to show some diagnostics about the study population, the model fit and the PK curve together. What we first want to do, is save every plot as an object.
 

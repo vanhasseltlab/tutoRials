@@ -234,7 +234,8 @@ PK_data$Ht
 PK_data$Wt
 ```
 
-```{r exercise1-solution, exercise.reveal_solution = FALSE} 
+```{r exercise1-solution, exercise.reveal_solution = TRUE} 
+#Solution
 print(PK_data)
 PK_data$BMI <- NA
 PK_data$BMI <- PK_data$WT / ((PK_data$HT/100)^2)
