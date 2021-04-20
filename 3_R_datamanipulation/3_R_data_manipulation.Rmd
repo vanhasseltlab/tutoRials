@@ -210,8 +210,8 @@ Try to do this yourself as well, with the following tips:
 
 - Take a look at the data frame *PK_data*  
 - Create a new column, called *BMI* and fill it with `NA`
-- For each row, calculate the BMI based, on the height `HT` and weight `WT` columns
-- CHECK the values of the `HT` and `WT` columns, are they in the correct unit for the BMI calculation?
+- For each row, calculate the BMI based, on the height `Ht` and weight `Wt` columns
+- CHECK the values of the `Ht` and `Wt` columns, are they in the correct unit for the BMI calculation?
 
 ```{r exercise1, exercise = TRUE} 
 
