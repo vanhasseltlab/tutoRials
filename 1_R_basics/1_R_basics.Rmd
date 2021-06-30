@@ -37,6 +37,15 @@ Exam <- c(7.0, 3.6, 8.0, 3.1, 2.0)
 data("Theoph")
 ```
 
+```{r, include = F}
+orig_opts_hook <- knitr::opts_hooks$get("tutorial")
+opts_hook_override <- function(options) {
+  options[["exercise"]] <- F
+  orig_opts_hook(options)
+}
+knitr::opts_hooks$set(tutorial = opts_hook_override)
+```
+
 ## Installation 
 
 This tutorial provides a short, but interactive introduction of R and RStudio. Before we continue with explaining the R studio environment, you first have to check if you need install R, RStudio and the package tidyverse. 

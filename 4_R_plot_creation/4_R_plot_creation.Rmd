@@ -63,6 +63,16 @@ p_PK <- ggplot(data = example_data, aes(x = time, group = ID, color = as.factor(
 
 ```
 
+```{r, include = F}
+orig_opts_hook <- knitr::opts_hooks$get("tutorial")
+opts_hook_override <- function(options) {
+  options[["exercise"]] <- F
+  orig_opts_hook(options)
+}
+knitr::opts_hooks$set(tutorial = opts_hook_override)
+```
+
+
 ## Introduction 
 
 Visualization is one of the strongest tools for data exploration and analysis. R contains a versatile library for plotting your data: `ggplot2`. This tutorial will guide you through the basics of using `ggplot2`, so at the end only your own imagination will stand between you and your data visualization.

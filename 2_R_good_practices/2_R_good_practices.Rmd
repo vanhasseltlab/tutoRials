@@ -24,6 +24,16 @@ Exam <- c(7.0, 3.6, 8.0, 3.1, 2.0)
 
 ```
 
+```{r, include = F}
+orig_opts_hook <- knitr::opts_hooks$get("tutorial")
+opts_hook_override <- function(options) {
+  options[["exercise"]] <- F
+  orig_opts_hook(options)
+}
+knitr::opts_hooks$set(tutorial = opts_hook_override)
+```
+
+
 ## Coding style
 
 This tutorial describes good practices when writing and saving R code, style recommendations, common mistakes that are often made when writing and running R code, and where and how to get help if you run into errors.

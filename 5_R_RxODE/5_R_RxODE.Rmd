@@ -71,6 +71,16 @@ mod3 <- RxODE({
 })
 ```
 
+```{r, include = F}
+orig_opts_hook <- knitr::opts_hooks$get("tutorial")
+opts_hook_override <- function(options) {
+  options[["exercise"]] <- F
+  orig_opts_hook(options)
+}
+knitr::opts_hooks$set(tutorial = opts_hook_override)
+```
+
+
 ## Introduction
 
 Understanding of pharmacokinetics (PK) and pharmacodynamics (PD) is essential before using the package RxODE. If the concept of compartmental modelling is not clear to you, first go back to PKPD lectures. A system of ordinary differential equations (ODEs) describe PKPD models, with equations for the change of amount of drug over time in different compartments. This is done for the example below (Figure 1), where a depot, which is the administration compartment, and central compartment are shown and the corresponding ODEs. The drug is only leaving compartment 1, the depot, which results in only one negative term in the ODE. Compartment 2, the central compartment has drug which enters from the depot, and drug which leaves the compartment. Therefore, we see two terms in the second ODE, one positive term describing the amount coming in and one negative term describing the amount going out over time. 
