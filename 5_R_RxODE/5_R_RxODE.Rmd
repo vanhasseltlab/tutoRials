@@ -127,7 +127,7 @@ quiz(caption = "Quiz - PK models and ODEs",
 Write the ODE for a one compartment model with IV administration, as shown in figure 2A above the quiz. Look back at the ODE equation for this model, which you identified in the quiz. The equation is very similar to the code you have to write. Pay attention to the parameter names. In the PKPD model code, and therefore also in the RxODE code, we usually use A for amount, C for concentration, V for volume of distribution and K for the rate constant. After the letter(s) we indicate in which compartment this happens with a number. For example A1, C1 and V1 are all in compartment one, while K13 is the rate constant from compartment one to three.
 
 ```{r exercise1a, exercise = TRUE}
-d/dt() = 
+#d/dt() = 
 ```
 
 ```{r exercise1a-hint-1}
@@ -170,7 +170,7 @@ In the previous chapter you have seen different examples of ODEs. It is importan
 Write the equation to calculate the concentration in the central compartment of a one compartment model with IV dosing.
 
 ```{r exercise1b, exercise = TRUE}
-C1 = 
+#C1 = 
 ```
 
 ```{r exercise1b-hint-1}
@@ -193,8 +193,8 @@ Another important aspect of the model definition concerns the inter individual v
 You might have suspected that you are building a model step by step. For this model, there is IIV described on both clearance (CL) and volume of distribution (V). Write the equations to describe `CL` and `V1` with their typical value and IIV. Look back at the explanation about IIV in the previous paragraph to see how you code this.
 
 ```{r exercise1c, exercise = TRUE}
-CL = 
-V1 = 
+#CL = 
+#V1 = 
 ```
 
 ```{r exercise1c-hint-1}
@@ -224,16 +224,16 @@ Additionally, covariate relationships can be added to PK parameters. The covaria
 Now that you have created the model in small steps, you are going to combine it, to create one complete model. Copy-paste the correct equations in the model specification to create your model.
 
 ```{r exercise1d, exercise = TRUE}
-mod2 <- RxODE({
-  #IIV on CL
-  CL = 
-  #IIV on V1
-  V1 = 
-  #Concentration in compartment1
-  C1 = 
-  #ODE for compartment 1
-  d/dt() =
-})
+# mod2 <- RxODE({
+#   #IIV on CL
+#   CL = 
+#   #IIV on V1
+#   V1 = 
+#   #Concentration in compartment1
+#   C1 = 
+#   #ODE for compartment 1
+#   d/dt() =
+# })
 ```
 
 ```{r exercise1d-hint-1}
@@ -340,14 +340,14 @@ Table: Table 1: parameter estimates for the exercise.
 a. Provide the values for the typical value of CL and the typical value of V1. 
 
 ```{r exercise2, exercise = TRUE}
-theta2 <- c()
+# theta2 <- c()
   
 ```
 
 b. Next, you also need to define the eta distributions for the IIV on both parameters. Do this in the same way as shown in the previous paragraph.
 
 ```{r exercise3, exercise = TRUE}
-omega2 <- 
+# omega2 <- 
 ```
 
 ### Initial conditions
@@ -359,7 +359,7 @@ You need to define the initial condition at time 0 for each compartment. For PK 
 We will finish building our model by setting the initial conditions to zero, since it is a PK model.
 
 ```{r exercise4, exercise = TRUE}
-inits2 <- c()
+# inits2 <- c()
 ```
 
 ## Simulation
@@ -382,7 +382,7 @@ Create an event table for your simulation with the following requirements:
 - Sample each hour for three days
 
 ```{r exercise5, exercise = TRUE, eval = FALSE}
-ev2 <- 
+# ev2 <- 
 ```
 
 ### Solve the system
@@ -443,7 +443,7 @@ Solve the model you have been creating in the past exercises. Use the following 
 - Use the mod2, theta2, inits2, omega2 and ev2 objects you have created
 
 ```{r exercise6, exercise = TRUE, eval = FALSE}
-sim2 <- 
+# sim2 <- 
 ```
 
 ```{r exercise6-hint-1}
