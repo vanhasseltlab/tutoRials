@@ -620,10 +620,10 @@ Now we want to stack these three together, maybe the PK on the left and the popu
 
 ### Patchwork
 
-There are two ways that I will show you here today. First using the package `patchwork`. You can install it directly from github:
+There are two ways that I will show you here today. First using the package `patchwork`. You can install it directly. 
 
 ```{r code17, eval = FALSE, echo = TRUE}
-devtools::install_github("thomasp85/patchwork")
+install.packages("patchwork")
 ```
 
 Patchworks uses very simple code to create different arrangements of your plots, using `+` to put plots next to each other, and `/` to put plots on top of each other.

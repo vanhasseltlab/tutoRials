@@ -50,16 +50,13 @@ knitr::opts_hooks$set(tutorial = opts_hook_override)
 
 This tutorial provides a short, but interactive introduction of R and RStudio. Before we continue with explaining the R studio environment, you first have to check if you need install R, RStudio and the package tidyverse. 
 
-```{r quiz0, echo = FALSE}
-question("Are you going to work on an RStudio webserver? Note: if you are doing an internship for your bachelor or master degree, you probably will be using the RStudio webserver.",
-  answer("Yes", message = "In that case, you don't have to read this chapter and can continue to *Introduction to R*"),
-  answer("No", correct = TRUE, message = "In that case, follow this chapter to find out what to install and how to do it.")
-)
-```
+### RStudio web server
+
+Besides the RStudio environment which can be downloaded and run locally on your computer together with R, you can also work with R and the RStudio environment online. The advantage of the web server is that you don't have to download and install R and RStudio on your device, furthermore it also is faster with complex models because it is not limited by your computer memory size. You can upload and download data sets to work with. The RStudio web server looks exactly the same as the RStudio IDE, which is what will be shown mostly in the tutorials. 
 
 ### What do you need to install?
 
-Do you need to work through the installing of the software? Take the quiz below to find out.
+If you have heard from your supervisor that you will be working on the RStudio web server, you can skip the installation of R on your computer. However, if you would prefer to work locally, you can follow the instructions below how to install R and RStudio. 
 
 ```{r quiz1, echo = FALSE}
 question("Check all that you have done:",
@@ -114,13 +111,9 @@ quiz(caption = "Quiz - Working with Packages",
 
 ## Introduction to R
 
-### RStudio web server
-
-Besides the RStudio environment which can be downloaded and run locally on your computer together with R, you can also work with R and the RStudio environment online. The advantage of the web server is that you don't have to download and install R and RStudio on your device. You can upload and download data sets to work with. The RStudio web server looks exactly the same as the RStudio IDE, which is what will be shown mostly in the tutorials. 
-
 ### How to work with R and RStudio?
 
-RStudio is an user-friendly environment to work with R. It is important to always work with a script, so you can save and look back at previously written code. When you opened a script, your environment should consist of four windows: 1) the script, 2) the console, 3) the global environment and 4) the files/plots/packages/help window (Figure 1).
+RStudio is a user-friendly environment to work with R. It is important to always work with a script, so you can save and look back at previously written code. When you opened a script, your environment should consist of four windows: 1) the script, 2) the console, 3) the global environment and 4) the files/plots/packages/help window (Figure 1).
 
 ```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 0.6, fig.cap = "**Figure 1: RStudio environment**"}
 img <- readPNG("./Images/Rstudio_environment.png")
@@ -647,7 +640,7 @@ for (x in c(1, 2, 3, 4, 5)) {
 The *x* is arbitrarily chosen, but represents each element in the sequence. So for each *x* the for loop will execute what is described in its body, in this case print the element. You can choose anything you like as the *x*, but usually only one letter is used and not complete words. A more applied use is to determine how many concentration measurements are below a certain threshold, for example the minimum concentration when a medication is working.  
 
 #### Loop control
-The for loop will run until the sequence is completed, however you can also manually control the loop. For example, you can skip one number/letter in the sequence or ensure that it stops on time. While the for loop usually will not run out of control, a while loop may do that and you include a `break` statement. 
+The for loop will run until the sequence is completed, however you can also manually control the loop. For example, you can skip one number/letter in the sequence or ensure that it stops on time. While the for loop usually will not run out of control, a while loop may do that and you include a `break` statement. The while loop is not further explained in this tutorial.  
 
 Two important statements you can use to keep control of the loop. `next` to immediately skip a number in the sequence and `break` to define when to stop/break the loop. With the two examples below, you can easily see the difference. With next, you will skip number 5, but print all other numbers. With break, you will break the loop at number 5 and not continue the loop after that. 
 
