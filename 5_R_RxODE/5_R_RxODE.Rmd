@@ -72,12 +72,12 @@ mod3 <- RxODE({
 ```
 
 ```{r, include = F}
-orig_opts_hook <- knitr::opts_hooks$get("tutorial")
-opts_hook_override <- function(options) {
-  options[["exercise"]] <- F
-  orig_opts_hook(options)
-}
-knitr::opts_hooks$set(tutorial = opts_hook_override)
+# orig_opts_hook <- knitr::opts_hooks$get("tutorial")
+# opts_hook_override <- function(options) {
+#   options[["exercise"]] <- F
+#   orig_opts_hook(options)
+# }
+# knitr::opts_hooks$set(tutorial = opts_hook_override)
 ```
 
 

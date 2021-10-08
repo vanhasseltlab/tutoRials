@@ -25,12 +25,12 @@ Exam <- c(7.0, 3.6, 8.0, 3.1, 2.0)
 ```
 
 ```{r, include = F}
-orig_opts_hook <- knitr::opts_hooks$get("tutorial")
-opts_hook_override <- function(options) {
-  options[["exercise"]] <- F
-  orig_opts_hook(options)
-}
-knitr::opts_hooks$set(tutorial = opts_hook_override)
+# orig_opts_hook <- knitr::opts_hooks$get("tutorial")
+# opts_hook_override <- function(options) {
+#   options[["exercise"]] <- F
+#   orig_opts_hook(options)
+# }
+# knitr::opts_hooks$set(tutorial = opts_hook_override)
 ```
 
 
