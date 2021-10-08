@@ -15,6 +15,7 @@ library(tidyverse)
 library(knitr)
 library(png)
 library(grid)
+library(gridExtra)
 library(magick)
 
 #options
@@ -25,31 +26,55 @@ gradethis_setup()
 
 #load data used in exercises
 baby_names <- c("Anne", "Fleur", "Johan", "Klaas", "Renee")
+freq <- c(100, 88, 78, 95, 45)
+baby_freq <- data.frame("names" = baby_names, "Frequency" = freq)
+baby_names_freq <- list("names" = baby_names, "baby_freq" = baby_freq)
+
+report <- c("Math" = 8.0, "Chemistry" = 7.5, "Biology" = 9.0, "English" = 6.0, "History" = 7.0)
 params <- c("Ka" = 0.5, "V1" = 15.0, "CL" = 2.0)
 bootstrap <- c(0.49, 16.9, 3.5)
 para_boot <- data.frame("parameters" = params, "bootstrap" = bootstrap)
+sec <- para_boot["V1", "bootstrap"]
+
 data("Remifentanil", package = "nlme")
 PK_data <- Remifentanil
+
+pk_complex <- PK_data%>% 
+                select(-Subject)
+pk_complex2 <- pk_complex
+pk_complex2$conc <- ifelse(pk_complex2$conc == 20.20, "missing", pk_complex2$conc)
+ids <- c(1, 33, 42, 57, 61, 63)
+pk_complex2$Sex <- as.character(pk_complex2$Sex)
+pk_complex2$Sex <- ifelse(pk_complex2$ID %in% ids , "male", pk_complex2$Sex)
+pk_complex2$Sex <- as.factor(pk_complex2$Sex)
+
+x <- data.frame("id" = c(1,2,3), "x" = c("x1", "x2", "x3"))
+y <- data.frame("id" = c(1,2,4), "y" = c("y1", "y2", "y4"))
+survival <- data.frame("ID" = 1:65, "death" = rep(c(0,0,1), length.out = 65))
+pk_survival <- full_join(pk_complex, survival, by = "ID")
+
+data("ChickWeight")
+ChickWeight_wide <- pivot_wider(ChickWeight, names_from = Time, values_from = weight)
+data("fish_encounters")
 ```
 
 ```{r, include = F}
-orig_opts_hook <- knitr::opts_hooks$get("tutorial")
-opts_hook_override <- function(options) {
-  options[["exercise"]] <- F
-  orig_opts_hook(options)
-}
-knitr::opts_hooks$set(tutorial = opts_hook_override)
+# orig_opts_hook <- knitr::opts_hooks$get("tutorial")
+# opts_hook_override <- function(options) {
+#   options[["exercise"]] <- F
+#   orig_opts_hook(options)
+# }
+# knitr::opts_hooks$set(tutorial = opts_hook_override)
 ```
 
 ## Selection and subsetting
 
-> **_NOTE:_**  This tutorial is still under construction. So far it only contains one way of subsetting data. The tutorial will be extended in the coming weeks. 
-
-This tutorial covers the basics of data manipulation with base R and the packages dplyr and tidyr. We will first start with the topic of selection and subsetting data. 
+This tutorial covers the basics of data manipulation with base R and the package Tidyverse. We will first start with the topic of selecting and subsetting data. 
 
 ### Dimensions
 
 To select your data, you need to know in which dimension you are working. This is graphically shown in figure 1. If you are working with vectors, this is easy, as there is only one dimension, you will be selecting the different elements of the vector. With data frames you are working with two dimensions, which means you can either select either rows or columns, or both. With lists, it is even more complex, as you can be selecting within an element of the list, these elements can be vectors, data frames or even another list. 
+
 ```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 0.5, fig.cap = "**Figure 1: Dimensions in data structures**"}
 img <- readPNG("./Images/Dimensions.png")
 grid.raster(img)
@@ -71,11 +96,11 @@ print(girls)
 print(baby_names)
 ```
 
-### Select using [] and index
+### Using [] and index
 
-The simplest way to select and subset is by using square brackets ([]). When you place these after an object name, you can select in different ways. Most important to remember is that the number of dimensions are of influence how you use these brackets! 
+The simplest way to select and subset is by using square brackets []. When you place these after an object name, you can select in different ways. Most important to remember is that the number of dimensions are of influence how you use these brackets! 
 
-### Vector
+### 1. Vector
 
 Vector is the easiest, as it has only one dimension, so one number is required within the square brackets. A vector is created in the example below, which consist of 5 elements. The easiest way is to set a number between 1 and 5 in the square brackets, resembling the index of the element you want to extract. If you want multiple elements, you can indicate this with `c()`, or `:` if it is a sequence. If you want to remove an element, you can indicate this with a minus sign (-) in front of the element number. 
 
@@ -86,7 +111,43 @@ baby_names[1:3]
 baby_names[-3]
 ```
 
-### Data frame
+
+#### Exercise
+
+Replace *Fleur* by *Julia* in the vector *baby_names*.
+
+```{r vector1, exercise = TRUE, exercise.eval = FALSE}
+
+```
+
+
+```{r vector1-hint-1} 
+#you can use print() to see which element is "Fleur" :
+print(baby_names)
+```
+
+```{r vector1-hint-2} 
+#select "Fleur" with:
+baby_names[2]
+```
+
+```{r vector1-hint-3} 
+#assign "Julia" to the place in the vector
+baby_names[2] <- "Julia"
+```
+
+```{r vector1-solution, exercise.reveal_solution = TRUE} 
+#Solution
+baby_names[2] <- "Julia"
+```
+
+```{r vector1-check} 
+gradethis::grade_code()
+```
+
+
+
+### 2. Data frame
 
 The same principle can also be applied on data frames. However, because you have two dimensions: rows and columns, you need to indicate to R in which dimension you are working. To separate the two dimensions, you use a comma, with the first number indicating the row and the second number indicating the column. If you leave a number out, it indicates to R that you are not selecting in that dimension and want to keep everything. A simple data frame is created below and printed to show you what it looks complete. 
 
@@ -101,7 +162,7 @@ Next, we are going to subset it. First select the first row, then the first colu
 
 ```{r code3, exercise = FALSE, eval=TRUE, echo = TRUE}
 #first row
-class(baby_freq[1, ])
+baby_freq[1, ]
 #first column
 baby_freq[ , 1]
 #value from first row and first column
@@ -111,7 +172,35 @@ baby_freq[1, 1]
 baby_freq[c(1,3,5),]
 ```
 
-### List
+#### Exercise
+
+Extract the first, second and third row from the data frame *baby_freq*.
+
+```{r dataframe1, exercise = TRUE, exercise.eval = TRUE}
+ 
+```
+
+
+```{r dataframe1-hint-1} 
+#you can use print() to see the structure of the data frame :
+print(baby_freq)
+```
+
+```{r dataframe1-hint-2} 
+#think about how you select rows
+# [ ? , ? ]
+```
+
+```{r dataframe1-solution, exercise.reveal_solution = TRUE} 
+#Solution
+baby_freq[1:3, ]
+```
+
+```{r dataframe1-check} 
+gradethis::grade_code()
+```
+
+### 3. List
 
 A list is also one dimensional, and therefore only requires one number in the square brackets to select an element. However, if you want to select something from an element, you need to consider its dimensions. Look at the example below, where a list is created from the vector and data frame we used in the two previous examples. 
 
@@ -123,7 +212,7 @@ baby_names_freq <- list("names" = baby_names, "baby_freq" = baby_freq)
 print(baby_names_freq)
 ```
 
-The vector with the baby names is the first element and the data frame with the names and frequencies is the second element of the list. If we want the fourth name from the vector *Klaas*, we have to first select the first element of the list and then the fourth element of the vector. However, keep attention to the output. When you use a single set of square brackets, you get a list as output, containing the element(s) you selected. When you use a double set of square brackets ([[]]), you will extract the element from the list. 
+The vector with the baby names is the first element and the data frame with the names and frequencies is the second element of the list. If we want the fourth name from the vector, which is *Klaas*, we have to first select the first element of the list and then the fourth element of the vector. However, keep attention to the output. When you use a single set of square brackets, you get a list as output, containing the element(s) you selected. When you use a double set of square brackets ([[]]), you will extract the element from the list. 
 
 ```{r code5, exercise = FALSE, eval=TRUE, echo = TRUE}
 #first element of the list
@@ -132,6 +221,40 @@ baby_names_freq[1]
 #fourth element of the vector
 baby_names_freq[[1]][4]
 
+```
+
+#### Exercise
+
+Change the value *95* into *50* in the data frame in the list *baby_names_freq*
+
+```{r list1, exercise = TRUE, exercise.eval = TRUE}
+ 
+```
+
+```{r list1-hint-1} 
+#you can use print() to see the structure of the list :
+print(baby_names_freq)
+```
+
+```{r list1-hint-2} 
+#Which element of the list is the dataframe and how do you acces it?
+baby_names_freq[[2]]
+```
+
+```{r list1-hint-3} 
+#Access the cell which contains value 95 (which column and row?) and assign 50 to this
+baby_names_freq[[2]][4,2] <- "50"
+
+#print the list again to check if the change was done correctly
+```
+
+```{r list1-solution, exercise.reveal_solution = TRUE} 
+#Solution
+baby_names_freq[[2]][4,2] <- "50"
+```
+
+```{r list1-check} 
+gradethis::grade_code()
 ```
 
 ### Test your knowledge
@@ -161,16 +284,76 @@ quiz(caption = "Quiz - Selection and subsetting with index",
 ```
 
 
-### Select using [] and/or names
+### Using names and $
 
 Previously we looked at selecting and subsetting using the square brackets and the index. Now, we are going to take it one step further and use names to select. Names can be present in a vector, called a *named* vector, in data frames as row names and/or column names and in lists, as element names. Depending on the data structure, different methods can be used. 
 
-### Data frame
+### 1. Vector
 
-In the example below, we see an data frame, which has in this case, both row and column names.
+A named vector can be useful to couple values to a label, without creating a more complex data frame. It still has one dimension, but now you can access the values both with its index as with the name or label. However, you cannot remove an element based on its name. 
+
+```{r code6, exercise = FALSE, eval=TRUE, echo = TRUE, error=TRUE}
+report <- c("Math" = 8.0, "Chemistry" = 7.5, "Biology" = 9.0, "English" = 6.0, "History" = 7.0)
+print(report)
+
+report[1]
+report["Math"]
+report[c("Chemistry", "History")]
+report[-"English"]
+```
+
+#### Exercise
+
+a. Extract the *Chemistry* and *Biology* grades from the named vector *report* using the names.
+b. Change the *English* grade to a *5.5*
+
+```{r vector2, exercise = TRUE, exercise.eval = TRUE}
+#a
+
+#b
+
+```
+
+```{r vector2-hint-1} 
+#a
+#think about the number of dimensions of a vector and use the combination (c() ) of the two names to extract these grades.
+```
+
+```{r vector2-hint-2} 
+#a
+report[c("Chemistry", "Biology")]
+```
+
+```{r vector2-hint-3} 
+#b 
+#Access the grade with the name and assign a new value to it
+```
+
+```{r vector2-hint-4} 
+#b 
+report["English"] <- 5.5
+#You can print *report* again to check if the grade was changed
+```
+
+```{r vector2-solution, exercise.reveal_solution = TRUE} 
+#Solution
+#a
+report[c("Chemistry", "Biology")]
+#b
+report["English"] <- 5.5
+```
+
+```{r vector2-check} 
+gradethis::grade_code()
+```
+
+
+### 2. Data frame
+
+In the example below, we see a data frame, which has in this case, both row and column names. The named vector *params* is used to create the first column, with its names becoming the row names of the data frame. 
 
 ```{r code 6, eval = TRUE, echo = TRUE}
-params <- c("Ka" = 0.5, "V1" = 15.0, "CL" = 2.0)
+params <- c("Ka" = 0.5, "V1" = 15.0, "CL" = 2.0) #named vector! 
 bootstrap <- c(0.49, 16.9, 3.5)
 para_boot <- data.frame("parameters" = params, "bootstrap" = bootstrap)
 print(para_boot)
@@ -199,11 +382,163 @@ para_boot$parameters
 para_boot$bootstrap
 ```
 
+#### Exercise
+
+a. Extract the value from the second row, second column from the data frame *para_boot* and store it in an object called: *sec*
+
+b. In *para_boot* replace the value for *V1* in the *parameters* column with the value you saved in *sec*.
+
+```{r dataframe2, exercise = TRUE, exercise.eval = TRUE}
+#a
+
+#b
+
+```
+
+```{r dataframe2-hint-1} 
+#a
+#think about the number of dimensions of a data frame and use the row and column names to extract the value
+```
+
+```{r dataframe2-hint-2} 
+#a
+#Save the value in *sec*
+sec <- para_boot["V1", "bootstrap"]
+```
+
+```{r dataframe2-hint-3} 
+#b 
+#Select the value for V1 in the parameters column 
+para_boot["V1", "parameters"]
+```
+
+```{r dataframe2-hint-4} 
+#b 
+#Assign sec to the previously selected value. Sec is a vector with only one element, so it will use that value to fill in
+para_boot["V1", "parameters"] <- sec
+#You can print *para_boot* again to check if the value is changed
+```
+
+```{r dataframe2-solution, exercise.reveal_solution = TRUE} 
+#Solution
+#a
+sec <- para_boot["V1", "bootstrap"]
+#b
+para_boot["V1", "parameters"] <- sec
+```
+
+```{r dataframe2-check} 
+gradethis::grade_code()
+```
+
+
+### 3. List
+
+List elements can also have names, which makes it easier to select and subset them. Similar to data frames, you don't have to worry about indices if the list get reordered. Because a list only has one dimension, you can select the elements with the names in square brackets or with the use of $. Look at the difference between the single pair or double pair of square brackets.  
+
+```{r code9, exercise = FALSE, eval=TRUE, echo = TRUE}
+combi <- list("Report" = report, "Results" = para_boot)
+
+combi["Report"]
+combi[["Report"]]
+```
+
+#### Exercise
+
+a. Select the data frame *Results* from the list *combi* using $ and the name of this element. 
+
+```{r list2, exercise = TRUE, exercise.eval = TRUE}
+
+```
+
+```{r list2-hint-1} 
+#You place the name of the element, Results, after $, after the name of the list, combi. 
+```
+
+```{r list2-solution, exercise.reveal_solution = TRUE} 
+#Solution
+combi$Results
+```
+
+```{r list2-check} 
+gradethis::grade_code()
+```
+
+```{r, quiz2}
+question("b. Is using a dollar sign $ similar to using single or double square brackets?",
+    answer("single square brackets [], because it is still a list, only with one element", message = "If you run combi['Results'], you see that the output is different."),
+    answer("double square brackets [[]], because it is extracted from the list and can be adapted", correct = TRUE),
+    allow_retry = TRUE
+)
+```
+
+
+### Using [] and logicals
+
+Selection and subsetting can be done in more ways than just using indices or names. For all three data types we discussed; vector, dataframe and list, we can also use logicals in combination with the square brackets. If you place a condition within the brackets, it will check for each element, row and/or column if the condition is true or false. Only the true elements, rows and/or columns are then selected, as shown below.
+
+```{r code 10, eval = TRUE, echo = TRUE }
+number <- c(1,2,3,4,5,6,7,8,9,10)
+letter <- letters[1:10] #letters is special variable from R, it contains all lowercase letters of the alphabet
+num_let <- data.frame("numbers" = number, "letters" = letter)
+
+number[number < 5]
+letter[letter == "e"]
+num_let[num_let$numbers > 5,] #Watch the dimensions!
+```
+
+You have learned in tutorial 1 about NA, not available, which is filled in if the data is missing. You might want to select or filter out the rows or elements with NA. It would seem logical to this with a simple condition statement, as above. However, R has a special function for finding NA: `is.na()`. This will check each element and indicate with TRUE and FALSE if the element is NA. If you place this function between square brackets, you can subset/select only the NA elements, or remove the NA elements by using an exclamation mark, indication that you want to select NOT the NA elements.  
+
+```{r code 11, eval = TRUE, echo = TRUE, error = TRUE }
+number_NA <- c(1,2,NA,4,5,NA,7,8,9,10)
+
+#this doesn't work
+number_NA[number_NA == NA]
+
+#use this function
+is.na(number_NA)
+#in combination with square brackets
+number_NA[!(is.na(number_NA))]
+```
+
+## Vectorization and arithmetic
+
+### Arithmetic
+
+Arithmetic is a branch of mathematics that study the operations on numbers, think for example about subtraction (-), addition(+), multiplication(*) and division(/). Another commonly used operation is exponentiation (^). Don't confuse `^` with `exp(x)`. The latter function is $e^x$, while with `^` you can use every base you need, for example $2^2$. 
+
+Using arithmetic functions often goes together with vectorization and that is why we explain that in the next part.
+
+### Vectorization
+Vectorization, vectorized behavior or vector recycling are all synonyms, with the meaning that the function will operate on all elements of a vector, without needing loops. You can see this very easing with the addition of two 4-element vectors. 
+
+```{r code 13, exercise = FALSE, echo = TRUE}
+a <- c(1, 2, 3, 4)
+b <- c(5, 6, 7, 8)
+
+a+b
+```
+
+What happened in fact was that the first element of *a* is added to the first element of *b*, so $1 + 5 = 6$, the same happened for the second, third and fourth element of both vectors. 
+
+```{r, quiz3}
+question("What do you think will happen if you add vector c, consisting of 4 elements, and vector d, consisting of 2 elements, together?",
+    answer("The first and second element of vector c and vector d will be added together, as we saw with vector a and b in the example. The third and fourth element of vector c will remain the same, since there are no elements in vector d that can be added.", message = "No, R has some tricks when the vectors are uneven, and reuses the vector, that's why one synonym is vector recycling."),
+    answer("The first and second element of vector c and vector d will be added together, as we saw with vector a and b in the example. The third and fourth element of vector c will be added to the first and second element of vector d.", correct = TRUE),
+    answer("It will result in an error because the vectors are not of the same length", message = "No, R has some tricks to overcome this, try again!"),
+    allow_retry = TRUE
+)
+```
+
+So you can use vectorization for many different operations in your code. It usually makes the code run faster, and looking cleaner. However, if you are new to coding in R, it is not a problem if you do not use vectorization. But, beware that it exists and it can happen when you are working with arithmetic functions. 
+
 ### Creating new columns
 
-Selecting columns of data frames is a commonly used aspect of your coding during data manipulation. You often base new columns on present columns in the data frame, think for example about calculating the BMI based on the weight and length column. If you calculate a new column based on another column, it will repeat the calculation for each row, based on the values in the other column from each row. Look at the example below. First you create a new column, and fill it with NA. Because you only provide one value, it will repeat itself until the whole column is filled. Next, you can define what should be in the new variable. In this case, the absolute difference between the parameter estimate and the bootstrap estimate. If you look at the last print of the data frame para_boot, you see that the difference column is calculated for each row. 
+Creating new columns in a data frames is a commonly used aspect of your coding during data manipulation. You often base new columns on present columns in the data frame, think for example about calculating the BMI based on the weight and length column. If you calculate a new column based on another column, it will repeat the calculation for each row, which is vectorization! While this is a data frame, you are working with one or two columns, which can be considered one or two vectors. 
 
-```{r code 9, eval = TRUE, echo = TRUE}
+Look at the example below. First you create a new column, and fill it with NA. Because you only provide one value, it will repeat itself until the whole column is filled. Next, you can define what should be in the new variable. In this case, the absolute difference between the parameter estimate and the bootstrap estimate. If you look at the last print of the data frame para_boot, you see that the difference column is calculated for each row. 
+
+```{r code 12, eval = TRUE, echo = TRUE}
 print(para_boot)
 
 #first create a new column and fill it with NA
@@ -215,41 +550,834 @@ para_boot$difference <- abs(para_boot$parameters - para_boot$bootstrap)
 print(para_boot)
 ```
 
-Try to do this yourself as well, with the following tips:
+#### Exercise
+Try to do this yourself, with the following tips:
 
 - Take a look at the data frame *PK_data*  
 - Create a new column, called *BMI* and fill it with `NA`
 - For each row, calculate the BMI based, on the height `Ht` and weight `Wt` columns
 - CHECK the values of the `Ht` and `Wt` columns, are they in the correct unit for the BMI calculation?
 
-```{r exercise1, exercise = TRUE} 
+```{r columns, exercise = TRUE} 
 
 ```
 
-```{r exercise1-hint-1} 
+```{r columns-hint-1} 
 #you can use:
 print(PK_data)
 ```
 
-```{r exercise1-hint-2} 
+```{r columns-hint-2} 
 #create a new column with:
 PK_data$BMI
 ```
 
-```{r exercise1-hint-3} 
+```{r columns-hint-3} 
 #the formula for BMI is: weight(kg)/(height(m)^2)
 #base the BMI columns on:
 PK_data$Ht
 PK_data$Wt
 ```
 
-```{r exercise1-solution, exercise.reveal_solution = TRUE} 
+```{r columns-solution, exercise.reveal_solution = TRUE} 
 #Solution
 print(PK_data)
 PK_data$BMI <- NA
 PK_data$BMI <- PK_data$Wt / ((PK_data$Ht/100)^2)
 ```
 
-```{r exercise1-check} 
+```{r columns-check} 
 gradethis::grade_code()
 ```
+
+### Complex exercise: data manipulation base R
+
+Now that we have discussed most of the functions for data manipulation with base R, an elaborate exercise is placed below. This exercise also contain functions which haven't been explained. Take a look at the help files if you are unsure how the function works. 
+
+1. We will use the PK dataset with the name pk_complex2. This dataset has been loaded in already. 
+
+```{r complex1, exercise = TRUE}
+head(pk_complex2)
+```
+
+2. Evaluate the characteristics of the imported data object. Everything ready for further processing? What about the class of the concentration column? Consider summary(), head(), tail(), class().
+
+```{r complex2, exercise = TRUE}
+
+```
+
+
+```{r, quiz4}
+question("Select ALL columns that contain mistakes or are not as you expected.",
+    answer("ID"),
+    answer("Time"),
+    answer("conc", correct = TRUE, message = "Yes, conc is weird, as you expect it to be numeric."),
+    answer("Rate"),
+    answer("Amt"),
+    answer("Sex", correct = TRUE, "Sex is also incorrect, as you expect only 2 levels, not 3."),
+    answer("Ht"),
+    answer("Wt"),
+    answer("BSA"),
+    answer("LBM"),
+    allow_retry = TRUE,
+    incorrect = "No this column is numeric, as you would expct with no striking outliers."
+)
+```
+
+Regularly, datasets will have small errors that become clear while analyzing the data in R. In such cases you can either go back to the dataset (e.g in excel), or directly fix it in R, which makes the process more reproducible (e.g. you do not have manipulate your "raw" dataset).
+
+3. The "missing" record in the *conc* column can be removed. You can replace the "missing" value by NA manually. E,g, select the specific element(s) using subsetting and then replace, e.g. conceptually:
+**data.frame$value[data.frame$value=="some value"] <- NA**
+
+```{r complex3, exercise = TRUE}
+
+```
+
+```{r complex3-hint-1} 
+#subset the values you want to replace by filling in the template function given:
+#data.frame = pk_complex2
+#value = conc
+#some value = missing
+```
+
+```{r complex3-solution, exercise.reveal_solution = TRUE} 
+#Solution
+
+pk_complex2$conc[pk_complex2$conc == "missing"] <- NA
+
+```
+
+```{r complex3-check} 
+gradethis::grade_code()
+```
+
+4. What about the Sex column? Fix the error there as well, by replacing the wrong values manually. 
+
+```{r complex4, exercise = TRUE}
+
+```
+
+```{r complex4-hint-1} 
+# Working with factors often goes wrong. Transform it into a character first, and at the end back to a factor.
+pk_complex2$Sex <- as.character(pk_complex2$Sex)
+#... other code for this exercise
+pk_compelx2$Sex <- as.factor(pk_complex2$Sex)
+```
+
+```{r complex4-hint-2} 
+# Use the same template function to replace *male* in the Sex column with *Male*. 
+#data.frame = pk_complex2
+#value = Sex
+#some value = male
+#NA => "Male"
+
+```
+
+```{r complex4-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex2$Sex <- as.character(pk_complex2$Sex)
+pk_complex2$Sex[pk_complex2$Sex == "male"] <- "Male"
+pk_complex2$Sex <- as.factor(pk_complex2$Sex)
+```
+
+```{r complex4-check} 
+gradethis::grade_code()
+```
+
+If you didn't manage to fix the errors, you can also work with the dataset pk_complex, which is clean already.
+
+
+5. Save the pk object into a new object pk2. It is good practice to use separate objects for steps in your analysis.
+
+```{r complex5, exercise = TRUE}
+
+```
+
+```{r complex5-hint-1} 
+# Use the following setup:
+new_object_name <- old_object_name
+```
+
+```{r complex5-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk2 <- pk_complex2
+```
+
+6. Remove the columns Wt, BSA and LBM from the dataset pk2.
+
+```{r complex6, exercise = TRUE}
+
+```
+
+```{r complex6-hint-1} 
+#Solution
+pk2 <- pk2[ , -c(9,10,11)]
+```
+
+
+7. Save the males from the dataset into a separate dataset named pkMale. Remove the males
+from the object pk2.
+
+```{r complex7, exercise = TRUE}
+
+```
+
+```{r complex7-hint-1} 
+# step 1: subset the males and save these in another dataset
+pkMale <- pk2[pk2$Sex == "Male", ]
+```
+
+```{r complex7-hint-2} 
+# step 2: remove males from pk2
+  # option 1: remove males
+  pk2 <- pk2[pk2$Sex != "Male", ]
+  # option 2: only select females
+  pk2 <- pk2[pk2$Sex == "Female", ]
+```
+
+8. Now combine the objects pkMale and pk2 again using rbind and this as object called pk3
+
+```{r complex8, exercise = TRUE}
+
+```
+
+```{r complex8-hint-1} 
+# Read in the help files what the function rbind() does and which arguments it requires
+```
+
+```{r complex8-solution, exercise.reveal_solution = TRUE} 
+# Solution
+pk3 <- rbind(pkMale, pk2)
+```
+
+```{r complex8-check} 
+gradethis::grade_code()
+```
+
+9. Now, sort the pk dataset with first Males, then by ID and then by time. Also try to sort in different ways. Save the sorted dataset in a new object. Take a moment to see how the order()
+function actually works, e.g. just type for instance order(-pk$id) or so.
+
+```{r complex9, exercise = TRUE}
+
+```
+
+
+## Introduction dplyr and tidyr
+
+Dplyr and Tidyr are two important packages within the Tidyverse package. Tidyverse is a collection of R packages designed for data science. All packages have similarities in design philosophy, grammar and data structures. 
+
+Dplyr functions are based on verbs, which makes it easier to understand which functions to use. They also share the same interface, meaning that when you have mastered one, it is easy to pick up the other functions. Dplyr is based around data frames, while base R functions tend to be based around vectors. This makes Dplyr one of the best packages to work with data frames, which are commonly used in data science. Dplyr has a very comprehensive [cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf), where the most commonly used functions are listed with their arguments. 
+
+Tidyr has useful functions to tidy data. Data is tidy when it follows the 3 rules:
+
+1. Each variable must have its own column
+2. Each observation must have its own row
+3. Each value must have its own cell
+
+```{r fig2, echo = FALSE, out.width = "100%", fig.asp = 0.5, fig.cap = "**Figure 2: Tidyverse, dplyr and tidyr icons**"}
+img1 <- readPNG("./Images/tidyverse-master.png")
+img2 <- readPNG("./Images/Dplyr_1.png")
+img3 <- readPNG("./Images/Tidy.png")
+grid.arrange(rasterGrob(img1), rasterGrob(img2), rasterGrob(img3), ncol = 3)
+```
+
+### Piping
+
+We can rewrite code to make it easier to read and understand, this is called *pipelining* the code. Instead of reading from inner to outer brackets, you can just read from left to right, top to bottom. This pipe operator from the magrittr package (included in tidyverse), is used for this: `%>%` . The object on the left side of the pipe operator is used as argument for the function plased on the right side of the operator. So conceptually: `x %>% f(y)` is equal to `f(x, y)`. You can read each pipe operator as *then*, see the example below:
+*Please note that functions are used you might not recognize. That is no problem, look at the structure and order of the functions.*
+
+```{r}
+#sequential coding
+a <- 5.22683 
+b <- seq(from = a, 10, 2) #create a vector with a sequence from a to 10, with steps of 2.
+print(round(b, 3)) #round each value in vector b to 3 digits
+
+#nested coding
+a <- 5.22683
+print(round(seq(from = a, 10, 2), 3)) #read from the inside out
+
+#piping
+a <- 5.22683
+a %>% seq(10,2) %>% 
+      round(3) %>% 
+      print()
+```
+
+You can see with this very simple exercise that piping makes it easier to read, than creating a bunch of objects, or nesting a lot of functions. It is also a lot easier to debug, or to work on someone else's code. 
+
+### Exercise 
+
+Transform the code standing below by using the pipe operator. 
+
+```{r piping_task, echo = TRUE} 
+all.rolls <- apply(t(
+  apply(as.matrix(
+    expand.grid(1:6, 1:6, 1:6, 1:6, 1:6)
+  ), 1, sort)
+), 1, paste, collapse = "")
+```
+
+
+```{r piping, exercise = TRUE} 
+
+```
+
+```{r piping-hint-1} 
+#Work from the inside out, so start with the inner set of brackets
+#Tip: use ctrl+shift+M to type the pipe operator in one go
+```
+
+```{r piping-hint-2} 
+#Start with expand.grid assigning to all.rolls
+all.rols <- expand.grid(1:6, 1:6, 1:6, 1:6, 1:6)
+```
+
+```{r piping-hint-3} 
+#Next are the as.matrix() and first apply function
+all.rols <- expand.grid(1:6, 1:6, 1:6, 1:6, 1:6) %>% 
+  as.matrix() %>% 
+    apply(1, sort) 
+```
+
+```{r piping-solution, exercise.reveal_solution = TRUE} 
+#Solution
+#And finally the t() and second apply function
+all.rols <- expand.grid(1:6, 1:6, 1:6, 1:6, 1:6) %>% 
+  as.matrix() %>% 
+    apply(1, sort) %>% 
+      t() %>% 
+        apply(1, paste, collapse = "")
+
+```
+
+```{r piping-check} 
+gradethis::grade_code()
+```
+
+
+## Columns
+
+First we will look at the functions that work on the columns of a data frame. 
+
+### select()
+
+The `select()` function selects/subsets columns very easily, with the use of so called *helper functions*. These functions can help you to select columns with a certain condition. All the helper functions are listed in help pages of the function and in the dplyr cheat sheet. 
+
+```{r fig3, echo = FALSE, out.width = "100%", fig.asp = 0.5, fig.cap = "**Figure 3: overview of the select() function**"}
+img <- readPNG("./Images/select.png")
+grid.raster(img)
+```
+
+### mutate()
+
+While `select()` subsets a column, `mutate()` creates a new column, either with your supplied values or calculations based on the existing columns. This useful function can create multiple columns very easily. 
+
+```{r fig4, echo = FALSE, out.width = "100%", fig.asp = 0.2, fig.cap = "**Figure 4: overview of the mutate() function**"}
+img <- readPNG("./Images/mutate.png")
+grid.raster(img)
+```
+
+### Exercise
+
+We will be working in the *pk_complex* data set with this and the following exercises. Try to use the pipe operator, in combination with the `select()` and `mutate()` functions. 
+
+a. Select the columns containing "e". 
+
+```{r columns1, exercise = TRUE} 
+
+```
+
+```{r columns1-hint-1} 
+#Use the helper function `contains` within the `select` function
+contains("e")
+```
+
+```{r columns1-hint-2} 
+#Put this in the select function
+select(contains("e"))
+```
+
+```{r columns1-hint-3} 
+#The first argument of the select function should be the data frame
+#Implement this by using the pipe functiom
+pk_complex %>% select(contains("e"))
+```
+
+```{r columns1-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex %>% select(contains("e"))
+```
+
+```{r columns1-check} 
+gradethis::grade_code()
+```
+
+b. Remove the Amt column. Search how you can do this with the `select()` function. 
+
+```{r columns2, exercise = TRUE} 
+
+```
+
+```{r columns2-hint-1} 
+#You can use the select function for this exercise
+```
+
+```{r columns2-hint-2} 
+#Think about how we could remove columns by using indices
+```
+
+```{r columns2-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex %>% select(-Amt)
+```
+
+```{r columns2-check} 
+gradethis::grade_code()
+```
+
+c. Create a new column called *DoseKg* where you calculate the dose (Amt) divided by the weight (Wt). 
+
+```{r columns3, exercise = TRUE} 
+
+```
+
+```{r columns3-hint-1} 
+#For this exercise, you need to use the mutate function
+```
+
+```{r columns3-hint-2} 
+#First write the equation to calculate DoseKg
+"DoseKg" = Amt / Wt
+```
+
+```{r columns3-hint-3} 
+#Then fill this in, in the mutate function
+pk_complex %>% mutate("DoseKg" = Amt / Wt)
+```
+
+```{r columns3-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex %>% mutate("DoseKg" = Amt / Wt)
+```
+
+```{r columns3-check} 
+gradethis::grade_code()
+```
+
+## Rows
+
+Next we will look at the functions that work on the rows of a data frame. 
+
+### filter()
+
+You can use `filter()` to subset rows from a data frame. It checks each row for a certain condition, and those which evaluated to TRUE are kept. This makes it easy to only keep rows with a certain condition, for example only the subjects who were in the hospital. You build conditions the same way as you have learned with the `if` and `ifelse` functions in tutorial 1. You can use logical and boolean operators shown in the second figure below.  
+
+```{r fig5a, echo = FALSE, out.width = "100%", fig.asp = 0.2, fig.cap = "**Figure 5a: overview of the filter() function**"}
+img <- readPNG("./Images/filter.png")
+grid.raster(img)
+```
+
+```{r fig5b, echo = FALSE, out.width = "100%", fig.asp = 0.2, fig.cap = "**Figure 5b: logical and boolean operators**"}
+img <- readPNG("./Images/filter2.png")
+grid.raster(img)
+```
+
+### arrange()
+
+`arrange()` is used to order the rows of a data frame based on one or multiple variables (the columns). 
+
+```{r fig6, echo = FALSE, out.width = "100%", fig.asp = 0.2, fig.cap = "**Figure 6: overview of the arrange() function**"}
+img <- readPNG("./Images/arrange.png")
+grid.raster(img)
+```
+
+### Exercise
+
+We will again be working in the *pk_complex* data set. Try to use the pipe operator, in combination with the `filter()` and `arrange()` functions.
+
+a. Create a subset of the pk_complex data called *pk_complex_old_heavy* with age higher than 60 years AND weight higher or equal to 80 kg.  
+
+```{r rows1, exercise = TRUE} 
+
+```
+
+```{r rows1-hint-1} 
+#First define the conditions based on the Age and Wt columns
+Age > 60
+Wt >= 80
+```
+
+```{r rows1-hint-2} 
+#place the conditions in the filter function
+filter(Age > 60 & Wt >= 80)
+```
+
+```{r rows1-hint-3} 
+#place the original dataset in front of the filter function
+pk_complex %>% filter(Age > 60 & Wt >= 80)
+```
+
+```{r rows1-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex_old_heavy <- pk_complex %>% 
+  filter(Age > 60 & Wt >= 80)
+```
+
+```{r rows1-check} 
+gradethis::grade_code()
+```
+
+b. Sort the data set pk_complex by increasing ID, but decreasing time. 
+
+```{r rows2, exercise = TRUE} 
+
+```
+
+```{r rows2-hint-1} 
+#First define the variables on which the data must be ordered
+ID
+desc(Time)
+```
+
+```{r rows2-hint-2} 
+#Fill in the arguments in the arrange function
+arrange(desc(Time), ID)
+```
+
+```{r rows2-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex %>% arrange(ID, desc(Time))
+```
+
+```{r rows2-check} 
+gradethis::grade_code()
+```
+
+c. Create a subset of data called *pk_complex_0* where only time zero is selected and ordered by increasing age. 
+
+```{r rows3, exercise = TRUE} 
+
+```
+
+```{r rows3-hint-1} 
+#First define the condition based on the Time column
+Time == 0
+#Which argument is necessary for the arrange function?
+Age
+```
+
+```{r rows3-hint-2} 
+#Fill in the arguments in the filter and arrange functions
+filter(Time == 0)
+arrange(Age)
+```
+
+```{r rows3-hint-3} 
+#Link these together with the data set by using pipe operators
+pk_complex %>% 
+  filter(Time == 0) %>% 
+  arrange(Age)
+```
+
+```{r rows3-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex_0 <- pk_complex %>% 
+  filter(Time == 0) %>% 
+  arrange(Age)
+```
+
+```{r rows3-check} 
+gradethis::grade_code()
+```
+
+## Whole dataset
+
+And finally, we will look at a couple functions that work on the complete data frame. 
+
+### group_by()
+
+Group wise operations can be performed by dplyr by using the `group_by()` function in combination with other dplyr functions. It is often used with `summarise()`, which will be explained in the next part. As you can see in Figure 7, the data set will be split into groups based on the variable(s) you provided. For each of those groups, you can execute a function, for example summarize the mean value of a variable. Don't forget to use `ungroup()` after, if you don't want to continue analyzing per group. 
+
+```{r fig7, echo = FALSE, out.width = "100%", fig.asp = 1, fig.cap = "**Figure 7: overview of the group_by() function**"}
+img <- readPNG("./Images/group_by.png")
+grid.raster(img)
+```
+
+### summarise()
+
+As seen in the figure, represented by colors, new variables are created by using `summarise()`. This is the result of a calculation on your data set. You can use it to describe your data, by requesting mean, max or sd for example. Different variations of this function exist: 
+
+ - `summarise_all()` applies the functions to every column
+ - `summarise_at()` applies the functions to specific columns
+ - `summarise_if()` applies the functions to all columns which meet the condition, for example if they are numeric. 
+ 
+```{r fig8, echo = FALSE, out.width = "100%", fig.asp = 0.3, fig.cap = "**Figure 8: overview of the summarise() function**"}
+img <- readPNG("./Images/summarise.png")
+grid.raster(img)
+```
+
+
+### *join()
+
+Often when working with data sets, you want to combine two data frames. Think for example about one data frame with the baseline characteristics of a patient, or the sample - strain coding together with the results from the trial or experiment. You can do this in different ways. Base R has two functions: `rbind()` and `cbind()`, of which dplyr has the analogues `bind_rows()` and `bind_cols()`. These functions, as the names already indicate, combine rows or columns to another data frame. Beware that with combining rows, the columns of the two data frames must be equal. With binding columns, the number of rows must be equal in both data frames.
+
+The *join functions from dplyr are better suited to combine data frames, as they match the rows. Think for example about including 200 patients in a study, but 10 patients withdraw their consent for their data to be used. Then, these 10 patients will not be in the other data set with the results, and the IDs can be removed from the initial data set, when the two data frames are combined. We will walk through the four different, commonly used join functions.
+
+```{r fig9, echo = FALSE, out.width = "100%", fig.asp = 0.3, fig.cap = "**Figure 9: overview of the *join() functions**"}
+img <- readPNG("./Images/join.png")
+grid.raster(img)
+```
+
+### full_join()
+
+You use the `full_join()` function when you want to combine two data frames and keep ALL rows. As you can see in the gif below, the data frames are combined by matching ID, the first column. Because ID 1 and 2 are in both data sets, the variable values will be placed on the same row. The missing y variable for ID = 3 and the missing x variable for ID = 4 are filled with `NA`. 
+
+```{r full_join}
+img_path <- "Images/full-join.gif"
+img1 <- magick::image_read(img_path)
+img1
+```
+
+
+Try it out yourself in the coding area standing below. 
+
+```{r fulljoin1, exercise = TRUE} 
+print(x)
+print(y)
+full_join(x, y, by = "id")
+```
+
+
+### left_join and right_join
+
+While `full_join()` keeps all rows, `left_join()` and `right_join()` only keep the values of their matching variable. This is explained in the two gifs below. With the `left_join()`, the values in the variable ID are kept only for the left data set, which is the "left" argument, so actually the first argument of your function, in this case the *x* data set. If there are multiple matches to one ID, both matches are kept. 
+
+The opposite is seen with the `right_join()` where only the values from the matching variable of the right data set are kept. The "right" argument is the second argument of your function, in this case the *y* data set. 
+
+```{r left_join}
+img_path <- "Images/left-join-extra.gif"
+img2 <- magick::image_read(img_path)
+img2
+```
+
+```{r right_join}
+img_path <- "Images/right-join.gif"
+img5 <- magick::image_read(img_path)
+img5
+```
+
+See this for yourself in the coding block below.
+
+```{r rightleftjoin, exercise = TRUE} 
+print(x)
+print(y)
+left_join(x, y, by = "id")
+right_join(x, y, by = "id")
+```
+
+
+### inner_join
+
+With the `inner_join()` function we go one step further in joining data frames and dropping rows. Only the matching rows are kept from either data set. In the previous functions, unmatchin IDs were kept, and the unknown variable was filled with NA. In this case the unmatched IDs are dropped. 
+
+```{r inner_join}
+img_path <- "Images/inner-join.gif"
+img3 <- magick::image_read(img_path)
+img3
+```
+
+See this for yourself in the coding block below.
+
+```{r innerjoin, exercise = TRUE} 
+print(x)
+print(y)
+inner_join(x, y, by = "id")
+```
+
+This completes the explanations of the 4 different *join functions. 
+
+### Exercise
+
+We will again be working in the *pk_complex* data set. Try to use the pipe operator, in combination with the `summarise()`, `group_by` and `*join()` functions.
+
+a. Calculate the average concentration, height and weight for males and females separately. 
+
+```{r wholedata1, exercise = TRUE} 
+
+```
+
+```{r wholedata1-hint-1} 
+#We will need to group the data into males and females, by using group_by
+pk_complex %>% 
+  group_by(Sex)
+```
+
+```{r wholedata1-hint-2} 
+#Next we need to figure out what we want to calculate in the summarise function
+mean(Ht)
+mean(Wt)
+```
+
+```{r wholedata1-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_complex %>% 
+  group_by(Sex) %>% 
+  summarise(mean(Ht), mean(Wt))
+```
+
+```{r wholedata1-check} 
+gradethis::grade_code()
+```
+
+b. An additional data set has been made available, describing the survival of the 65 patients in the pk_complex data. It is easier to have everything in one data set, so use the full_join() to combine *pk_complex* and *survival*. Save it under the name *pk_survival* 
+
+```{r wholedata2, exercise = TRUE} 
+
+```
+
+```{r wholedata2-hint-1} 
+#Find out what the matching variable is between the two data sets
+```
+
+```{r wholedata2-hint-2} 
+#Fill in the arguments of the full_join function
+full_join(pk_complex, survival, by = "ID")
+```
+
+```{r wholedata2-solution, exercise.reveal_solution = TRUE} 
+#Solution
+pk_survival <- full_join(pk_complex, survival, by = "ID")
+```
+
+```{r wholedata2-check} 
+gradethis::grade_code()
+```
+
+c. We will use the newly created *pk_survival* to calculate how many patients died grouped by sex, as well as total. Death is indicated with either 0 = alive, or 1 = dead. If you sum this column, you could calculate how many patients died. However, this is only possible if you have one value per patient. Therefore, you first need to filter for time = 0, then group if necessary and then calculate the number of dead patients. 
+
+```{r wholedata3, exercise = TRUE} 
+#a. Dead patients per sex
+
+#b. Dead patients in total 
+
+```
+
+```{r wholedata3-hint-1} 
+#Start with the data set, pipe operator and filter function
+pk_survival %>% 
+  filter(Time == 0)
+```
+
+```{r wholedata3-hint-2} 
+#For the grouped number, you need to use the function group_by. Skip this step for the total count
+pk_survival %>% 
+  filter(Time == 0) %>% 
+  group_by(Sex)
+```
+
+```{r wholedata3-hint-3} 
+#Last, we need to summarise() and calculate the sum of the death column
+pk_survival %>% 
+  filter(Time == 0) %>% 
+  group_by(Sex) %>%
+  summarise(sum(death))
+```
+
+```{r wholedata3-solution, exercise.reveal_solution = TRUE} 
+#Solution
+#a. Dead patients per sex
+pk_survival %>% 
+  filter(Time == 0) %>% 
+  group_by(Sex) %>%
+  summarise(sum(death))
+#b. Dead patients in total 
+pk_survival %>% 
+  filter(Time == 0) %>% 
+  summarise(sum(death))
+```
+
+```{r wholedata3-check} 
+gradethis::grade_code()
+```
+
+### pivot_longer and pivot_wider
+
+We will take a brief look at two functions from the Tidyr package: `pivot_longer` and `pivot_wider`. These functions are useful to make data tidy, as explained in the introduction. Various software can have different requirements for their input data. If you want to create graphs with ggplot, and separate different individuals, you need to have the individual ID in a column, not as column names. 
+
+```{r pivot}
+img_path <- "Images/pivot.gif"
+img4 <- magick::image_read(img_path)
+img4
+```
+
+We are going to look at an example with the ChickWeight data and determine if it is **tidy**. 
+
+```{r fig10, echo = FALSE, out.width = "100%", fig.asp = 0.3, fig.cap = "**Figure 10: snippet of ChickWeight data set in wide format**"}
+img <- readPNG("./Images/chickweight.png")
+grid.raster(img)
+```
+
+```{r, quiz5}
+question("Why is the ChickWeight data in wide format NOT tidy? Select all that apply",
+    answer("Each variable doesn't have its own column", correct = TRUE),
+    answer("Each observation doesn't its own row", correct = TRUE),
+    answer("Each value doesn't have their own cell", message = "Each value is placed in their own cell, no cell contain more than one value."),
+    allow_retry = TRUE, 
+    correct = "Indeed, this data set does not adhere to 2 of the 3 rules of Tidy data."
+)
+```
+
+If we want to make this data set tidy, we need the time stamps, now as column names, in one column. And we need the chicken weights, now in the rows, in one column. Chicken ID (*Chick*) and the diet (*Diet*) should remain in their columns. Because the data is currently in wide format, we want to go to a long format, we will use the function: `pivot_longer()`. Go the the help page of pivot_longer if you don't understand the arguments I have provided in the example below.
+
+```{r pivot_l, exercise = TRUE} 
+print(ChickWeight_wide)
+ChickWeight_long <- pivot_longer(ChickWeight_wide,   #wide format dataset
+                                 cols = `0`: `21`,   #columns of the data which need to be transformed
+                                 names_to = "Time",  #Name of the new column which will contain the old column names from the wide data set
+                                 values_to =  "Weight") #Name of the new column which will contain the old values from the wide data set
+head(ChickWeight_long)
+```
+
+### Exercise
+
+You will now try yourself to transform a data set. The data set has already been loaded in for you and is called *fish_encounters*. 
+
+```{r, quiz6}
+question("a. In what format is the data *fish_encounters*? ",
+    answer("Wide format", message = "No, this is long format as all the stations are in a column, and not as column names."),
+    answer("Long format", correct = TRUE),
+    allow_retry = TRUE
+)
+```
+
+b. Transform it to the other format. Use the help page of either pivot_wider or pivot_longer to look up what arguments you need. Use the pipe operator %>% as well.
+
+```{r wholedata4, exercise = TRUE} 
+
+```
+
+```{r wholedata4-hint-1} 
+#You will need pivot_wider, because the data is currently in long format.
+fish_encounters %>% pivot_wider()
+```
+
+```{r wholedata4-hint-2} 
+#We need to specify how the columns will be called in the wide format and what values will be placed in the rows
+#So the different stations in the column station will become the column names
+#And the values in seen will become the values in the rows
+```
+
+```{r wholedata4-solution, exercise.reveal_solution = TRUE} 
+#Solution
+fish_encounters %>% pivot_wider(names_from = station, values_from = seen)
+```
+
+```{r wholedata4-check} 
+gradethis::grade_code()
+```
+
+### End of R data manipulation tutorial
+
+Well done! You finished this tutorial in R! Please feel free to revisit parts that were difficult, or continue with the next tutorial "R: plot creation".
+
+I would appreciate if you could [provide me feedback](https://forms.gle/zf8e8eJhP5kPvFyj7) on this tutorial. This anonymously given feedback will be used to improve the tutorial.  
