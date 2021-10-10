@@ -1132,10 +1132,11 @@ grid.raster(img)
 
 You use the `full_join()` function when you want to combine two data frames and keep ALL rows. As you can see in the gif below, the data frames are combined by matching ID, the first column. Because ID 1 and 2 are in both data sets, the variable values will be placed on the same row. The missing y variable for ID = 3 and the missing x variable for ID = 4 are filled with `NA`. 
 
-```{r full_join, out.width = "50%"}
+```{r full_join}
 img_path <- "Images/full-join.gif"
 img1 <- magick::image_read(img_path)
 img1
+magick::image_destroy(img1)
 ```
 
 
@@ -1154,16 +1155,18 @@ While `full_join()` keeps all rows, `left_join()` and `right_join()` only keep t
 
 The opposite is seen with the `right_join()` where only the values from the matching variable of the right data set are kept. The "right" argument is the second argument of your function, in this case the *y* data set. 
 
-```{r left_join, out.width = "50%"}
+```{r left_join}
 img_path <- "Images/left-join-extra.gif"
 img2 <- magick::image_read(img_path)
 img2
+magick::image_destroy(img2)
 ```
 
-```{r right_join, out.width = "50%" }
+```{r right_join}
 img_path <- "Images/right-join.gif"
 img5 <- magick::image_read(img_path)
 img5
+magick::image_destroy(img5)
 ```
 
 See this for yourself in the coding block below.
@@ -1180,10 +1183,11 @@ right_join(x, y, by = "id")
 
 With the `inner_join()` function we go one step further in joining data frames and dropping rows. Only the matching rows are kept from either data set. In the previous functions, unmatchin IDs were kept, and the unknown variable was filled with NA. In this case the unmatched IDs are dropped. 
 
-```{r inner_join, out.width = "50%"}
+```{r inner_join}
 img_path <- "Images/inner-join.gif"
 img3 <- magick::image_read(img_path)
 img3
+magick::image_destroy(img3)
 ```
 
 See this for yourself in the coding block below.
@@ -1308,6 +1312,7 @@ We will take a brief look at two functions from the Tidyr package: `pivot_longer
 img_path <- "Images/pivot.gif"
 img4 <- magick::image_read(img_path)
 img4
+magick::image_destroy(img4)
 ```
 
 We are going to look at an example with the ChickWeight data and determine if it is **tidy**. 
