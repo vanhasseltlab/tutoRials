@@ -1132,12 +1132,7 @@ grid.raster(img)
 
 You use the `full_join()` function when you want to combine two data frames and keep ALL rows. As you can see in the gif below, the data frames are combined by matching ID, the first column. Because ID 1 and 2 are in both data sets, the variable values will be placed on the same row. The missing y variable for ID = 3 and the missing x variable for ID = 4 are filled with `NA`. 
 
-```{r full_join}
-img_path <- "Images/full-join.gif"
-img1 <- magick::image_read(img_path)
-img1
-magick::image_destroy(img1)
-```
+Gif full join
 
 
 Try it out yourself in the coding area standing below. 
@@ -1155,19 +1150,9 @@ While `full_join()` keeps all rows, `left_join()` and `right_join()` only keep t
 
 The opposite is seen with the `right_join()` where only the values from the matching variable of the right data set are kept. The "right" argument is the second argument of your function, in this case the *y* data set. 
 
-```{r left_join}
-img_path <- "Images/left-join-extra.gif"
-img2 <- magick::image_read(img_path)
-img2
-magick::image_destroy(img2)
-```
+gif left join
 
-```{r right_join}
-img_path <- "Images/right-join.gif"
-img5 <- magick::image_read(img_path)
-img5
-magick::image_destroy(img5)
-```
+gif right join
 
 See this for yourself in the coding block below.
 
@@ -1183,12 +1168,7 @@ right_join(x, y, by = "id")
 
 With the `inner_join()` function we go one step further in joining data frames and dropping rows. Only the matching rows are kept from either data set. In the previous functions, unmatchin IDs were kept, and the unknown variable was filled with NA. In this case the unmatched IDs are dropped. 
 
-```{r inner_join}
-img_path <- "Images/inner-join.gif"
-img3 <- magick::image_read(img_path)
-img3
-magick::image_destroy(img3)
-```
+gif inner join
 
 See this for yourself in the coding block below.
 
@@ -1308,12 +1288,7 @@ gradethis::grade_code()
 
 We will take a brief look at two functions from the Tidyr package: `pivot_longer` and `pivot_wider`. These functions are useful to make data tidy, as explained in the introduction. Various software can have different requirements for their input data. If you want to create graphs with ggplot, and separate different individuals, you need to have the individual ID in a column, not as column names. 
 
-```{r pivot}
-img_path <- "Images/pivot.gif"
-img4 <- magick::image_read(img_path)
-img4
-magick::image_destroy(img4)
-```
+gif pivot
 
 We are going to look at an example with the ChickWeight data and determine if it is **tidy**. 
 
