@@ -1123,7 +1123,7 @@ Often when working with data sets, you want to combine two data frames. Think fo
 
 The *join functions from dplyr are better suited to combine data frames, as they match the rows. Think for example about including 200 patients in a study, but 10 patients withdraw their consent for their data to be used. Then, these 10 patients will not be in the other data set with the results, and the IDs can be removed from the initial data set, when the two data frames are combined. We will walk through the four different, commonly used join functions.
 
-```{r fig9, echo = FALSE, out.width = "100%", fig.asp = 0.3, fig.cap = "**Figure 9: overview of the *join() functions**"}
+```{r fig9, echo = FALSE, out.width = "100%", fig.asp = 0.3, fig.cap = "**Figure 9: overview of the join() functions**"}
 img <- readPNG("./Images/join.png")
 grid.raster(img)
 ```
@@ -1150,7 +1150,7 @@ While `full_join()` keeps all rows, `left_join()` and `right_join()` only keep t
 
 The opposite is seen with the `right_join()` where only the values from the matching variable of the right data set are kept. The "right" argument is the second argument of your function, in this case the *y* data set. 
 
-gif left join
+![gif](https://raw.githubusercontent.com/gadenbuie/tidyexplain/master/images/left-join.gif)
 
 gif right join
 
