@@ -1133,8 +1133,7 @@ grid.raster(img)
 
 You use the `full_join()` function when you want to combine two data frames and keep ALL rows. As you can see in the gif below, the data frames are combined by matching ID, the first column. Because ID 1 and 2 are in both data sets, the variable values will be placed on the same row. The missing y variable for ID = 3 and the missing x variable for ID = 4 are filled with `NA`. 
 
-Gif full join
-
+![](https://raw.githubusercontent.com/gadenbuie/tidyexplain/master/images/full-join.gif)
 
 Try it out yourself in the coding area standing below. 
 
@@ -1151,9 +1150,9 @@ While `full_join()` keeps all rows, `left_join()` and `right_join()` only keep t
 
 The opposite is seen with the `right_join()` where only the values from the matching variable of the right data set are kept. The "right" argument is the second argument of your function, in this case the *y* data set. 
 
-![gif](https://raw.githubusercontent.com/gadenbuie/tidyexplain/master/images/left-join.gif)
+![](https://raw.githubusercontent.com/gadenbuie/tidyexplain/master/images/left-join-extra.gif)
 
-gif right join
+![](https://raw.githubusercontent.com/gadenbuie/tidyexplain/master/images/right-join.gif)
 
 See this for yourself in the coding block below.
 
@@ -1169,7 +1168,7 @@ right_join(x, y, by = "id")
 
 With the `inner_join()` function we go one step further in joining data frames and dropping rows. Only the matching rows are kept from either data set. In the previous functions, unmatchin IDs were kept, and the unknown variable was filled with NA. In this case the unmatched IDs are dropped. 
 
-gif inner join
+![](https://raw.githubusercontent.com/gadenbuie/tidyexplain/master/images/inner-join.gif)
 
 See this for yourself in the coding block below.
 
@@ -1289,7 +1288,7 @@ gradethis::grade_code()
 
 We will take a brief look at two functions from the Tidyr package: `pivot_longer` and `pivot_wider`. These functions are useful to make data tidy, as explained in the introduction. Various software can have different requirements for their input data. If you want to create graphs with ggplot, and separate different individuals, you need to have the individual ID in a column, not as column names. 
 
-gif pivot
+![](https://rladiessydney.org/img/tidyr-longer-wider.gif)
 
 We are going to look at an example with the ChickWeight data and determine if it is **tidy**. 
 
