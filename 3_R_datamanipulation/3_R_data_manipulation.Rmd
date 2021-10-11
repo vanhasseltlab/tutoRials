@@ -76,9 +76,11 @@ This tutorial covers the basics of data manipulation with base R and the package
 To select your data, you need to know in which dimension you are working. This is graphically shown in figure 1. If you are working with vectors, this is easy, as there is only one dimension, you will be selecting the different elements of the vector. With data frames you are working with two dimensions, which means you can either select either rows or columns, or both. With lists, it is even more complex, as you can be selecting within an element of the list, these elements can be vectors, data frames or even another list. 
 
 ```{r fig1, echo = FALSE, out.width = "100%", fig.asp = 0.5, fig.cap = "**Figure 1: Dimensions in data structures**"}
-img <- readPNG("./Images/Dimensions.png")
-grid.raster(img)
+# img <- readPNG("./Images/Dimensions.png")
+# grid.raster(img)
 ```
+
+![](Images/Dimensions.png)
 
 Please note that selecting and subsetting are closely related, however, they are **not** synonyms! If you use one of the methods, which are described in the following paragraphs, you can select data to change or delete, but you can also extract certain data, which is called subsetting. Look at the example below, where the first example is selecting, where data is selected and changed. The second example is subsetting two names, to be saved in another vector. However, the original vector is not changed. 
 
