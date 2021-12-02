@@ -787,7 +787,7 @@ grid.arrange(rasterGrob(img1), rasterGrob(img2), rasterGrob(img3), ncol = 3)
 We can rewrite code to make it easier to read and understand, this is called *pipelining* the code. Instead of reading from inner to outer brackets, you can just read from left to right, top to bottom. This pipe operator from the magrittr package (included in tidyverse), is used for this: `%>%` . The object on the left side of the pipe operator is used as argument for the function plased on the right side of the operator. So conceptually: `x %>% f(y)` is equal to `f(x, y)`. You can read each pipe operator as *then*, see the example below:
 *Please note that functions are used you might not recognize. That is no problem, look at the structure and order of the functions.*
 
-```{r}
+```{r piping_example, eval = TRUE, echo = TRUE}
 #sequential coding
 a <- 5.22683 
 b <- seq(from = a, 10, 2) #create a vector with a sequence from a to 10, with steps of 2.
