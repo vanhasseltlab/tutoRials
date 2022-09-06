@@ -550,7 +550,7 @@ if (z >= 5.5) {
 
 If you want to check a whole variable or vector to see which values meet the condition, you cannot do that by only using this if-statement. As  you can see below, it will return a warning, but it does execute! As the warning states, it will only use the first element in the if-statement. Because the first element of the variable *avg* meets the condition, the text is printed.
 
-```{r code11, exercise = FALSE, echo = TRUE, eval = TRUE}
+```{r code11, exercise = FALSE, echo = TRUE, eval = TRUE, error = TRUE}
 average_grades <- c(8.5, 5.1, 7.9, 9, 6.5)
 if (average_grades >= 8) {
   print("Passed cum laude")
