@@ -224,7 +224,7 @@ Additionally, covariate relationships can be added to PK parameters. The covaria
 Now that you have created the model in small steps, you are going to combine it, to create one complete model. Copy-paste the correct equations in the model specification to create your model.
 
 ```{r exercise1d, exercise = TRUE}
-# mod2 <- RxODE({
+# mod2 <- rxode2({
 #   #IIV on CL
 #   CL = 
 #   #IIV on V1
@@ -249,7 +249,7 @@ Now that you have created the model in small steps, you are going to combine it,
 ```
 
 ```{r exercise1d-solution, exercise.solution_checker = TRUE}
-mod2 <- RxODE({
+mod2 <- rxode2({
   #IIV on CL
   CL = TVCL * exp(eta_CL)
   #IIV on V1
@@ -409,7 +409,7 @@ Because the exercises in this tutorial build up on each other, it is important t
 
 ```{r code_exercises, exercise = TRUE}
 # Exercise 1
-mod2 <- RxODE({
+mod2 <- rxode2({
   V1 = TVV1 * exp(eta_V1)
   CL = TVCL * exp(eta_CL)
   C1 = A1/V1
