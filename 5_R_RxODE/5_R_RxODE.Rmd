@@ -16,7 +16,7 @@ require(png)
 require(grid)
 library(cowplot)
 library(ggplot2)
-library(RxODE)
+library(rxode2)
 
 #options
 knitr::opts_chunk$set(echo = FALSE)
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = FALSE)
 gradethis_setup()
 
 #load data used in exercises
-mod1 <- RxODE({C2 = A2/Vd
+mod1 <- rxode2({C2 = A2/Vd
                d/dt(A1) = -Ka*A1 
                d/dt(A2) = Ka*A1 - CL/Vd *A2})
 
@@ -40,7 +40,7 @@ ev<-eventTable()  %>%
 sim1 <-  rxSolve(mod1, theta, ev, inits)
 
 ## Large exercise data
-mod2 <- RxODE({
+mod2 <- rxode2({
   V1 = TVV1 * exp(eta_V1)
   CL = TVCL * exp(eta_CL)
   C1 = A1/V1
@@ -63,7 +63,7 @@ ev2 <-eventTable()  %>%
 sim2 <-  solve(mod2, theta2, ev2, inits2, omega = omega2, nSub = 10, seed = 10)
 
 #quiz data
-mod3 <- RxODE({
+mod3 <- rxode2({
   CL = TVCL * exp(eta_CL)
   C1 = A1 / V1
   d/dt(A1) = -CL / V1 * A1 - K12 * A1
